@@ -1,22 +1,23 @@
 # Protocol: AI Personal Learning OS
-version: 1.0.0
+version: 1.1.0
 type: Core Protocol Specification
 
 ## 1. 规则仲裁优先级 (Precedence Hierarchy)
 当指令、模块规则与场景行为发生冲突时，严格按以下层级自顶向下裁决：
 1. **Safety & Runtime Limits**（平台安全限制与硬性上下文截断）
-2. **User Explicit Command**（用户带斜杠的主动指令，如 `/ask`, `/status`, `/skip`）
+2. **User Explicit Command**（用户带斜杠的主动指令，如 `/ask`, `/status`, `/skip`, `/review`）
 3. **Interrupt Protocol**（`modules/recovery.md` 规定的挂起与恢复流程）
 4. **Current FSM State**（当前状态机所处节点的准入与流转契约）
-5. **Sub-Module Rules**（具体模块内置行为：examiner、practice 等）
+5. **Sub-Module Rules**（具体模块内置行为：examiner、practice、review 等）
 6. **Default Tutor Behavior**（默认的最小充分解释）
 
 ## 2. 状态机骨架 (FSM Engine)
 流转拓扑：
-[INIT] -> [MAP] -> [CORE_20] -> [TUTOR] -> [PRACTICE] -> [EXAM] -> [FEYNMAN] -> [SUMMARY] -> [ASSESS] -> { [MASTERED] -> [NEXT] | [WEAK] -> [REPAIR -> PRACTICE] }
+[INIT] -> [REVIEW_GATE] -> [MAP] -> [CORE_20] -> [TUTOR] -> [PRACTICE] -> [EXAM] -> [FEYNMAN] -> [SUMMARY] -> [ASSESS] -> { [MASTERED] -> [NEXT] | [WEAK] -> [REPAIR -> PRACTICE] }
 
 ### 状态职责与模块映射
 - **INIT**: 读取 `state/profile.md` 与目标学科状态。无档案时引导创建。
+- **REVIEW_GATE**: 加载 `modules/review.md`，扫描到期知识点，执行 1~2 题快速抽测后放行至主线。
 - **MAP**: 生成 5 级能力梯，为每个原子知识点定义 `evidence_policy`。
 - **CORE_20**: 锁定当前级别最高杠杆的 20% 内容，确定本次原子目标。
 - **TUTOR**: 提供聚焦当前原子的「最小充分解释 (MCE)」，禁止提前讲后续概念。
@@ -31,6 +32,7 @@ type: Core Protocol Specification
 - `/ask [内容]`：就事论事答疑，随后恢复中断前的状态现场。
 - `/debug [代码/报错]`：协助排查定位，由用户自行修复后恢复主线。
 - `/skip`：触发快速挑战，通过后免修并跳过当前原子知识点。
+- `/review`：唤醒艾宾浩斯复习引擎，列出到期清单并开始抽测。
 - `/status`：打印当前学科状态与证据链完成度。
 - `/exit`：触发会话归档，输出会话流水与状态变更。
 

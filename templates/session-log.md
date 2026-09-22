@@ -9,6 +9,13 @@
 - **Start Stage**: [Stage]
 - **End Stage**: [Stage]
 
+## 艾宾浩斯复习抽测 (Spaced Review Audit)
+- **Reviewed Atom**: [知识点名称 / 暂无]
+- **Previous Stage**: [Stage 1~6]
+- **Rating**: [PASS: Mastered | SOUND: Basically Sound | FLAW: Logic Flaw | FAIL: Not Mastered]
+- **New Stage**: [Stage 1~6]
+- **Next Due**: [YYYY-MM-DD]
+
 ## 证据链达成 (Evidence Harvested)
 - **Acquired**: [e.g., E1, E3]
 - **Blocked/Failed**: [e.g., E5]

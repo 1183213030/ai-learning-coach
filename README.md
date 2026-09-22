@@ -1,15 +1,17 @@
 <div align="center">
 
 # AI Personal Learning OS
-### Protocol Specification v1.0
+### Protocol Specification v1.1.0
 
 An evidence-based, state-machine-driven personal learning protocol designed for AI Agents and Large Language Models.
 
-[![Protocol Version](https://img.shields.io/badge/Protocol-v1.0.0-007ACC?style=flat-square)](#)
+[![Protocol Version](https://img.shields.io/badge/Protocol-v1.1.0-007ACC?style=flat-square)](#)
 [![Architecture](https://img.shields.io/badge/Architecture-FSM%20%7C%20Decoupled-4EBA6F?style=flat-square)](#)
 [![Verification](https://img.shields.io/badge/Verification-E1~E5%20Evidence%20Chain-orange?style=flat-square)](#)
-[![Environments](https://img.shields.io/badge/Runtime-Agent%20%7C%20Web%20LLM-blueviolet?style=flat-square)](#)
+[![Review Engine](https://img.shields.io/badge/Review-Ebbinghaus%20Spaced-blueviolet?style=flat-square)](#)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)](#)
+
+[English](README.md) • [简体中文](README_zh.md)
 
 [Overview](#overview) • [Core Philosophy](#core-philosophy) • [FSM State Machine](#state-machine-topology) • [Evidence Policy](#evidence-chain-matrix) • [Execution Modules](#execution-modules) • [Dual-Mode Runtime](#dual-mode-runtime-guide) • [Quick Start](#quick-start)
 
@@ -57,7 +59,11 @@ The learning engine follows a deterministic, unidirectional graph with strict ga
 
 ```mermaid
 graph TD
-    INIT[INIT: Load Profile & State] --> MAP[MAP: 5-Level Competence Ladder]
+    INIT[INIT: Load Profile & State] --> REVIEW_GATE{REVIEW_GATE: Spaced Review Due?}
+    REVIEW_GATE -->|Due Items Found| SPOT_EXAM[REVIEW: 1~2 Spot Exams]
+    SPOT_EXAM -->|Pass & Upgraded| MAP[MAP: 5-Level Competence Ladder]
+    SPOT_EXAM -->|Decayed / Failed| WEAK[WEAK: Precision Repair Loop]
+    REVIEW_GATE -->|No Due Items| MAP
     MAP --> CORE_20[CORE_20: Top 20% Leveraged Atom]
     CORE_20 --> TUTOR[TUTOR: Minimum Concept Explanation MCE]
     TUTOR --> PRACTICE[PRACTICE: Dynamic Match Mode]
@@ -67,7 +73,7 @@ graph TD
     SUMMARY --> ASSESS[ASSESS: Evidence Policy Audit]
     
     ASSESS -->|All Required Evidence Fulfilled| MASTERED[MASTERED: Level Up / Next Atom]
-    ASSESS -->|Evidence Deficit / Gaps| WEAK[WEAK: Precision Repair Loop]
+    ASSESS -->|Evidence Deficit / Gaps| WEAK
     WEAK --> PRACTICE
     MASTERED --> CORE_20
 ```
@@ -77,6 +83,7 @@ graph TD
 | State | Purpose | Associated Module / Template |
 | :--- | :--- | :--- |
 | `INIT` | Read `state/profile.md` and subject state; initialize on cold start | `state/profile.md` |
+| `REVIEW_GATE` | Scan for spaced repetition due dates; trigger 1~2 high-yield spot exams | `modules/review.md` |
 | `MAP` | Generate a 5-level competence ladder and assign `evidence_policy` per atom | `modules/assessment.md` |
 | `CORE_20` | Lock into the 20% highest-leverage atom for the current level | `templates/subject-state.md` |
 | `TUTOR` | Deliver Minimum Concept Explanation (MCE, strictly <=15 lines code) | `SKILL.md` |
@@ -115,7 +122,12 @@ When `/skip` is invoked, the AI synthesizes a **single comprehensive challenge**
 
 ## Execution Modules
 
-### 1. Practice Engine (`modules/practice.md`)
+### 1. Spaced Review Engine (`modules/review.md`)
+- **Ebbinghaus 6-Tier Intervals**: Standardized intervals (`+1d`, `+2d`, `+4d`, `+7d`, `+15d`, `+30d/PERMANENT`).
+- **Spot Exam Precision**: Extracts single high-yield questions from `required` evidence tokens without cognitive clutter.
+- **Dynamic Demotion/Promotion**: Flawless recall elevates tier; cognitive decay demotes and redirects to targeted repair.
+
+### 2. Practice Engine (`modules/practice.md`)
 Dynamically switches between 6 specialized training modes:
 - `BUILD`: Write standard implementations from scratch given rigorous specifications.
 - `DEBUG`: Locate and resolve subtle runtime/type defects in pre-constructed snippets.
@@ -124,23 +136,23 @@ Dynamically switches between 6 specialized training modes:
 - `EXPLAIN`: Deconstruct systemic timings and protocols into structured text diagrams.
 - `DESIGN`: Model types, interfaces, and architecture under domain constraints.
 
-### 2. Single-Step Examiner (`modules/examiner.md`)
+### 3. Single-Step Examiner (`modules/examiner.md`)
 - **Lock-Step**: Strictly one question per prompt round.
 - **Inspirational Feedback**: Never leaks solutions; points out logical gaps.
 - **Structured Rating Matrix**:
   ```text
-  Rating:     [ 🟢 Mastered | 🟡 Basically Sound | 🟠 Logic Flaw | 🔴 Not Mastered ]
+  Rating:     [ PASS: Mastered | SOUND: Basically Sound | FLAW: Logic Flaw | FAIL: Not Mastered ]
   Confidence: [ High | Medium | Low ]
   Diagnosis:  [ Specific cognitive breakdown or missing edge cases ]
   Follow-up:  [ Stepped inquiry to verify root understanding ]
   ```
 
-### 3. Feynman Reviewer (`modules/feynman.md`)
+### 4. Feynman Reviewer (`modules/feynman.md`)
 - **Jargon Penetration**: Whenever professional jargon (e.g. *closure, coroutine, covariance*) is used as an explanatory crutch, the coach demands a plain-language mechanistic description.
 - **3D Metaphor Stress Test**: Audits metaphors for mapping completeness, reverse misdirection, and breakdown under extreme concurrency/error states.
 
-### 4. Recovery & Interrupt Protocol (`modules/recovery.md`)
-Any interruption (`/ask`, `/debug`) creates a suspension snapshot and seamlessly returns to the exact breakpoint once answered.
+### 5. Recovery & Interrupt Protocol (`modules/recovery.md`)
+Any interruption (`/ask`, `/debug`, `/review`) creates a suspension snapshot and seamlessly returns to the exact breakpoint once answered.
 
 ---
 
@@ -178,6 +190,7 @@ ai-learning-coach/
 ├── README.md                         # Architecture overview & runtime guide
 ├── SKILL.md                          # Protocol core: FSM engine, arbitration & IO contract
 ├── modules/
+│   ├── review.md                     # Ebbinghaus 6-tier spaced review & spot exam engine
 │   ├── practice.md                   # 6 practice modes & dynamic scheduler
 │   ├── examiner.md                   # Lock-step examiner & grading rules
 │   ├── feynman.md                    # Jargon penetration & metaphor stress tests

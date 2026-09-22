@@ -23,10 +23,21 @@ evidence_status:
   E4_debug: false       # 暂无
   E5_boundary: true     # 理解谓词写错会欺骗编译器导致运行时崩溃
 
-## 3. 掌握与薄弱项 (Progress & Gaps)
+## 3. 掌握与艾宾浩斯复习调度 (Mastered Atoms & Spaced Review)
 mastered_atoms:
-  - "typeof / instanceof 收窄"
-  - "字面量穷尽性检查 (never)"
+  - id: "TS-L1-A1"
+    name: "typeof / instanceof 收窄"
+    stage: 2
+    last_reviewed: "2026-09-20"
+    next_review_due: "2026-09-22"
+    status: "DUE"
+  - id: "TS-L1-A2"
+    name: "字面量穷尽性检查 (never)"
+    stage: 1
+    last_reviewed: "2026-09-21"
+    next_review_due: "2026-09-22"
+    status: "DUE"
+
 weak_atoms:
   - "自定义类型谓词 (param is Type)"
 
