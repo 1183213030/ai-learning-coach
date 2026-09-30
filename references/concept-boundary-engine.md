@@ -1,92 +1,109 @@
-# Concept Boundary & Expansion Engine
+# Concept Boundary & Expansion Engine (Contract Protocol)
 
-This document specifies the core pedagogical mechanism for expanding any concept into its **Minimal Complete Coverage** behavioral space.
+This document specifies the **Concept Boundary Contract**: the formal contract between Knowledge Registry and the Teaching Engine that guarantees zero omissions in conceptual behavioral coverage.
 
 ---
 
 ## 1. The Core Philosophy: Boundary Space over Abstract Definitions
 
-Traditional teaching introduces a concept through an abstract definition and a single happy-path example. The learner nods along, but has zero intuition about the concept's actual operational limits.
+Traditional AI teaching introduces a concept through an abstract definition and a single happy-path example. The learner nods along, but has zero intuition about the concept's actual operational limits.
 
-**The Golden Rule of Boundary Expansion**:
+**The Golden Law of Boundary Expansion**:
 > **Do not merely explain what a concept means. Systematically unpack its entire behavioral surface: what makes it true, what keeps it true under mutation, what superficially resembles it but causes it to fail, and where its edge limits break.**
+>
+> **教学可以渐进，但概念边界不能遗漏。不要要求每一次解释都完整；要要求每一个概念最终都有完整的行为边界覆盖。**
 
-```text
-Concept Node
-     │
-     ├── [ 1. The Core Governing Rule ] (The single invariant that decides truth)
-     │
-     ├── [ 2. Positive Nominal Cases ]  (Baseline conditions where it holds)
-     │
-     ├── [ 3. Structural Variations ]   (Mutations where it surprisingly STILL holds)
-     │
-     ├── [ 4. Counterexample Shocks ]  (Looks almost identical, but FAILS immediately)
-     │
-     ├── [ 5. Boundary & Extreme Limits] (Empty values, type coercion, special primitives)
-     │
-     ├── [ 6. Confusing Neighbor Contrast] (vs similar methods/keywords in ecosystem)
-     │
-     └── [ 7. Real Engineering Anchors] (Where this exact boundary boundary matters in production)
+---
+
+## 2. The Formal Concept Boundary Contract Schema
+
+Every concept registered in the system must conform to the following structured contract. The Teaching Engine draws strictly from these fields rather than improvising uncurated examples on the fly:
+
+```yaml
+concept:
+  id: string
+  name: string
+  core_invariant: string           # The single physical/mathematical rule deciding truth
+
+  behavioral_space:
+    baseline:                      # Baseline nominal condition where invariant holds cleanly
+      input: string
+      expected: any
+      rationale: string
+
+    positive_cases:                # Standard valid conditions
+      - input: string
+        expected: any
+        rationale: string
+
+    controlled_variations:         # Strictly single-variable mutation chain
+      - step: integer
+        variable_changed_only: string # Explicitly state the single delta
+        input: string
+        expected: any
+        rationale: string
+
+    counterexample_shocks:         # Visually resembles positive case, but fails invariant immediately!
+      - input: string
+        expected: any
+        shock_reason: string
+        pedagogical_prompt: string
+
+    boundary_cases:                # Empty values, special IEEE-754 primitives, type coercion limits
+      - input: string
+        expected: any
+        boundary_type: string
+        rationale: string
+
+    common_misconceptions:         # Mental traps explicitly articulated and refuted with counter-code
+      - trap: string
+        counter_proof: string
+
+    confusing_neighbor_contrast:   # Side-by-side differentiation against adjacent ecosystem tools
+      - neighbor: string
+        core_difference: string
+        when_to_use_which: string
+
+    real_world_anchors:            # Production scenarios and silent bug vectors
+      - scenario: string
+        trap_in_production: string
+        correct_pattern: string
+
+    failure_modes:                 # What breaks downstream if this concept is misunderstood?
+      - symptom: string
+        root_cause: string
+
+    transfer_cases:                # Applying invariant in an unfamiliar domain with keywords omitted
+      - novel_domain: string
+        task: string
+        expected_deduction: string
 ```
 
 ---
 
-## 2. The 7-Dimension Minimal Complete Coverage Protocol
+## 3. Strict Controlled Variation Protocol
 
-When teaching any concept, the coach automatically deduces its 7-dimensional behavioral space:
-
-### Dimension 1: The Core Invariant
-- What is the single, non-negotiable physical rule governing this mechanism?
-- *Example (`includes`)*: Value must be located via SameValueZero comparison algorithm.
-- *Example (`assertIn`)*: Target substring must appear contiguously inside the container.
-
-### Dimension 2: Positive Nominal Cases (Baseline)
-- The cleanest, zero-distraction example where the rule holds.
-- `"admin"` in `"hello admin"` -> Pass.
-- `[1, 2, 3].includes(2)` -> `true`.
-
-### Dimension 3: Structural Variations (Invariance Testing)
-- What changes can be made to surrounding data without breaking the invariant?
-- Prefix additions: `"admin123"` -> Pass.
-- Suffix additions: `"123admin"` -> Pass.
-- Both ends padded: `"123admin456"` -> Pass.
-- *Pedagogical Value*: Proves to the learner that location or padding does not invalidate the invariant.
-
-### Dimension 4: Counterexample Shocks (The Crucial Step)
-- **The most vital cognitive step in education**: Present an example that *visually resembles* the positive case, but *fails the underlying invariant*.
-- `"admin"` in `"admmmmmin"` -> **FAIL**.
-- `[1, 2, 3].includes("2")` -> **false** (Strict type boundary).
-- `[[1]].includes([1])` -> **false** (Reference identity vs structural equality).
-- *Pedagogical Prompt*: *"Notice how every single character of 'admin' exists in 'admmmmmin'. Why does the assertion fail? What specific rule was broken?"*
-- *Result*: The learner autonomously deduces that **contiguity** is required, locking in the concept permanently.
-
-### Dimension 5: Boundary & Extreme Limits (Edge Fuzzing)
-- Empty string: `"" in "admin"` -> Pass. `"admin" in ""` -> Fail.
-- Special IEEE-754 primitives: `[NaN].includes(NaN)` -> `true` (Unlike `indexOf`).
-- Loose equality traps: `0 == false` -> `true`. `"" == false` -> `true`. `null == 0` -> `false`.
-
-### Dimension 6: Confusing Neighbor Contrast
-- Side-by-side comparison against the 2-3 most common alternatives:
-  - `assertIn` vs `assertEqual` vs `regex match` vs `startswith`.
-  - `Array.includes` vs `Array.indexOf` vs `Array.some` vs `Set.has`.
-  - `==` vs `===` vs `Object.is`.
-
-### Dimension 7: Real Engineering Anchors
-- Why does knowing these edge cases matter in production?
-  - *Example*: Checking user roles with `user.roles.includes("admin")` fails silently if API returns an array of objects `[{ name: "admin" }]` instead of strings.
+To prevent cognitive overload and guarantee accurate causal attribution:
+1. **The Delta Constraint**: Between `step N` and `step N+1`, exactly ONE parameter may change.
+2. **Forbidden**: Mutating array values, array types, and search values simultaneously.
+3. **Mandatory Sequence**:
+   - `Baseline` ->
+   - `Mutate Value Only` ->
+   - `Mutate Argument Type Only` ->
+   - `Mutate Element Type Only` ->
+   - `Mutate Reference Structure Only` ->
+   - `Mutate Special Primitive Only`.
 
 ---
 
-## 3. Teaching Protocol: The "Shock and Deduce" Cycle
+## 4. Teaching Progression: The "Shock and Deduce" Cycle
 
-Never dump all 7 dimensions at once. Guide the learner through the **Shock and Deduce** progression:
+The Teaching Engine executes the contract in sequenced phases:
 
 ```text
-Step 1: Normal Case    -> Run baseline positive case.
-Step 2: Variation      -> Add prefixes/suffixes; learner confirms it still works.
-Step 3: Shock          -> Introduce Counterexample that intuitively looks right but fails.
-Step 4: Deduction      -> Ask: "What exact invariant broke between Step 2 and Step 3?"
-Step 5: Edge Fuzzing   -> Test empties, nulls, NaNs, or type shifts.
-Step 6: Neighboring    -> Compare against alternative tool.
-Step 7: Production Pin -> Apply to realistic API / bug scenario.
+Phase 1: Baseline & Variation -> Observe invariant holding under controlled single shifts.
+Phase 2: Counterexample Shock -> Near-miss scenario fails; learner deduces the invariant.
+Phase 3: Boundary Fuzzing     -> Test empties, nulls, NaNs, or edge coercions.
+Phase 4: Neighbor Debate      -> Contrast against alternative API / keyword.
+Phase 5: Production Grounding -> Trace realistic silent bug in real project.
 ```

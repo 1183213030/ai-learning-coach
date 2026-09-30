@@ -1,40 +1,112 @@
 id: "js-closure"
-name: "JavaScript Closures & Heap Environment Retention"
+name: "JavaScript Closures & Lexical Environments"
 domain: "frontend-javascript"
 source_ids:
   - "src-mdn-web"
 
-capabilities:
-  - id: "cap-explain-closure-heap"
-    token: "E1_explain"
-    description: "Explain why outer local variables are preserved on the heap instead of disappearing when execution context pops off stack."
-  - id: "cap-predict-closure-instances"
-    token: "E2_predict"
-    description: "Predict output when multiple closure instances are created and independently mutate shared vs isolated state."
-  - id: "cap-implement-encapsulation"
-    token: "E4_implement"
-    description: "Implement private state encapsulation (e.g. factory counter, rate limiter, or memoizer) with zero AI assistance (L0)."
-  - id: "cap-transfer-closure"
-    token: "E5_transfer"
-    description: "Identify and utilize closure retention in an unfamiliar domain (e.g. Node.js stream pipeline or event emitter) without prompting."
+core_invariant:
+  - "A closure is the combination of a function bundled together with references to its surrounding lexical environment. It allows an inner function to retain access to an outer function's scope even after the outer execution context has popped off the call stack."
 
-prerequisites:
-  - "js-scope"
-  - "js-call-stack"
+behavioral_space:
+  problem_it_solves:
+    - "Global variables are vulnerable to accidental mutation, while standard local variables are destroyed when their enclosing function terminates. Closures resolve this by providing persistent, private, encapsulated state."
 
-unlocks:
-  - "js-module-pattern"
-  - "js-currying"
-  - "vue-reactivity"
-  - "react-hooks-internals"
+  baseline:
+    code: |
+      function createCounter() {
+        let count = 0;
+        return function() {
+          count++;
+          return count;
+        };
+      }
+      const counter = createCounter();
+      counter(); // 1
+      counter(); // 2
+    rationale: "The returned function retains a live reference to count in its lexical environment on the heap."
 
-common_misconceptions:
-  - id: "misc-closure-copy-by-value"
-    trap: "Believing that closed-over variables are copied or cloned at the moment the inner function is defined."
-    counter_case: "Mutating an outer variable after returning the closure demonstrates live shared reference."
-  - id: "misc-unavoidable-leak"
-    trap: "Believing that every closure inevitably produces a permanent memory leak in the V8 engine."
-    counter_case: "Nullifying the reference to the inner function triggers V8 garbage collection to reclaim the heap environment record."
+  lifecycle_and_heap_retention:
+    stack_behavior: "createCounter() executes; its execution context frame is pushed to call stack, initializes count = 0, and returns the function object."
+    heap_behavior: "When createCounter() frame pops off stack, its Environment Record is NOT collected because the returned inner function retains a [[Scopes]] reference pointing to it on the V8 heap."
 
-source_fact: "ECMAScript §10.2: Function objects evaluate in a LexicalEnvironment saved in their internal [[Environment]] slot at creation time."
-scaffolding_metaphor: "A persistent tether to a floating backpack: even after the tent is folded and packed away, the tether keeps the backpack accessible."
+  multi_instance_independence:
+    code: |
+      const c1 = createCounter();
+      const c2 = createCounter();
+      c1(); // 1
+      c1(); // 2
+      c2(); // 1 (Isolated heap environment!)
+    invariant_deduction: "Each invocation of the outer factory function instantiates a brand new, independent lexical environment record on the heap."
+
+  shared_environment_methods:
+    code: |
+      function createBox() {
+        let val = 0;
+        return {
+          inc: () => ++val,
+          dec: () => --val,
+          get: () => val
+        };
+      }
+      const b = createBox();
+      b.inc(); // val = 1
+      b.get(); // 1 (Multiple inner functions share the EXACT SAME lexical scope instance!)
+    invariant_deduction: "Methods returned together in the same execution context share a unified mutable closure environment."
+
+  loop_scoping_classic_trap:
+    var_trap: |
+      for (var i = 0; i < 3; i++) {
+        setTimeout(() => console.log(i), 10);
+      }
+      // Prints: 3, 3, 3 (Single function-scoped variable shared by all 3 callbacks)
+    let_fix: |
+      for (let i = 0; i < 3; i++) {
+        setTimeout(() => console.log(i), 10);
+      }
+      // Prints: 0, 1, 2 (let creates a fresh lexical block scope binding on EACH iteration tick)
+
+  this_binding_divergence:
+    trap: "Closures preserve lexical variables, NOT the dynamic 'this' binding. Inner standard functions re-bind 'this' based on call site unless arrow functions are used."
+
+  garbage_collection_and_cleanup:
+    rule: "A closure remains on the heap as long as any reachable reference to the inner function exists."
+    severing_reference: "Setting counter = null removes the root reference, allowing the V8 Mark-and-Sweep GC to collect the closed-over environment record."
+
+  counterexample_shocks:
+    - code: |
+      let outer = 0;
+      function notAClosure() {
+        outer++;
+        return outer;
+      }
+      shock_reason: "Accessing a global variable is NOT closure encapsulation; it does not protect the variable from external mutation."
+    - code: |
+      function createNumber() {
+        let x = 10;
+        return x;
+      }
+      shock_reason: "Returning a primitive value copies by value; no function reference remains, so x is garbage collected immediately."
+
+  boundary_cases:
+    - case: "Immediate Invocation (IIFE)"
+      behavior: "((x) => () => x)(5) retains x = 5 cleanly without polluting surrounding scope."
+    - case: "Mutating outer variable after closure creation"
+      behavior: "Closures capture live references, not snapshot copies. Mutating outer variable is reflected in next closure invocation."
+
+  common_misconceptions:
+    - trap: "Believing closures make a snapshot copy of the variable at creation time."
+      counter_proof: "Mutating the variable after function definition proves it is a live shared reference."
+    - trap: "Believing all closures cause harmful memory leaks."
+      counter_proof: "Memory retention is the deliberate feature; it only becomes a leak when references are abandoned in global listeners without removal."
+
+  real_world_engineering_anchors:
+    - name: "Debounce / Throttle Implementation"
+      code: "Preserves timer ID across rapid user scroll/input events."
+    - name: "Vue 3 Reactive Effect Scope"
+      code: "effectScope captures and tears down reactive subscriptions in a clean closure."
+    - name: "Module Pattern / Private Fields before #syntax"
+      code: "Factory functions returning public API while keeping internal state un-tamperable."
+
+  when_not_to_use:
+    - "Inside performance-critical micro-loops where creating millions of closure function allocations triggers severe GC thrashing."
+    - "When a simple object prototype method would suffice without per-instance function allocations."

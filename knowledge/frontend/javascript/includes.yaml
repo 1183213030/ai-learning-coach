@@ -4,23 +4,84 @@ domain: "frontend-javascript"
 source_ids:
   - "src-mdn-web"
 
-expansion_ref: "templates/concept-expansion.yaml"
+core_invariant:
+  - "Determines whether an array includes a certain value among its entries, returning true or false, using the SameValueZero comparison algorithm."
 
-capabilities:
-  - id: "cap-explain-samevaluezero"
-    token: "E1_explain"
-    description: "Explain why includes handles NaN correctly while indexOf fails."
-  - id: "cap-predict-reference-includes"
-    token: "E2_predict"
-    description: "Predict output when checking presence of object literals or nested arrays."
-  - id: "cap-debug-permission-check"
-    token: "E3_debug"
-    description: "Diagnose silent authorization failure caused by passing new object reference into includes()."
+behavioral_space:
+  baseline:
+    input: "[1, 2, 3].includes(2)"
+    expected: true
+    rationale: "Target number primitive 2 exists at index 1."
 
-prerequisites:
-  - "js-reference-vs-primitive"
-  - "js-equality-operators"
+  controlled_variations:
+    - step: 1
+      variable_changed_only: "Target Search Value Only"
+      input: "[1, 2, 3].includes(4)"
+      expected: false
+      rationale: "Array [1, 2, 3] is unchanged; target number 4 is simply not present in elements."
 
-unlocks:
-  - "js-set-collection"
-  - "fe-role-based-access"
+    - step: 2
+      variable_changed_only: "Target Search Type Only (String instead of Number)"
+      input: "[1, 2, 3].includes('2')"
+      expected: false
+      rationale: "Array [1, 2, 3] is unchanged; SameValueZero strictly checks types without type coercion."
+
+    - step: 3
+      variable_changed_only: "Array Element Types Only (Elements are now Strings)"
+      input: "['1', '2', '3'].includes('2')"
+      expected: true
+      rationale: "Search value '2' is unchanged from step 2; types now align as string primitives."
+
+    - step: 4
+      variable_changed_only: "Reference Structure Only (Nested Array Pointer)"
+      input: "[[1]].includes([1])"
+      expected: false
+      rationale: "Even though [1] contains number 1, [1] inside array and [1] in argument are distinct heap memory references."
+
+    - step: 5
+      variable_changed_only: "Special Primitive IEEE-754 (NaN vs NaN)"
+      input: "[NaN].includes(NaN)"
+      expected: true
+      rationale: "SameValueZero algorithm explicitly treats NaN as equal to NaN (unlike Strict Equality === which treats NaN === NaN as false)."
+
+  counterexample_shocks:
+    - input: "[{ id: 1 }].includes({ id: 1 })"
+      expected: false
+      shock_reason: "Object literal in search argument creates a new heap memory pointer; reference equality fails silently."
+      pedagogical_prompt: "The objects look completely identical in fields. Why did includes() return false? What is JavaScript actually comparing under the hood?"
+
+  boundary_cases:
+    - input: "[].includes(undefined)"
+      expected: false
+      boundary_type: "Empty array"
+      rationale: "Empty collection has length 0; always returns false."
+    - input: "[undefined].includes(undefined)"
+      expected: true
+      boundary_type: "Explicit undefined element"
+      rationale: "Index 0 explicitly contains the undefined primitive."
+    - input: "new Array(1).includes(undefined)"
+      expected: true
+      boundary_type: "Sparse array hole"
+      rationale: "includes() treats sparse empty slots as undefined, unlike map() or forEach() which skip holes."
+
+  common_misconceptions:
+    - trap: "Believing includes() performs deep property checking on objects."
+      counter_proof: "Passing two distinct object references with identical fields returns false."
+    - trap: "Assuming includes() behaves identically to indexOf()."
+      counter_proof: "indexOf(NaN) returns -1, while includes(NaN) returns true."
+
+  confusing_neighbor_contrast:
+    - neighbor: "Array.prototype.indexOf"
+      core_difference: "Returns index position integer; uses Strict Equality (===) which causes it to miss NaN."
+      when_to_use_which: "Use indexOf when index position is needed; use includes when boolean membership is needed (especially with NaN)."
+    - neighbor: "Array.prototype.some"
+      core_difference: "Accepts a callback predicate function; essential for finding objects by internal property."
+      when_to_use_which: "Use some() when querying objects by property (e.g. users.some(u => u.id === targetId))."
+    - neighbor: "Set.prototype.has"
+      core_difference: "O(1) average lookup complexity vs O(N) array scan."
+      when_to_use_which: "Use Set.has when membership checks are frequent or collections are large."
+
+  real_world_anchors:
+    - scenario: "Checking user permissions from JWT payload array."
+      trap_in_production: "If roles are returned as [{ name: 'admin' }], roles.includes({ name: 'admin' }) returns false silently."
+      correct_pattern: "roles.some(r => r.name === 'admin')"
