@@ -1,112 +1,166 @@
-id: "js-closure"
-name: "JavaScript Closures & Lexical Environments"
-domain: "frontend-javascript"
-source_ids:
-  - "src-mdn-web"
+version: "3.2.0"
 
-core_invariant:
-  - "A closure is the combination of a function bundled together with references to its surrounding lexical environment. It allows an inner function to retain access to an outer function's scope even after the outer execution context has popped off the call stack."
+concept:
+  id: "js-closure"
+  name: "JavaScript Closures & Lexical Environment Retention"
+  domain: "frontend-javascript"
+  source_ids:
+    - "ecma-262"
+    - "src-mdn-web"
 
-behavioral_space:
-  problem_it_solves:
-    - "Global variables are vulnerable to accidental mutation, while standard local variables are destroyed when their enclosing function terminates. Closures resolve this by providing persistent, private, encapsulated state."
+  normative_sources:
+    - source_id: "ecma-262"
+      name: "ECMAScript Language Specification"
+      level: "S0"
+      section: "9.1.2 Environment Records & 10.2.1 Function Environment Records"
 
-  baseline:
-    code: |
-      function createCounter() {
-        let count = 0;
-        return function() {
-          count++;
-          return count;
-        };
-      }
-      const counter = createCounter();
-      counter(); // 1
-      counter(); // 2
-    rationale: "The returned function retains a live reference to count in its lexical environment on the heap."
+  claims:
+    - id: "lexical-environment-binding"
+      source_id: "ecma-262"
+      section: "9.1.2"
+      claim_text: "A function retains an implicit reference to its outer Environment Record established at evaluation time, forming a closure."
+    - id: "independent-environment-instances"
+      source_id: "ecma-262"
+      section: "10.2.1"
+      claim_text: "Every invocation of an outer function allocates a distinct, separate Environment Record."
+    - id: "block-iteration-binding"
+      source_id: "ecma-262"
+      section: "14.7.4.3 ForDeclarationBindingInitialization"
+      claim_text: "A for-loop with 'let' creates a fresh lexical Environment Record per iteration, preserving loop counter state per closure."
+    - id: "gc-reachability"
+      source_id: "ecma-262"
+      section: "Memory Management & Garbage Collection"
+      claim_text: "Variables in an outer Environment Record cannot be reclaimed by garbage collection as long as any reachable child function references the environment."
 
-  lifecycle_and_heap_retention:
-    stack_behavior: "createCounter() executes; its execution context frame is pushed to call stack, initializes count = 0, and returns the function object."
-    heap_behavior: "When createCounter() frame pops off stack, its Environment Record is NOT collected because the returned inner function retains a [[Scopes]] reference pointing to it on the V8 heap."
+  boundary_matrix:
+    - dimension: "baseline_behavior"
+      applicability: "required"
+      reason: "Defines nominal function returning inner function accessing parent variable."
+      coverage:
+        status: "covered"
+        artifact_id: "artifact-closure-baseline"
 
-  multi_instance_independence:
-    code: |
-      const c1 = createCounter();
-      const c2 = createCounter();
-      c1(); // 1
-      c1(); // 2
-      c2(); // 1 (Isolated heap environment!)
-    invariant_deduction: "Each invocation of the outer factory function instantiates a brand new, independent lexical environment record on the heap."
+    - dimension: "multiple_instances"
+      applicability: "required"
+      reason: "Multiple invocations must produce independent, non-colliding state environments."
+      coverage:
+        status: "covered"
+        artifact_id: "artifact-closure-instances"
 
-  shared_environment_methods:
-    code: |
-      function createBox() {
-        let val = 0;
-        return {
-          inc: () => ++val,
-          dec: () => --val,
-          get: () => val
-        };
-      }
-      const b = createBox();
-      b.inc(); // val = 1
-      b.get(); // 1 (Multiple inner functions share the EXACT SAME lexical scope instance!)
-    invariant_deduction: "Methods returned together in the same execution context share a unified mutable closure environment."
+    - dimension: "shared_mutable_state"
+      applicability: "required"
+      reason: "Multiple inner functions from the same invocation share the exact same Environment Record."
+      coverage:
+        status: "covered"
+        artifact_id: "artifact-closure-shared-state"
 
-  loop_scoping_classic_trap:
-    var_trap: |
-      for (var i = 0; i < 3; i++) {
-        setTimeout(() => console.log(i), 10);
-      }
-      // Prints: 3, 3, 3 (Single function-scoped variable shared by all 3 callbacks)
-    let_fix: |
-      for (let i = 0; i < 3; i++) {
-        setTimeout(() => console.log(i), 10);
-      }
-      // Prints: 0, 1, 2 (let creates a fresh lexical block scope binding on EACH iteration tick)
+    - dimension: "loop_variable_binding"
+      applicability: "required"
+      reason: "Critical pitfall contrasting var (single hoisted binding) vs let (per-iteration lexical scope)."
+      coverage:
+        status: "covered"
+        artifact_id: "artifact-closure-loop-binding"
 
-  this_binding_divergence:
-    trap: "Closures preserve lexical variables, NOT the dynamic 'this' binding. Inner standard functions re-bind 'this' based on call site unless arrow functions are used."
+    - dimension: "memory_retention_gc"
+      applicability: "required"
+      reason: "Retained lexical environments that hold heavy objects cause production memory leaks."
+      coverage:
+        status: "covered"
+        artifact_id: "artifact-closure-gc-leak"
 
-  garbage_collection_and_cleanup:
-    rule: "A closure remains on the heap as long as any reachable reference to the inner function exists."
-    severing_reference: "Setting counter = null removes the root reference, allowing the V8 Mark-and-Sweep GC to collect the closed-over environment record."
+    - dimension: "prototype_chain"
+      applicability: "not_applicable"
+      reason: "Closures resolve identifiers along lexical Environment Record scope chains, not prototype inheritance chains."
+      coverage:
+        status: "not_applicable"
+        artifact_id: null
 
-  counterexample_shocks:
-    - code: |
-      let outer = 0;
-      function notAClosure() {
-        outer++;
-        return outer;
-      }
-      shock_reason: "Accessing a global variable is NOT closure encapsulation; it does not protect the variable from external mutation."
-    - code: |
-      function createNumber() {
-        let x = 10;
-        return x;
-      }
-      shock_reason: "Returning a primitive value copies by value; no function reference remains, so x is garbage collected immediately."
+  coverage_artifacts:
+    - artifact_id: "artifact-closure-baseline"
+      dimension: "baseline_behavior"
+      claim_id: "lexical-environment-binding"
+      case:
+        baseline:
+          input: "function outer() { let a = 1; return function() { return a; }; } outer()()"
+          expected: 1
+      causal_explanation: "The returned function holds an outer reference to outer's Environment Record where 'a' was initialized to 1."
+      scaffolding_metaphor: "A child function carrying a backpack of parent variables."
 
-  boundary_cases:
-    - case: "Immediate Invocation (IIFE)"
-      behavior: "((x) => () => x)(5) retains x = 5 cleanly without polluting surrounding scope."
-    - case: "Mutating outer variable after closure creation"
-      behavior: "Closures capture live references, not snapshot copies. Mutating outer variable is reflected in next closure invocation."
+    - artifact_id: "artifact-closure-instances"
+      dimension: "multiple_instances"
+      claim_id: "independent-environment-instances"
+      case:
+        baseline:
+          input: "function create() { let count = 0; return () => ++count; } const c1 = create(); const c2 = create(); c1(); [c1(), c2()]"
+          expected: [2, 1]
+      causal_explanation: "Each call to create() instantiates a fresh Environment Record. c1 and c2 mutate distinct memory records."
 
-  common_misconceptions:
-    - trap: "Believing closures make a snapshot copy of the variable at creation time."
-      counter_proof: "Mutating the variable after function definition proves it is a live shared reference."
-    - trap: "Believing all closures cause harmful memory leaks."
-      counter_proof: "Memory retention is the deliberate feature; it only becomes a leak when references are abandoned in global listeners without removal."
+    - artifact_id: "artifact-closure-shared-state"
+      dimension: "shared_mutable_state"
+      claim_id: "lexical-environment-binding"
+      case:
+        baseline:
+          input: "function pair() { let x = 0; return [() => ++x, () => x]; } const [inc, get] = pair(); inc(); get()"
+          expected: 1
+      causal_explanation: "Both inc and get share the identical Environment Record created in the single execution of pair()."
 
-  real_world_engineering_anchors:
-    - name: "Debounce / Throttle Implementation"
-      code: "Preserves timer ID across rapid user scroll/input events."
-    - name: "Vue 3 Reactive Effect Scope"
-      code: "effectScope captures and tears down reactive subscriptions in a clean closure."
-    - name: "Module Pattern / Private Fields before #syntax"
-      code: "Factory functions returning public API while keeping internal state un-tamperable."
+    - artifact_id: "artifact-closure-loop-binding"
+      dimension: "loop_variable_binding"
+      claim_id: "block-iteration-binding"
+      case:
+        baseline:
+          input: "const fns = []; for (var i = 0; i < 3; i++) { fns.push(() => i); } fns.map(f => f())"
+          expected: [3, 3, 3]
+        mutation:
+          changed_only: "declaration keyword (var -> let)"
+          input: "const fns = []; for (let i = 0; i < 3; i++) { fns.push(() => i); } fns.map(f => f())"
+          expected: [0, 1, 2]
+      causal_explanation: "Under ECMAScript §14.7.4.3, 'let' in for-loop creates a new Environment Record per iteration. 'var' binds a single shared record in the enclosing execution context."
 
-  when_not_to_use:
-    - "Inside performance-critical micro-loops where creating millions of closure function allocations triggers severe GC thrashing."
-    - "When a simple object prototype method would suffice without per-instance function allocations."
+    - artifact_id: "artifact-closure-gc-leak"
+      dimension: "memory_retention_gc"
+      claim_id: "gc-reachability"
+      case:
+        baseline:
+          input: "let holder; function leak() { const heavy = new Array(1e6); holder = () => heavy.length; } leak(); typeof holder"
+          expected: "function"
+      causal_explanation: "Global reference 'holder' keeps the inner function reachable, which retains the entire lexical environment containing 'heavy'."
+
+  teaching:
+    teaching_budget:
+      max_new_dimensions_per_turn: 2
+      max_cases_per_cluster: 3
+      max_counterexamples: 1
+    completed_dimensions:
+      - "baseline_behavior"
+    active_dimension: "multiple_instances"
+    queue:
+      - dimension: "multiple_instances"
+        priority: "critical"
+        phase: 1
+      - dimension: "shared_mutable_state"
+        priority: "high"
+        phase: 2
+      - dimension: "loop_variable_binding"
+        priority: "critical"
+        phase: 2
+      - dimension: "memory_retention_gc"
+        priority: "high"
+        phase: 3
+
+  learner_evidence:
+    baseline_behavior:
+      status: "independent"
+    multiple_instances:
+      status: "supported"
+    shared_mutable_state:
+      status: "not_attempted"
+    loop_variable_binding:
+      status: "not_attempted"
+    memory_retention_gc:
+      status: "not_attempted"
+
+  completeness:
+    knowledge: 100.0  # 5 covered / 5 required
+    teaching: 40.0   # 2 delivered / 5 required
+    capability: 20.0 # 1 independent / 5 required

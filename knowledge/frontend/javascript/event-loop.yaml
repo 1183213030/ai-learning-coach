@@ -1,0 +1,141 @@
+version: "3.2.0"
+
+concept:
+  id: "js-event-loop"
+  name: "JavaScript Event Loop & Microtask Interleaving"
+  domain: "frontend-javascript"
+  source_ids:
+    - "html-spec"
+    - "src-mdn-web"
+
+normative_sources:
+  - source_id: "html-spec"
+    name: "HTML Living Standard: Event Loops"
+    level: "S0"
+    section: "8.1.6 Event loops & 8.1.6.3 Processing model"
+
+claims:
+  - id: "sync-stack-priority"
+    source_id: "html-spec"
+    section: "8.1.6.3"
+    claim_text: "The JavaScript Call Stack executes current synchronous script to completion before inspecting any asynchronous queues."
+  - id: "microtask-queue-drain"
+    source_id: "html-spec"
+    section: "8.1.6.3.3 Microtask checkpoint"
+    claim_text: "At each microtask checkpoint, the microtask queue is drained until completely empty, including microtasks queued during checkpoint processing."
+  - id: "macrotask-single-turn"
+    source_id: "html-spec"
+    section: "8.1.6.3.1 Task selection"
+    claim_text: "Each event loop iteration runs at most ONE macrotask (Task) from a task queue, immediately followed by a complete microtask checkpoint."
+  - id: "render-step-timing"
+    source_id: "html-spec"
+    section: "8.1.6.3.11 Update the rendering"
+    claim_text: "Rendering updates and requestAnimationFrame callbacks occur only after the active microtask checkpoint has completely resolved."
+
+boundary_matrix:
+  - dimension: "baseline_behavior"
+    applicability: "required"
+    reason: "Validates fundamental execution order between synchronous script, Promise microtask, and setTimeout macrotask."
+    coverage:
+      status: "covered"
+      artifact_id: "artifact-eventloop-baseline"
+
+  - dimension: "microtask_drain_exhaustion"
+    applicability: "required"
+    reason: "Microtasks queued by microtasks run before any subsequent macrotask, proving complete checkpoint draining."
+    coverage:
+      status: "covered"
+      artifact_id: "artifact-eventloop-microtask-drain"
+
+  - dimension: "macrotask_interleaving"
+    applicability: "required"
+    reason: "Proves that between two consecutive macrotasks, microtask queues must run to empty."
+    coverage:
+      status: "covered"
+      artifact_id: "artifact-eventloop-macrotask-interleaving"
+
+  - dimension: "render_timing_phase"
+    applicability: "required"
+    reason: "Proves requestAnimationFrame runs before style/layout paint and after current task microtasks."
+    coverage:
+      status: "covered"
+      artifact_id: "artifact-eventloop-render-timing"
+
+  - dimension: "prototype_chain"
+    applicability: "not_applicable"
+    reason: "Event loop queuing is governed by HTML host environment task schedulers, completely independent of prototype delegation."
+    coverage:
+      status: "not_applicable"
+      artifact_id: null
+
+coverage_artifacts:
+  - artifact_id: "artifact-eventloop-baseline"
+    dimension: "baseline_behavior"
+    claim_id: "sync-stack-priority"
+    case:
+      baseline:
+        input: "const log = []; log.push(1); setTimeout(() => log.push(2), 0); Promise.resolve().then(() => log.push(3)); log.push(4); return log;"
+        expected: [1, 4, 3, 2]
+    causal_explanation: "Sync code (1, 4) executes first. Microtask checkpoint drains Promise (3). Finally event loop executes queued macrotask (2)."
+    scaffolding_metaphor: "Sync stack is current speaker; microtasks are VIP urgent line; setTimeout is general waiting room."
+
+  - artifact_id: "artifact-eventloop-microtask-drain"
+    dimension: "microtask_drain_exhaustion"
+    claim_id: "microtask-queue-drain"
+    case:
+      baseline:
+        input: "const log = []; setTimeout(() => log.push('macro'), 0); Promise.resolve().then(() => { log.push('micro1'); Promise.resolve().then(() => log.push('micro2')); }); return log;"
+        expected: ["micro1", "micro2", "macro"]
+    causal_explanation: "HTML spec §8.1.6.3.3 mandates microtask checkpoint loops until queue is empty; nested microtask runs before any macrotask."
+
+  - artifact_id: "artifact-eventloop-macrotask-interleaving"
+    dimension: "macrotask_interleaving"
+    claim_id: "macrotask-single-turn"
+    case:
+      baseline:
+        input: "const log = []; setTimeout(() => { log.push('m1'); Promise.resolve().then(() => log.push('p1')); }, 0); setTimeout(() => { log.push('m2'); }, 0); return log;"
+        expected: ["m1", "p1", "m2"]
+    causal_explanation: "After macrotask m1 executes, a microtask checkpoint immediately triggers and runs p1 before the engine picks up macrotask m2."
+
+  - artifact_id: "artifact-eventloop-render-timing"
+    dimension: "render_timing_phase"
+    claim_id: "render-step-timing"
+    case:
+      baseline:
+        input: "Synchronous microtasks block browser rendering updates until fully drained."
+        expected: "UI renders only after microtask queue is exhausted."
+    causal_explanation: "HTML Living Standard §8.1.6.3 Step 11 updates rendering only after microtask checkpoint completes."
+
+teaching:
+  teaching_budget:
+    max_new_dimensions_per_turn: 2
+    max_cases_per_cluster: 3
+    max_counterexamples: 1
+  completed_dimensions:
+    - "baseline_behavior"
+  active_dimension: "microtask_drain_exhaustion"
+  queue:
+    - dimension: "microtask_drain_exhaustion"
+      priority: "critical"
+      phase: 1
+    - dimension: "macrotask_interleaving"
+      priority: "high"
+      phase: 2
+    - dimension: "render_timing_phase"
+      priority: "medium"
+      phase: 3
+
+learner_evidence:
+  baseline_behavior:
+    status: "independent"
+  microtask_drain_exhaustion:
+    status: "supported"
+  macrotask_interleaving:
+    status: "not_attempted"
+  render_timing_phase:
+    status: "not_attempted"
+
+completeness:
+  knowledge: 100.0  # 4 covered / 4 required
+  teaching: 50.0   # 2 delivered / 4 required
+  capability: 25.0 # 1 independent / 4 required

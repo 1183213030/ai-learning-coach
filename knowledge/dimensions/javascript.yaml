@@ -1,0 +1,83 @@
+version: "3.2.0"
+domain: "javascript"
+description: "ECMAScript language and JavaScript runtime behavioral dimensions."
+
+dimensions:
+  - id: primitive_vs_reference
+    name: "Primitive Values vs Object Identity"
+    description: "Distinction between immutable primitive values and newly allocated object identities under SameValue / SameValueZero."
+    applicability_hint:
+      - equality
+      - collections
+      - parameters
+      - memory
+
+  - id: type_coercion
+    name: "Abstract Type Coercion"
+    description: "Implicit conversion rules under Abstract Equality (==), ToPrimitive, ToNumber, ToString."
+    applicability_hint:
+      - equality
+      - operators
+      - arithmetic
+
+  - id: special_primitives
+    name: "IEEE-754 & Engine Special Values"
+    description: "Behavior involving NaN, +0, -0, Infinity, undefined, null, and Symbol."
+    applicability_hint:
+      - arithmetic
+      - equality
+      - search_algorithms
+
+  - id: sparse_structure
+    name: "Sparse Array Slots & Holes"
+    description: "Difference between empty slots (holes from delete/new Array(N)) and explicitly assigned undefined."
+    applicability_hint:
+      - array_methods
+      - iterators
+
+  - id: index_boundary
+    name: "Index Boundaries & Negative Offsets"
+    description: "Boundary index handling: 0, length, out-of-bounds, and negative wrapping offsets."
+    applicability_hint:
+      - arrays
+      - strings
+      - buffers
+
+  - id: execution_context_scope
+    name: "Lexical Scope & Closure Retainment"
+    description: "Lexical nesting, environment record variable lookup, scope chain closure over external variables."
+    applicability_hint:
+      - functions
+      - closures
+      - modules
+
+  - id: event_loop_timing
+    name: "Event Loop & Task Scheduling"
+    description: "Execution order among synchronous stack, microtasks (Promise/queueMicrotask), macrotasks (setTimeout), and rendering."
+    applicability_hint:
+      - async
+      - timing
+      - dom_events
+
+  - id: prototype_chain
+    name: "Prototype Inheritance & Property Lookup"
+    description: "Delegation up the [[Prototype]] chain vs own properties (hasOwnProperty / Object.hasOwn)."
+    applicability_hint:
+      - objects
+      - classes
+      - inheritance
+
+  - id: asynchronous_lifecycle
+    name: "Asynchronous Lifecycle & Settling"
+    description: "Promise states (pending, fulfilled, rejected), async/await suspension, unhandled rejections."
+    applicability_hint:
+      - async
+      - promises
+
+  - id: memory_retention_gc
+    name: "Memory Retention & GC Reachability"
+    description: "Garbage collection reachability root graphs, unclosed handlers, and unintended retained closures."
+    applicability_hint:
+      - memory
+      - performance
+      - closures

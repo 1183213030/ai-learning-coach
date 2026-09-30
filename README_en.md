@@ -6,9 +6,9 @@
 
 Say goodbye to "reading a tutorial and thinking you got it, then staring blankly at an empty screen." Like having an expert private tutor by your side, guiding you from absolute zero to independent real-world mastery.
 
-[![Protocol Version](https://img.shields.io/badge/Protocol-v3.1.0-007ACC?style=flat-square)](#)
+[![Protocol Version](https://img.shields.io/badge/Protocol-v3.2.0-007ACC?style=flat-square)](#)
 [![Zero Command](https://img.shields.io/badge/Interaction-Zero--Command%20Natural%20Language-4EBA6F?style=flat-square)](#)
-[![Complete Pedagogy](https://img.shields.io/badge/Pedagogy-Controlled%20Variation%20%7C%20Counterexamples-orange?style=flat-square)](#)
+[![Tri Completeness](https://img.shields.io/badge/Completeness-Knowledge%20%7C%20Teaching%20%7C%20Capability-orange?style=flat-square)](#)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)](#)
 
 [简体中文](README.md) • [English](README_en.md)
@@ -31,14 +31,20 @@ When learning to code, almost everyone encounters three painful frustrations:
 
 ## How Does It Actually Teach a Beginner?
 
-### 1. Maps the Entire Journey First
+### 1. Tri-Completeness: Knowing != Teaching != Mastering
+Most AI tutoring tools fail because they confuse reciting an explanation with actual learner understanding. This system tracks three strictly separated dimensions:
+- **Knowledge Completeness**: Exhaustively auditing every required behavioral boundary and pitfall against official runtime specifications (S0).
+- **Teaching Delivery**: Pacing lessons according to your energy and level (max 2 dimensions per turn for beginners) via single-variable experiments to prevent cognitive overload.
+- **Capability Mastery**: Demanding unassisted closed-book proofs (`L0`) and real-world transfer tests before marking any concept as truly mastered.
+
+### 2. Maps the Entire Journey First
 Whether you say "I want to build websites" or "I want to master frontend development," it doesn't rush to dump random code. It quietly draws a clear **Skill Tree Roadmap**:
 - What fundamentals must be built first (the solid bedrock);
 - What comes second and third;
 - Where the destination lies and how every concept connects.
 It never pushes you to advanced chapters until your foundational mechanics are truly solid.
 
-### 2. Controlled Variation: Change One Variable and Watch the Result Shift
+### 3. Controlled Variation: Change One Variable and Watch the Result Shift
 Great teachers don't just state definitions; they run experiments with you.
 Instead of memorizing array methods, it holds everything constant and **changes only one variable at a time**:
 - `[1, 2, 3].includes(2)` -> `true` (Found, normal)
@@ -47,7 +53,7 @@ Instead of memorizing array methods, it holds everything constant and **changes 
 - `[[1]].includes([1])` -> `false` (Reference changed: distinct object identity trap!)
 By observing output shifts step-by-step, you build an unshakeable physical intuition for how the runtime operates.
 
-### 3. Counterexample Shocks: Shattering False Assumptions
+### 4. Counterexample Shocks: Shattering False Assumptions
 Beginners often suffer from assuming they understand when they don't.
 The coach presents **"near-miss counterexamples that look correct but fail instantly"**:
 - For example, checking if a string contains `"admin"`;
@@ -55,12 +61,12 @@ The coach presents **"near-miss counterexamples that look correct but fail insta
 - Then asks: *"Every letter of 'admin' is inside 'admmmmmin'. Why did the computer reject it?"*
 When you deduce for yourself that "the letters must be connected consecutively with no breaks," the concept is locked into your mind forever.
 
-### 4. Closed-Book Verification: Saying "I Understand" Doesn't Count
+### 5. Closed-Book Verification: Saying "I Understand" Doesn't Count
 Traditional courses ask "Does that make sense?" and accept a polite "yes" as proof of mastery.
 This coach enforces a strict rule: **Teaching and Testing are completely separate**.
 During verification, hints and solutions are hidden. You must explain the mechanism in plain words or write the code completely independently. True capability is logged only when you succeed with zero AI hints.
 
-### 5. Respects Real Life: Your Fatigue and Time Come First
+### 6. Respects Real Life: Your Fatigue and Time Come First
 Real humans aren't machines. You can't always study for 2 hours:
 - If you worked late and only have 10 minutes, say: *"Exhausted today, only have 10 mins"*. It stops new chapters immediately and gives you a 3-minute micro-review on a recent blind spot.
 - If you hit a real production bug, say: *"Pause the course, my app is throwing a CORS error"*. It pauses the curriculum immediately to help you debug and extracts the lesson from your real code.

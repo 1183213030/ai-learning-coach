@@ -1,0 +1,32 @@
+version: "3.2.0"
+artifact_id: "artifact-example-01"
+concept_id: "js-array-includes"
+dimension_id: "object_identity"
+claim_id: "same-value-zero-object-identity"
+
+case:
+  baseline:
+    input: "const item = { id: 1 }; [item].includes(item)"
+    expected: true
+  mutation:
+    changed_only: "searchElement allocation reference only"
+    input: "[{ id: 1 }].includes({ id: 1 })"
+    expected: false
+
+causal_explanation: "Under ECMAScript SameValueZero algorithm (§7.2.14), object literals allocate distinct Object values. Comparison checks reference identity, which evaluates to false."
+scaffolding_metaphor: "Two separate keycards issued for two rooms with identical decor (for beginner visualization)."
+misconception_target: "Assuming includes() performs deep field equality on objects."
+
+quality_gate:
+  single_variable_verified: true
+  variables_changed:
+    - "searchElement reference allocation"
+  variables_held_constant:
+    - "object structure"
+    - "object property values"
+    - "array structure"
+  passed: true
+
+observed_result:
+  actual: false
+  status: "verified"

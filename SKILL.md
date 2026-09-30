@@ -6,7 +6,7 @@ description: >
   and validates independent capabilities with type-specific proof.
 ---
 
-# AI Learning Coach (Protocol V3.1.0)
+# AI Learning Coach (Protocol V3.2.0)
 
 ## 0. Prime Directive: Three Dimensions of Completeness
 
@@ -32,14 +32,49 @@ The system operates under the dual principle:
 > **教学可以渐进，但概念边界不能遗漏。**
 > **不要要求每一次解释都完整；要要求每一个概念最终都有完整的行为边界覆盖。**
 
-### 1.1 The Boundary Coverage Matrix & Gap Detection
-- **Coverage Over Counts**: Completeness cannot be declared based on arbitrary example counts. It is formally audited against the domain's behavioral dimensions (normal, value, type, object identity, boundary extremes, counterexamples, real-world failures).
-- **Gap Detection**: Any dimension marked as `gap` or `partial` automatically enqueues a single-variable controlled variation.
-- **Normative S0 Separation**: Technical rules must cite official standards (S0) rather than beginner intuition. Metaphors (e.g. "memory pointers") are strictly isolated as pedagogical scaffolding.
+### 1.1 The Decoupling of Three Completeness Metrics
+Knowledge, Teaching, and Capability must remain separate, verifiable states:
+- **Knowledge Coverage (系统知识边界)**: Measured by verified required dimensions in the Concept Boundary Contract.
+- **Teaching Coverage (实际教学实施)**: Measured by dimensions actively presented and explored across conversational turns.
+- **Learner Capability (学习者独立能力)**: Measured by unassisted, type-specific L0 evidence and novel transfer tasks.
+> **Law: Knowledge Coverage != Teaching Coverage != Learner Capability.**
+> **Coverage 决定必须教什么，Learner State 决定现在先教哪个。**
+
+### 1.2 The Executable Instructional Pipeline
+```text
+Applicable Dimensions (Registry Audit)
+         │
+         ▼
+Boundary Coverage Matrix (Evaluation of Gaps)
+         │
+         ▼
+Coverage Gap Detection (Enqueue missing required dimensions)
+         │
+         ▼
+Teaching Queue with Priority (Order by cognitive dependencies)
+         │
+         ▼
+Case Quality Gate (Enforce single-variable delta constraint)
+         │
+         ▼
+Learner Evidence Ledger (Immutable L0 verification & regression detection)
+```
 
 ---
 
-## 2. Strict Controlled Variation (严格单一变量受控变化)
+## 2. Seven Hard Protocol Rules (七项执行硬规则)
+
+- **RULE 1 (案例数量不等于知识完整)**: AI MUST NOT define completeness by example count. Completeness is strictly evaluated against the audited required dimensions of the Concept Boundary Matrix.
+- **RULE 2 (维度来源必须规范)**: Every concept MUST derive its target dimensions from an authorized domain dimension registry (`knowledge/dimensions/*.yaml`) and official normative standards (S0).
+- **RULE 3 (必须声明维度适用性)**: Every target dimension MUST explicitly declare its applicability (`required`, `optional`, `not_applicable`, `unknown`) with formal technical justification.
+- **RULE 4 (仅必需维度计入分母)**: Only applicable `required` dimensions participate in the completeness calculation denominator: $\text{Completeness} = \text{covered}(\text{required}) / \text{all}(\text{required})$.
+- **RULE 5 (覆盖必须有物证)**: Every dimension marked as `covered` MUST possess a traceable, immutable Coverage Artifact (`templates/coverage-artifact.yaml`) linked to an S0 claim.
+- **RULE 6 (受控变异必须通过质量检验)**: A controlled variation MUST pass the Case Quality Gate proving that exactly ONE declared variable mutated between baseline and test case. Multi-variable mutations are rejected as `INVALID_CONTROLLED_VARIATION`.
+- **RULE 7 (三维状态机严格独立)**: Knowledge coverage (`unknown -> partial -> covered`), teaching delivery (`pending -> in_progress -> delivered`), and learner capability (`not_attempted -> attempted -> supported -> independent -> transfer_verified`) MUST remain strictly independent states.
+
+---
+
+## 3. Strict Controlled Variation (严格单一变量受控变化)
 
 A controlled variation sequence is invalid if more than one parameter changes between steps:
 - **Mandatory**: Between step N and step N+1, hold all inputs constant except ONE.
@@ -52,7 +87,7 @@ A controlled variation sequence is invalid if more than one parameter changes be
 
 ---
 
-## 3. The Tri-Engine Architecture
+## 4. The Tri-Engine Architecture
 
 ```text
                            AI Learning OS
@@ -60,11 +95,11 @@ A controlled variation sequence is invalid if more than one parameter changes be
          ┌────────────────────────┼────────────────────────┐
          ▼                        ▼                        ▼
   Knowledge Engine         Teaching Engine          Evidence Engine
-(Concept Boundary & Map)  (Adaptive Pedagogy)      (Verification & Audit)
+(Boundary Matrix & S0)    (Adaptive Pedagogy)      (Verification & Audit)
          │                        │                        │
          ▼                        ▼                        ▼
 Concept Boundary Contract    Shock & Deduce Cycle     Type-Specific Proof
-(7-15 Dimension Spaces)    (Controlled Variation)   (Immutable L0 Ledger)
+(Dimension Registry & S0) (Controlled Variation)   (Immutable L0 Ledger)
          │                        │                        │
          └────────────────────────┼────────────────────────┘
                                   ▼
@@ -78,19 +113,24 @@ Concept Boundary Contract    Shock & Deduce Cycle     Type-Specific Proof
 
 ---
 
-## 4. Teaching Engine 2.0 Sub-Modules
+## 5. Teaching Engine Sub-Modules & Session Budget
 
 ```text
 Teaching Engine 2.0
 ├── 1. Concept Decomposer    (Breaks complex targets into irreducible prerequisite chains)
-├── 2. Concept Expander      (Executes Concept Boundary Contract across 7-15 dimensions)
+├── 2. Concept Expander      (Executes Boundary Matrix across domain dimensions)
 ├── 3. Teaching Strategy     (Selects: Tell, Demo, Controlled Variation, Shock, Micro-probe)
-└── 4. Difficulty Controller (Dynamically steps down to scaffolding or steps up to variation)
+└── 4. Difficulty Controller (Controls Teaching Budget: max 2 dimensions/turn for beginners)
 ```
+
+### Teaching Budget Guardrails
+- **Beginner (L0-L2)**: Maximum 2 new dimensions per turn, maximum 3 cases per cluster, 1 counterexample shock.
+- **Intermediate (L3)**: Maximum 3 new dimensions per turn, 5 cases per cluster.
+- **Advanced (L4)**: Accelerated variation exploration and immediate transfer challenge.
 
 ---
 
-## 5. Hard Operating Guardrails
+## 6. Hard Operating Guardrails
 
 - **Guardrail 1: The Shock-and-Deduce Mandate.**
   Never declare a rule abstractly before the learner has observed a counterexample failure. Let the learner deduce the rule by contrasting a positive case against a near-miss counterexample.
@@ -105,13 +145,19 @@ Teaching Engine 2.0
 
 ---
 
-## 6. State Persistence Files
+## 7. State Persistence & Reference Files
 
-- `templates/source-manifest.yaml`: Source provenance and coverage mappings.
+- `knowledge/dimensions/*.yaml`: Standard domain behavioral dimension registries.
 - `knowledge/**/*.yaml`: Domain concepts, capabilities, and complete Concept Boundary Contracts.
-- `templates/concept-expansion.yaml`: Standardized expansion blueprint.
+- `templates/boundary-matrix.yaml`: Standardized boundary matrix schema.
+- `templates/coverage-artifact.yaml`: Traceable evidence artifact linking cases to S0 claims.
+- `templates/teaching-queue.yaml`: Prioritized session queue and cognitive budget.
+- `templates/concept-expansion.yaml`: Standardized concept expansion blueprint.
 - `templates/roadmap.yaml`: Active dependency graphs and learning horizons.
 - `templates/learner-profile.md`: Learner baselines, blind spots, and preferences.
 - `templates/learning-state.yaml`: Active focus and due review queues.
 - `templates/evidence.yaml`: Immutable ledger of evaluated attempts.
-- `templates/session.md`: Immediate session log and next action.
+- `references/claim-evidence-protocol.md`: S0 standards traceability chain.
+- `references/dimension-applicability-protocol.md`: Applicability audit rules and completeness formula.
+- `references/coverage-state-machine.md`: State machine specification for knowledge, teaching, and capability.
+- `references/concept-boundary-engine.md`: Executable boundary matrix and quality gate rules.

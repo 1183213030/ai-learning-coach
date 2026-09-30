@@ -1,0 +1,88 @@
+version: "3.2.0"
+domain: "universal"
+description: "Universal behavioral dimensions applicable across all programming languages, runtimes, and engineering systems."
+
+dimensions:
+  - id: core_invariant
+    name: "Core Invariant"
+    description: "The fundamental mathematical or runtime rule that dictates truth and invariant behavior."
+    applicability_hint:
+      - all_concepts
+
+  - id: baseline_behavior
+    name: "Baseline Nominal Behavior"
+    description: "Nominal, happy-path execution under standard conditions without edge interference."
+    applicability_hint:
+      - all_concepts
+
+  - id: value_variation
+    name: "Value Variation"
+    description: "Holding type, structure, and execution environment constant while varying the target or input data."
+    applicability_hint:
+      - data_structures
+      - search_algorithms
+      - operators
+
+  - id: type_variation
+    name: "Type Variation"
+    description: "Holding value semantics constant while testing mismatched or coerced primitive data types."
+    applicability_hint:
+      - operators
+      - equality
+      - function_signatures
+
+  - id: boundary_extremes
+    name: "Boundary Extremes & Empty States"
+    description: "Execution at extremal limits: empty collections, zero length, max bounds, null/undefined inputs."
+    applicability_hint:
+      - collections
+      - range_queries
+      - loops
+
+  - id: structural_composition
+    name: "Structural Composition & Nesting"
+    description: "Behavior when entities are deeply nested, composed, chained, or wrapped."
+    applicability_hint:
+      - data_structures
+      - functions
+      - object_graphs
+
+  - id: state_lifecycle
+    name: "State & Lifecycle Dynamics"
+    description: "Creation, initialization, transition, mutation, and destruction lifecycle phases."
+    applicability_hint:
+      - components
+      - connections
+      - memory_management
+
+  - id: counterexample_shocks
+    name: "Counterexample Shocks (Near-Misses)"
+    description: "Superficially valid cases that fail immediately, shattering false mental assumptions."
+    applicability_hint:
+      - all_concepts
+
+  - id: common_misconceptions
+    name: "Common Mental Misconceptions"
+    description: "Enticing cognitive traps and false analogies refuted with falsifiable counter-code."
+    applicability_hint:
+      - all_concepts
+
+  - id: neighboring_concepts
+    name: "Neighboring Concept Contrast"
+    description: "Side-by-side trade-off debate against adjacent APIs or architectural options in the ecosystem."
+    applicability_hint:
+      - api_selection
+      - patterns
+
+  - id: production_real_world
+    name: "Production Anchors & Silent Failures"
+    description: "Realistic production bugs or vulnerability patterns caused by boundary misunderstanding."
+    applicability_hint:
+      - production_code
+      - system_design
+
+  - id: transfer_application
+    name: "Transfer Application (Novel Domain)"
+    description: "Applying the core invariant in an unfamiliar scenario without prompting keywords."
+    applicability_hint:
+      - mastery_verification

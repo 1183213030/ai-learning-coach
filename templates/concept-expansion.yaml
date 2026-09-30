@@ -1,118 +1,227 @@
-version: "3.1.0"
-concept_id: "js-array-includes"
-name: "Array.prototype.includes & SameValueZero Algorithm"
-domain: "frontend-javascript"
+version: "3.2.0"
 
-purpose:
-  - "Determine whether an array contains a specific element, returning a boolean true or false."
+concept:
+  id: "js-array-includes"
+  name: "Array.prototype.includes & SameValueZero Algorithm"
+  domain: "frontend-javascript"
 
-syntax:
-  - "arr.includes(searchElement[, fromIndex])"
+  normative_sources:
+    - source_id: "ecma-262"
+      name: "ECMAScript Language Specification"
+      level: "S0"
+      section: "23.1.3.16 Array.prototype.includes"
+    - source_id: "ecma-262-svz"
+      name: "ECMAScript SameValueZero Specification"
+      level: "S0"
+      section: "7.2.14 SameValueZero"
 
-core_invariant:
-  - "Compares searchElement with array elements using the SameValueZero algorithm. Unlike indexOf, it treats NaN as equal to NaN."
+  claims:
+    - id: "membership-evaluation"
+      source_id: "ecma-262"
+      section: "23.1.3.16"
+      claim_text: "Determines whether an array includes a certain value among its entries, returning true or false, using SameValueZero."
+    - id: "same-value-zero-identity"
+      source_id: "ecma-262-svz"
+      section: "7.2.14"
+      claim_text: "Object literals allocate distinct Object values. Reference identity comparison evaluates to false."
+    - id: "same-value-zero-nan"
+      source_id: "ecma-262-svz"
+      section: "7.2.14"
+      claim_text: "SameValueZero treats NaN as equal to NaN."
 
-coverage_audit:
-  target_dimensions:
+  boundary_matrix:
     - dimension: "primitive_baseline"
-      status: "covered"
-      test_case: "[1, 2, 3].includes(2)"
+      applicability: "required"
+      reason: "Defines normal successful primitive number/string search."
+      coverage:
+        status: "covered"
+        artifact_id: "artifact-includes-baseline"
+
     - dimension: "value_variation"
-      status: "covered"
-      test_case: "[1, 2, 3].includes(4)"
-    - dimension: "type_mismatch_boundary"
-      status: "covered"
-      test_case: "['1'].includes(1)"
-    - dimension: "object_identity_reference"
-      status: "covered"
-      test_case: "[[1]].includes([1])"
-      s0_fact: "ECMAScript §7.2.14 SameValueZero algorithm: distinct object literals create distinct object values (identities)."
-      scaffolding_metaphor: "Distinct memory pointers (beginner scaffolding only)."
-    - dimension: "special_primitive_nan"
-      status: "covered"
-      test_case: "[NaN].includes(NaN)"
-      s0_fact: "SameValueZero treats NaN as equal to NaN."
-    - dimension: "special_primitive_signed_zero"
-      status: "covered"
-      test_case: "[+0].includes(-0)"
-      s0_fact: "SameValueZero treats +0 and -0 as equal."
-    - dimension: "sparse_array_holes"
-      status: "covered"
-      test_case: "new Array(1).includes(undefined)"
-      s0_fact: "includes() visits empty slots as undefined."
+      applicability: "required"
+      reason: "Core membership semantics: element absence returning false."
+      coverage:
+        status: "covered"
+        artifact_id: "artifact-includes-value-var"
+
+    - dimension: "type_mismatch"
+      applicability: "required"
+      reason: "SameValueZero does not coerce string and number."
+      coverage:
+        status: "covered"
+        artifact_id: "artifact-includes-type-var"
+
+    - dimension: "object_identity"
+      applicability: "required"
+      reason: "Object operands are compared by reference identity, not structural fields."
+      coverage:
+        status: "covered"
+        artifact_id: "artifact-includes-object-identity"
+
+    - dimension: "special_nan"
+      applicability: "required"
+      reason: "Treating NaN as equal to NaN is the core differentiator from indexOf."
+      coverage:
+        status: "covered"
+        artifact_id: "artifact-includes-nan"
+
+    - dimension: "special_signed_zero"
+      applicability: "required"
+      reason: "SameValueZero treats +0 and -0 as identical."
+      coverage:
+        status: "covered"
+        artifact_id: "artifact-includes-signed-zero"
+
+    - dimension: "sparse_structure"
+      applicability: "required"
+      reason: "includes() treats sparse empty slots as undefined."
+      coverage:
+        status: "covered"
+        artifact_id: "artifact-includes-sparse"
+
     - dimension: "index_offset_boundaries"
-      status: "covered"
-      test_case: "[1, 2, 3].includes(3, -1)"
+      applicability: "required"
+      reason: "Validates positive and negative fromIndex offset handling."
+      coverage:
+        status: "covered"
+        artifact_id: "artifact-includes-index-offset"
 
-positive_cases:
-  - input: "[1, 2, 3].includes(2)"
-    expected: true
-    rationale: "Direct primitive number match."
-  - input: "['admin', 'editor'].includes('admin')"
-    expected: true
-    rationale: "Direct primitive string match."
+    - dimension: "prototype_chain"
+      applicability: "not_applicable"
+      reason: "includes() operates solely on indexed numeric properties without prototype traversal."
+      coverage:
+        status: "not_applicable"
+        artifact_id: null
 
-variation_cases:
-  - input: "[1, 2, 3].includes(2, 1)"
-    expected: true
-    rationale: "Searching fromIndex 1 includes index 1 itself."
-  - input: "[1, 2, 3].includes(1, 1)"
-    expected: false
-    rationale: "Searching fromIndex 1 starts past the target position."
-  - input: "[1, 2, 3].includes(3, -1)"
-    expected: true
-    rationale: "Negative offset counts back from array length (3 + (-1) = 2)."
+  coverage_artifacts:
+    - artifact_id: "artifact-includes-baseline"
+      dimension: "primitive_baseline"
+      claim_id: "membership-evaluation"
+      case:
+        baseline:
+          input: "[1, 2, 3].includes(2)"
+          expected: true
+      causal_explanation: "Target number primitive 2 exists at index 1."
 
-counterexample_shocks:
-  - input: "['1'].includes(1)"
-    expected: false
-    shock_reason: "Looks identical in string coercion, but strictly checks types without casting."
-  - input: "[[1]].includes([1])"
-    expected: false
-    shock_reason: "Inner arrays are distinct object identities per ECMAScript SameValueZero."
-    s0_fact: "ECMAScript §7.2.14: distinct object literals create separate object identities."
-    scaffolding_metaphor: "Distinct memory pointers (for beginner visualization)."
-  - input: "[{ id: 1 }].includes({ id: 1 })"
-    expected: false
-    shock_reason: "Object literal creates a newly allocated object identity; identity comparison fails."
-    s0_fact: "ECMAScript §7.2.14: Object comparison evaluates identity, not structural equality."
-    scaffolding_metaphor: "Separate keycards for two rooms with identical furniture."
+    - artifact_id: "artifact-includes-value-var"
+      dimension: "value_variation"
+      claim_id: "membership-evaluation"
+      case:
+        baseline:
+          input: "[1, 2, 3].includes(2)"
+          expected: true
+        mutation:
+          changed_only: "target search value"
+          input: "[1, 2, 3].includes(4)"
+          expected: false
+      causal_explanation: "Array is unchanged; value 4 is absent."
 
-boundary_cases:
-  - input: "[NaN].includes(NaN)"
-    expected: true
-    boundary_type: "IEEE-754 Special Primitive"
-    note: "Unlike indexOf which uses === (where NaN === NaN is false), includes correctly finds NaN."
-  - input: "[+0].includes(-0)"
-    expected: true
-    boundary_type: "IEEE-754 Signed Zero"
-    note: "SameValueZero treats +0 and -0 as equal (unlike Object.is which differentiates them)."
-  - input: "[].includes(undefined)"
-    expected: false
-    boundary_type: "Empty collection"
-  - input: "[undefined].includes(undefined)"
-    expected: true
-    boundary_type: "Explicit undefined element"
-  - input: "new Array(1).includes(undefined)"
-    expected: true
-    boundary_type: "Sparse array hole"
-    note: "includes() treats sparse empty slots as undefined, unlike map() or forEach()."
+    - artifact_id: "artifact-includes-type-var"
+      dimension: "type_mismatch"
+      claim_id: "membership-evaluation"
+      case:
+        baseline:
+          input: "[1, 2, 3].includes(2)"
+          expected: true
+        mutation:
+          changed_only: "target search type (number -> string)"
+          input: "[1, 2, 3].includes('2')"
+          expected: false
+      causal_explanation: "SameValueZero does not coerce string '2' into number 2."
 
-common_misconceptions:
-  - trap: "Believing includes() performs deep object equality checking."
-    counter_proof: "Passing two distinct object references with identical fields returns false."
-  - trap: "Assuming includes() works like indexOf with NaN."
-    counter_proof: "indexOf(NaN) returns -1, while includes(NaN) returns true."
+    - artifact_id: "artifact-includes-object-identity"
+      dimension: "object_identity"
+      claim_id: "same-value-zero-identity"
+      case:
+        baseline:
+          input: "const o = { id: 1 }; [o].includes(o)"
+          expected: true
+        mutation:
+          changed_only: "searchElement allocation reference"
+          input: "[{ id: 1 }].includes({ id: 1 })"
+          expected: false
+      causal_explanation: "Object literals allocate distinct Object values. Reference identity comparison fails."
+      scaffolding_metaphor: "Distinct memory pointers / separate keycards for identical rooms."
 
-confusing_neighbor_contrast:
-  - tool: "Array.prototype.indexOf"
-    difference: "Returns integer index; uses Strict Equality (===) which causes it to miss NaN."
-  - tool: "Array.prototype.some"
-    difference: "Accepts a callback predicate function; essential for finding objects by internal property."
-  - tool: "Set.prototype.has"
-    difference: "O(1) average lookup complexity; far superior for high-frequency or large collections."
+    - artifact_id: "artifact-includes-nan"
+      dimension: "special_nan"
+      claim_id: "same-value-zero-nan"
+      case:
+        baseline:
+          input: "[NaN].includes(NaN)"
+          expected: true
+      causal_explanation: "SameValueZero explicitly evaluates NaN equals NaN to true."
 
-real_world_engineering_anchor:
-  scenario: "Checking user permissions from JWT payload array."
-  trap_in_prod: "If roles are returned as [{ name: 'admin' }], roles.includes({ name: 'admin' }) returns false silently."
-  correct_pattern: "roles.some(r => r.name === 'admin')"
+    - artifact_id: "artifact-includes-signed-zero"
+      dimension: "special_signed_zero"
+      claim_id: "membership-evaluation"
+      case:
+        baseline:
+          input: "[+0].includes(-0)"
+          expected: true
+      causal_explanation: "SameValueZero treats +0 and -0 as identical values."
+
+    - artifact_id: "artifact-includes-sparse"
+      dimension: "sparse_structure"
+      claim_id: "membership-evaluation"
+      case:
+        baseline:
+          input: "new Array(1).includes(undefined)"
+          expected: true
+      causal_explanation: "includes() treats sparse empty slots as undefined."
+
+    - artifact_id: "artifact-includes-index-offset"
+      dimension: "index_offset_boundaries"
+      claim_id: "membership-evaluation"
+      case:
+        baseline:
+          input: "[1, 2, 3].includes(3, -1)"
+          expected: true
+      causal_explanation: "Negative offset counts backwards from array length (3 + (-1) = 2)."
+
+  teaching:
+    teaching_budget:
+      max_new_dimensions_per_turn: 2
+      max_cases_per_cluster: 3
+      max_counterexamples: 1
+    completed_dimensions:
+      - "primitive_baseline"
+      - "value_variation"
+      - "type_mismatch"
+    active_dimension: "object_identity"
+    queue:
+      - dimension: "object_identity"
+        priority: "critical"
+        phase: 2
+      - dimension: "special_nan"
+        priority: "high"
+        phase: 2
+      - dimension: "special_signed_zero"
+        priority: "medium"
+        phase: 2
+      - dimension: "sparse_structure"
+        priority: "low"
+        phase: 3
+
+  learner_evidence:
+    primitive_baseline:
+      status: "independent"
+    value_variation:
+      status: "independent"
+    type_mismatch:
+      status: "independent"
+    object_identity:
+      status: "supported"
+    special_nan:
+      status: "not_attempted"
+    special_signed_zero:
+      status: "not_attempted"
+    sparse_structure:
+      status: "not_attempted"
+    index_offset_boundaries:
+      status: "not_attempted"
+
+  completeness:
+    knowledge: 100.0
+    teaching: 50.0
+    capability: 37.5

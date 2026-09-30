@@ -1,0 +1,64 @@
+version: "3.2.0"
+concept_id: "js-array-includes"
+learner_id: "learner-01"
+learner_level: "beginner" # beginner (L0-L2) | intermediate (L3) | advanced (L4)
+
+teaching_budget:
+  max_new_dimensions_per_turn: 2
+  max_cases_per_cluster: 3
+  max_counterexamples: 1
+  require_prediction_after: 2
+
+queue:
+  - dimension: "primitive_baseline"
+    priority: "critical"
+    phase: 1
+    rationale: "Foundational baseline prerequisite for all subsequent variations."
+    prerequisites: []
+    status: "pending"
+
+  - dimension: "value_variation"
+    priority: "high"
+    phase: 1
+    rationale: "Establishes contrast between present and absent elements."
+    prerequisites:
+      - "primitive_baseline"
+    status: "pending"
+
+  - dimension: "type_variation"
+    priority: "high"
+    phase: 1
+    rationale: "Validates non-coercive strict type matching."
+    prerequisites:
+      - "primitive_baseline"
+    status: "pending"
+
+  - dimension: "object_identity"
+    priority: "critical"
+    phase: 2
+    rationale: "Core engineering pitfall; must contrast primitive equality against reference equality."
+    prerequisites:
+      - "type_variation"
+    status: "pending"
+
+  - dimension: "special_nan"
+    priority: "medium"
+    phase: 2
+    rationale: "Differentiates includes from indexOf under SameValueZero."
+    prerequisites:
+      - "primitive_baseline"
+    status: "pending"
+
+  - dimension: "sparse_structure"
+    priority: "low"
+    phase: 3
+    rationale: "Edge case behavior with array holes vs explicit undefined."
+    prerequisites:
+      - "primitive_baseline"
+    status: "pending"
+
+active_session_slice:
+  phase: 1
+  target_dimensions:
+    - "primitive_baseline"
+    - "value_variation"

@@ -1,59 +1,60 @@
-# Concept Boundary Engine & Coverage Matrix Protocol
+# Concept Boundary Engine & Executable State Protocol (Protocol V3.2)
 
-This document specifies the **Boundary Coverage Matrix**, the **Coverage Gap Detection** algorithm, and domain-specific behavioral dimension registries to guarantee zero omissions in technical knowledge coverage.
+This document specifies the **Boundary Coverage Matrix**, **Dimension Applicability**, the **Coverage Completeness Formula**, the **Coverage Gap Detection Algorithm**, **Coverage Artifacts**, and the **Case Quality Gate** to guarantee mathematical rigor and zero omissions in technical education.
 
 ---
 
-## 1. Prime Directive: Coverage Matrix Over Case Lists
+## 1. Prime Directive: Boundary Coverage Over Case Counts
 
-A major defect in AI education is listing arbitrary examples without a mathematical proof of boundary completeness:
+A fatal flaw in educational AI is assuming arbitrary examples constitute mastery:
 > **Listing 10 happy-path examples does not prove a concept is mastered.**
-> **Completeness is proven only when every intrinsic behavioral dimension of the concept has a verified coverage artifact.**
+> **Completeness is proven only when every applicable behavioral dimension of the concept possesses a verified Coverage Artifact.**
 
 ```text
 Concept Node
      │
      ▼
-Domain Behavioral Dimensions Registry
+Domain Dimension Registry (universal.yaml / javascript.yaml)
      │
      ▼
-Boundary Coverage Matrix (Evaluation of Gaps)
+Dimension Applicability Audit (required / optional / not_applicable)
      │
      ▼
-Coverage Gap Detection -> Enqueue Missing Dimension
+Boundary Coverage Matrix (Audited Required Set)
      │
      ▼
-Controlled Variation & Case Cluster Teaching
+Coverage Gap Detection (Identifies gaps & partials)
      │
      ▼
-Verification & Audit
+Teaching Queue with Priority (Schedules by cognitive priority)
+     │
+     ▼
+Case Quality Gate (Enforces single-variable delta constraint)
+     │
+     ▼
+Coverage Artifact & S0 Traceability Chain
 ```
 
 ---
 
-## 2. Standard Boundary Dimension Registry
+## 2. Dimension Applicability & The Completeness Formula
 
-Every technical domain defines its governing behavioral dimensions. A concept contract must map against these dimensions:
+Every dimension from the domain registry must be classified for the target concept:
 
-### 2.1 Universal Core Dimensions
-1. `core_invariant`: The fundamental mathematical/runtime condition deciding truth.
-2. `normal_behavior`: Nominal baseline execution without edge interference.
-3. `value_variation`: Holding type and structure constant; changing search/input values.
-4. `type_variation`: Holding value stringification constant; changing primitive data types.
-5. `structural_variation`: Padded context, nesting, prefix/suffix additions.
-6. `boundary_extremes`: Empty collections, boundary indices (0, -1, length), sparse slots.
-7. `counterexamples`: Superficially identical structures that fail the invariant immediately.
-8. `misconceptions`: Enticing mental traps refuted with falsifiable counter-code.
-9. `neighboring_concepts`: Side-by-side trade-off debate against adjacent ecosystem APIs.
-10. `real_world_failure`: Realistic production silent bugs caused by boundary misunderstanding.
-11. `transfer`: Applying the invariant in a foreign, unprompted domain.
+### 2.1 Applicability Classifications
+- `required`: Essential behavioral dimension governing correct execution. Must enter the completeness denominator and teaching queue.
+- `optional`: Enrichment or historical context. Does not inflate the required completeness denominator.
+- `not_applicable`: Mechanically irrelevant to this concept. Requires an explicit negative technical rationale.
+- `unknown`: Unaudited dimension. Flags an incomplete concept contract.
 
-### 2.2 JavaScript Runtime Domain Extensions
-- `primitive_vs_reference`: ECMAScript Object identity (SameValue / SameValueZero) vs primitive values.
-- `type_coercion`: Abstract equality conversion rules (ToPrimitive, ToNumber, ToString).
-- `special_primitives`: IEEE-754 primitives (`NaN`, `+0`, `-0`, `undefined`, `null`, `Symbol`).
-- `sparse_slots`: Array holes (`new Array(3)`) vs explicitly assigned `undefined`.
-- `prototype_chain`: Inherited properties vs own properties (`hasOwnProperty`).
+### 2.2 Mathematical Completeness Formula
+
+$$\text{Knowledge Completeness} = \frac{\sum \text{covered}(\text{required dimensions})}{\sum \text{all}(\text{required dimensions})} \times 100\%$$
+
+**Hard Laws**:
+1. `not_applicable` dimensions **MUST NOT** be counted in either numerator or denominator.
+2. `optional` dimensions **MUST NOT** inflate the required denominator.
+3. Completeness is strictly bounded by verified required dimensions, never arbitrary example counts.
 
 ---
 
@@ -62,61 +63,139 @@ Every technical domain defines its governing behavioral dimensions. A concept co
 A Concept Boundary Contract must declare its explicit coverage matrix:
 
 ```yaml
-concept_id: js-array-includes
-coverage_audit:
-  target_dimensions:
-    - dimension: "primitive_baseline"
+concept_id: "js-array-includes"
+boundary_matrix:
+  - dimension: "primitive_baseline"
+    applicability: "required"
+    reason: "Defines normal value search baseline under SameValueZero."
+    coverage:
       status: "covered"
-      test_case: "[1, 2, 3].includes(2)"
+      artifact_id: "artifact-includes-baseline"
 
-    - dimension: "type_mismatch_boundary"
+  - dimension: "value_variation"
+    applicability: "required"
+    reason: "Changing target value is central to membership semantics."
+    coverage:
       status: "covered"
-      test_case: "[1, 2, 3].includes('2')"
+      artifact_id: "artifact-includes-value-var"
 
-    - dimension: "object_identity_reference"
+  - dimension: "type_mismatch"
+    applicability: "required"
+    reason: "SameValueZero strictly checks types without coercion."
+    coverage:
       status: "covered"
-      test_case: "[[1]].includes([1])"
-      s0_fact: "ECMAScript SameValueZero algorithm: distinct object literals produce distinct object references; comparison evaluates to false."
-      scaffolding_metaphor: "Distinct memory pointers (for beginner mental visualization only)."
+      artifact_id: "artifact-includes-type-var"
 
-    - dimension: "special_primitive_nan"
+  - dimension: "object_identity"
+    applicability: "required"
+    reason: "Object operands are compared by reference identity, not structural fields."
+    coverage:
       status: "covered"
-      test_case: "[NaN].includes(NaN)"
+      artifact_id: "artifact-includes-object-identity"
 
-    - dimension: "special_primitive_signed_zero"
+  - dimension: "special_nan"
+    applicability: "required"
+    reason: "Treating NaN as equal to NaN is the core differentiator from indexOf."
+    coverage:
       status: "covered"
-      test_case: "[+0].includes(-0)"
-      s0_fact: "SameValueZero treats +0 and -0 as equal (unlike Object.is which differentiates them)."
+      artifact_id: "artifact-includes-nan"
 
-    - dimension: "sparse_array_holes"
+  - dimension: "special_signed_zero"
+    applicability: "required"
+    reason: "SameValueZero treats +0 and -0 as equal."
+    coverage:
       status: "covered"
-      test_case: "new Array(1).includes(undefined)"
+      artifact_id: "artifact-includes-signed-zero"
 
-    - dimension: "index_offset_boundaries"
+  - dimension: "sparse_structure"
+    applicability: "required"
+    reason: "includes() treats sparse empty slots as undefined."
+    coverage:
       status: "covered"
-      test_case: "[1, 2, 3].includes(2, 1) vs [1, 2, 3].includes(2, 2)"
+      artifact_id: "artifact-includes-sparse"
+
+  - dimension: "prototype_chain"
+    applicability: "not_applicable"
+    reason: "includes() operates solely on indexed numeric properties and does not traverse the prototype chain."
+    coverage:
+      status: "not_applicable"
+      artifact_id: null
 ```
 
 ---
 
 ## 4. Coverage Gap Detection Algorithm
 
-When the Teaching Engine prepares a lesson:
-1. **Matrix Inspection**: The engine loads the concept's `coverage_audit`.
-2. **Gap Identification**: Any dimension flagged as `gap` or `partial` is enqueued into the immediate teaching queue.
-3. **Instructional Generation**: The engine generates a single-variable controlled variation specifically targeting the missing dimension.
-4. **Completion Guarantee**: The coach is forbidden from declaring "concept delivered" until 100% of defined target dimensions are marked `covered`.
+When the Teaching Engine prepares an instructional plan:
+
+```text
+Algorithm: DetectCoverageGaps(concept_id, learner_id)
+1. Load concept boundary_matrix and learner evidence ledger.
+2. required_dims = boundary_matrix.filter(dim => dim.applicability === "required")
+3. For each dim in required_dims:
+     if dim.coverage.status !== "covered":
+         enqueue(dim, status="gap", priority=dim.priority)
+     else if learner_evidence[dim.id] < "independent":
+         enqueue(dim, status="partial_mastery", priority=dim.priority)
+4. Sort teaching_queue by:
+     Priority (critical > high > medium > low)
+     -> Prerequisites resolved first
+     -> Learner cognitive budget
+5. Return ordered teaching_queue slice for immediate session turn.
+```
 
 ---
 
-## 5. Strict Separation: S0 Standard Fact vs. Scaffolding Metaphor
+## 5. Case Quality Gate (Single-Variable Verification)
 
-To maintain technical purity and avoid polluting standard engineering understanding:
+To guarantee that variations provide unconfounded causal learning, every candidate case must pass the automated **Case Quality Gate**:
+
+```text
+                     Candidate Variation Pair
+                  (Baseline Case -> Mutated Case)
+                               │
+                               ▼
+                    Extract Changed Variables
+                               │
+               ┌───────────────┴───────────────┐
+               ▼                               ▼
+       Delta Count == 1                 Delta Count > 1
+               │                               │
+               ▼                               ▼
+      [GATE PASSED: VALID]            [GATE FAILED: REJECTED]
+    Eligible for Artifact           Error: INVALID_CONTROLLED_VARIATION
+```
+
+### Validation Invariants:
+1. Exactly ONE parameter may mutate between baseline and test case.
+2. Holding array structure, input types, and search values constant while mutating only the target variable.
+3. If two variables change simultaneously (e.g. changing both target type and target value), the case is rejected and forbidden from serving as a Coverage Artifact.
+
+---
+
+## 6. Coverage Artifact Specification
+
+Every dimension marked `covered` must reference a concrete, immutable `Coverage Artifact`:
+- `artifact_id`: Unique identifier.
+- `claim_id`: Standard S0 claim reference.
+- `case`:
+  - `baseline`: Input and expected outcome.
+  - `mutation`: Input, expected outcome, and `changed_only` declaration.
+- `causal_explanation`: Technical explanation derived from the S0 standard.
+- `scaffolding_metaphor`: Tagged beginner intuition (isolated from S0).
+- `misconception_target`: The specific mental trap broken by this case.
+- `quality_gate`: Record of single-variable verification.
+
+---
+
+## 7. Strict Separation: S0 Standard Fact vs. Scaffolding Metaphor
+
+To maintain absolute engineering integrity:
 
 ### Rule 1: Normative Specifications Must Cite Standards (S0)
 - **Object Reference Rule**: Never state as a formal rule that *"JavaScript compares memory pointers"*.
 - **Standard Statement (ECMAScript §7.2.14 SameValueZero)**:
-  > *If Type(x) is Object, return true if x and y are the same Object value (referencing the exact same object identity), otherwise return false. `[1] === [1]` evaluates to false because each array literal creates a newly allocated object identity.*
+  > *If Type(x) is Object, return true if and only if x and y refer to the exact same Object identity; otherwise return false. `[1] === [1]` evaluates to false because each array literal creates a newly allocated object identity.*
 
 ### Rule 2: Metaphors Must Be Declared as Scaffolding
 - Metaphors (like "memory pointers" or "keycards") are strictly pedagogical tools for Beginners (Level 0-2). They must be formally tagged as `scaffolding_metaphor` and accompanied by the exact S0 fact.
