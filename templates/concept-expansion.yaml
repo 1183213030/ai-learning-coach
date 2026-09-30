@@ -1,4 +1,4 @@
-version: "3.0.0"
+version: "3.1.0"
 concept_id: "js-array-includes"
 name: "Array.prototype.includes & SameValueZero Algorithm"
 domain: "frontend-javascript"
@@ -11,6 +11,38 @@ syntax:
 
 core_invariant:
   - "Compares searchElement with array elements using the SameValueZero algorithm. Unlike indexOf, it treats NaN as equal to NaN."
+
+coverage_audit:
+  target_dimensions:
+    - dimension: "primitive_baseline"
+      status: "covered"
+      test_case: "[1, 2, 3].includes(2)"
+    - dimension: "value_variation"
+      status: "covered"
+      test_case: "[1, 2, 3].includes(4)"
+    - dimension: "type_mismatch_boundary"
+      status: "covered"
+      test_case: "['1'].includes(1)"
+    - dimension: "object_identity_reference"
+      status: "covered"
+      test_case: "[[1]].includes([1])"
+      s0_fact: "ECMAScript §7.2.14 SameValueZero algorithm: distinct object literals create distinct object values (identities)."
+      scaffolding_metaphor: "Distinct memory pointers (beginner scaffolding only)."
+    - dimension: "special_primitive_nan"
+      status: "covered"
+      test_case: "[NaN].includes(NaN)"
+      s0_fact: "SameValueZero treats NaN as equal to NaN."
+    - dimension: "special_primitive_signed_zero"
+      status: "covered"
+      test_case: "[+0].includes(-0)"
+      s0_fact: "SameValueZero treats +0 and -0 as equal."
+    - dimension: "sparse_array_holes"
+      status: "covered"
+      test_case: "new Array(1).includes(undefined)"
+      s0_fact: "includes() visits empty slots as undefined."
+    - dimension: "index_offset_boundaries"
+      status: "covered"
+      test_case: "[1, 2, 3].includes(3, -1)"
 
 positive_cases:
   - input: "[1, 2, 3].includes(2)"
@@ -37,22 +69,34 @@ counterexample_shocks:
     shock_reason: "Looks identical in string coercion, but strictly checks types without casting."
   - input: "[[1]].includes([1])"
     expected: false
-    shock_reason: "Inner arrays are distinct heap object references, even though contents look identical."
+    shock_reason: "Inner arrays are distinct object identities per ECMAScript SameValueZero."
+    s0_fact: "ECMAScript §7.2.14: distinct object literals create separate object identities."
+    scaffolding_metaphor: "Distinct memory pointers (for beginner visualization)."
   - input: "[{ id: 1 }].includes({ id: 1 })"
     expected: false
-    shock_reason: "Object literal creates a new heap memory pointer; reference equality fails."
+    shock_reason: "Object literal creates a newly allocated object identity; identity comparison fails."
+    s0_fact: "ECMAScript §7.2.14: Object comparison evaluates identity, not structural equality."
+    scaffolding_metaphor: "Separate keycards for two rooms with identical furniture."
 
 boundary_cases:
   - input: "[NaN].includes(NaN)"
     expected: true
     boundary_type: "IEEE-754 Special Primitive"
     note: "Unlike indexOf which uses === (where NaN === NaN is false), includes correctly finds NaN."
+  - input: "[+0].includes(-0)"
+    expected: true
+    boundary_type: "IEEE-754 Signed Zero"
+    note: "SameValueZero treats +0 and -0 as equal (unlike Object.is which differentiates them)."
   - input: "[].includes(undefined)"
     expected: false
     boundary_type: "Empty collection"
   - input: "[undefined].includes(undefined)"
     expected: true
-    boundary_type: "Sparse array / undefined slot"
+    boundary_type: "Explicit undefined element"
+  - input: "new Array(1).includes(undefined)"
+    expected: true
+    boundary_type: "Sparse array hole"
+    note: "includes() treats sparse empty slots as undefined, unlike map() or forEach()."
 
 common_misconceptions:
   - trap: "Believing includes() performs deep object equality checking."

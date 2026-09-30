@@ -6,7 +6,7 @@
 
 Say goodbye to "reading a tutorial and thinking you got it, then staring blankly at an empty screen." Like having an expert private tutor by your side, guiding you from absolute zero to independent real-world mastery.
 
-[![Protocol Version](https://img.shields.io/badge/Protocol-v3.0.0-007ACC?style=flat-square)](#)
+[![Protocol Version](https://img.shields.io/badge/Protocol-v3.1.0-007ACC?style=flat-square)](#)
 [![Zero Command](https://img.shields.io/badge/Interaction-Zero--Command%20Natural%20Language-4EBA6F?style=flat-square)](#)
 [![Complete Pedagogy](https://img.shields.io/badge/Pedagogy-Controlled%20Variation%20%7C%20Counterexamples-orange?style=flat-square)](#)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)](#)
@@ -44,7 +44,7 @@ Instead of memorizing array methods, it holds everything constant and **changes 
 - `[1, 2, 3].includes(2)` -> `true` (Found, normal)
 - `[1, 2, 3].includes(4)` -> `false` (Value changed)
 - `['1', '2', '3'].includes(1)` -> `false` (Type changed: string vs number)
-- `[[1]].includes([1])` -> `false` (Reference changed: memory pointer trap!)
+- `[[1]].includes([1])` -> `false` (Reference changed: distinct object identity trap!)
 By observing output shifts step-by-step, you build an unshakeable physical intuition for how the runtime operates.
 
 ### 3. Counterexample Shocks: Shattering False Assumptions

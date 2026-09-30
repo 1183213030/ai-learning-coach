@@ -7,6 +7,49 @@ source_ids:
 core_invariant:
   - "Determines whether an array includes a certain value among its entries, returning true or false, using the SameValueZero comparison algorithm."
 
+coverage_audit:
+  target_dimensions:
+    - dimension: "primitive_baseline"
+      status: "covered"
+      test_case: "[1, 2, 3].includes(2)"
+      rationale: "Target number primitive 2 exists at index 1."
+
+    - dimension: "value_variation"
+      status: "covered"
+      test_case: "[1, 2, 3].includes(4)"
+      rationale: "Array [1, 2, 3] is unchanged; target number 4 is not present."
+
+    - dimension: "type_mismatch_boundary"
+      status: "covered"
+      test_case: "[1, 2, 3].includes('2')"
+      rationale: "SameValueZero strictly checks types without type coercion (string '2' !== number 2)."
+
+    - dimension: "object_identity_reference"
+      status: "covered"
+      test_case: "[[1]].includes([1])"
+      s0_fact: "ECMAScript §7.2.14 SameValueZero algorithm: distinct object literals produce distinct object values (identities); comparison evaluates to false."
+      scaffolding_metaphor: "Distinct memory pointers / separate keycards (for beginner visualization only)."
+
+    - dimension: "special_primitive_nan"
+      status: "covered"
+      test_case: "[NaN].includes(NaN)"
+      s0_fact: "SameValueZero algorithm explicitly treats NaN as equal to NaN (unlike Strict Equality === which treats NaN === NaN as false)."
+
+    - dimension: "special_primitive_signed_zero"
+      status: "covered"
+      test_case: "[+0].includes(-0)"
+      s0_fact: "SameValueZero treats +0 and -0 as equal (unlike Object.is which differentiates them)."
+
+    - dimension: "sparse_array_holes"
+      status: "covered"
+      test_case: "new Array(1).includes(undefined)"
+      s0_fact: "includes() treats sparse empty slots as undefined entries, returning true when searching for undefined."
+
+    - dimension: "index_offset_boundaries"
+      status: "covered"
+      test_case: "[1, 2, 3].includes(2, 1) vs [1, 2, 3].includes(2, 2)"
+      rationale: "Validates positive and negative fromIndex offset handling."
+
 behavioral_space:
   baseline:
     input: "[1, 2, 3].includes(2)"
@@ -33,10 +76,12 @@ behavioral_space:
       rationale: "Search value '2' is unchanged from step 2; types now align as string primitives."
 
     - step: 4
-      variable_changed_only: "Reference Structure Only (Nested Array Pointer)"
+      variable_changed_only: "Reference Structure Only (Nested Array Object Identity)"
       input: "[[1]].includes([1])"
       expected: false
-      rationale: "Even though [1] contains number 1, [1] inside array and [1] in argument are distinct heap memory references."
+      rationale: "Even though both contain number 1, array literals produce distinct object identities per ECMAScript SameValueZero."
+      s0_fact: "ECMAScript §7.2.14 SameValueZero: distinct object instances have distinct identities."
+      scaffolding_metaphor: "Distinct memory pointers (for beginner visualization only)."
 
     - step: 5
       variable_changed_only: "Special Primitive IEEE-754 (NaN vs NaN)"
@@ -44,10 +89,18 @@ behavioral_space:
       expected: true
       rationale: "SameValueZero algorithm explicitly treats NaN as equal to NaN (unlike Strict Equality === which treats NaN === NaN as false)."
 
+    - step: 6
+      variable_changed_only: "Special Primitive Signed Zero (+0 vs -0)"
+      input: "[+0].includes(-0)"
+      expected: true
+      rationale: "SameValueZero algorithm treats +0 and -0 as identical values."
+
   counterexample_shocks:
     - input: "[{ id: 1 }].includes({ id: 1 })"
       expected: false
-      shock_reason: "Object literal in search argument creates a new heap memory pointer; reference equality fails silently."
+      shock_reason: "Object literal in search argument creates a new object identity; SameValueZero reference equality fails."
+      s0_fact: "ECMAScript §7.2.14: Object comparison evaluates identity, not structural equality."
+      scaffolding_metaphor: "Different memory pointers/keycards for two visually identical objects."
       pedagogical_prompt: "The objects look completely identical in fields. Why did includes() return false? What is JavaScript actually comparing under the hood?"
 
   boundary_cases:
@@ -63,6 +116,10 @@ behavioral_space:
       expected: true
       boundary_type: "Sparse array hole"
       rationale: "includes() treats sparse empty slots as undefined, unlike map() or forEach() which skip holes."
+    - input: "[+0].includes(-0)"
+      expected: true
+      boundary_type: "IEEE-754 Signed zero (+0 vs -0)"
+      rationale: "SameValueZero does not differentiate positive and negative zero."
 
   common_misconceptions:
     - trap: "Believing includes() performs deep property checking on objects."

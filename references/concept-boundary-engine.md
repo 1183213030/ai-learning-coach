@@ -1,109 +1,122 @@
-# Concept Boundary & Expansion Engine (Contract Protocol)
+# Concept Boundary Engine & Coverage Matrix Protocol
 
-This document specifies the **Concept Boundary Contract**: the formal contract between Knowledge Registry and the Teaching Engine that guarantees zero omissions in conceptual behavioral coverage.
-
----
-
-## 1. The Core Philosophy: Boundary Space over Abstract Definitions
-
-Traditional AI teaching introduces a concept through an abstract definition and a single happy-path example. The learner nods along, but has zero intuition about the concept's actual operational limits.
-
-**The Golden Law of Boundary Expansion**:
-> **Do not merely explain what a concept means. Systematically unpack its entire behavioral surface: what makes it true, what keeps it true under mutation, what superficially resembles it but causes it to fail, and where its edge limits break.**
->
-> **教学可以渐进，但概念边界不能遗漏。不要要求每一次解释都完整；要要求每一个概念最终都有完整的行为边界覆盖。**
+This document specifies the **Boundary Coverage Matrix**, the **Coverage Gap Detection** algorithm, and domain-specific behavioral dimension registries to guarantee zero omissions in technical knowledge coverage.
 
 ---
 
-## 2. The Formal Concept Boundary Contract Schema
+## 1. Prime Directive: Coverage Matrix Over Case Lists
 
-Every concept registered in the system must conform to the following structured contract. The Teaching Engine draws strictly from these fields rather than improvising uncurated examples on the fly:
-
-```yaml
-concept:
-  id: string
-  name: string
-  core_invariant: string           # The single physical/mathematical rule deciding truth
-
-  behavioral_space:
-    baseline:                      # Baseline nominal condition where invariant holds cleanly
-      input: string
-      expected: any
-      rationale: string
-
-    positive_cases:                # Standard valid conditions
-      - input: string
-        expected: any
-        rationale: string
-
-    controlled_variations:         # Strictly single-variable mutation chain
-      - step: integer
-        variable_changed_only: string # Explicitly state the single delta
-        input: string
-        expected: any
-        rationale: string
-
-    counterexample_shocks:         # Visually resembles positive case, but fails invariant immediately!
-      - input: string
-        expected: any
-        shock_reason: string
-        pedagogical_prompt: string
-
-    boundary_cases:                # Empty values, special IEEE-754 primitives, type coercion limits
-      - input: string
-        expected: any
-        boundary_type: string
-        rationale: string
-
-    common_misconceptions:         # Mental traps explicitly articulated and refuted with counter-code
-      - trap: string
-        counter_proof: string
-
-    confusing_neighbor_contrast:   # Side-by-side differentiation against adjacent ecosystem tools
-      - neighbor: string
-        core_difference: string
-        when_to_use_which: string
-
-    real_world_anchors:            # Production scenarios and silent bug vectors
-      - scenario: string
-        trap_in_production: string
-        correct_pattern: string
-
-    failure_modes:                 # What breaks downstream if this concept is misunderstood?
-      - symptom: string
-        root_cause: string
-
-    transfer_cases:                # Applying invariant in an unfamiliar domain with keywords omitted
-      - novel_domain: string
-        task: string
-        expected_deduction: string
-```
-
----
-
-## 3. Strict Controlled Variation Protocol
-
-To prevent cognitive overload and guarantee accurate causal attribution:
-1. **The Delta Constraint**: Between `step N` and `step N+1`, exactly ONE parameter may change.
-2. **Forbidden**: Mutating array values, array types, and search values simultaneously.
-3. **Mandatory Sequence**:
-   - `Baseline` ->
-   - `Mutate Value Only` ->
-   - `Mutate Argument Type Only` ->
-   - `Mutate Element Type Only` ->
-   - `Mutate Reference Structure Only` ->
-   - `Mutate Special Primitive Only`.
-
----
-
-## 4. Teaching Progression: The "Shock and Deduce" Cycle
-
-The Teaching Engine executes the contract in sequenced phases:
+A major defect in AI education is listing arbitrary examples without a mathematical proof of boundary completeness:
+> **Listing 10 happy-path examples does not prove a concept is mastered.**
+> **Completeness is proven only when every intrinsic behavioral dimension of the concept has a verified coverage artifact.**
 
 ```text
-Phase 1: Baseline & Variation -> Observe invariant holding under controlled single shifts.
-Phase 2: Counterexample Shock -> Near-miss scenario fails; learner deduces the invariant.
-Phase 3: Boundary Fuzzing     -> Test empties, nulls, NaNs, or edge coercions.
-Phase 4: Neighbor Debate      -> Contrast against alternative API / keyword.
-Phase 5: Production Grounding -> Trace realistic silent bug in real project.
+Concept Node
+     │
+     ▼
+Domain Behavioral Dimensions Registry
+     │
+     ▼
+Boundary Coverage Matrix (Evaluation of Gaps)
+     │
+     ▼
+Coverage Gap Detection -> Enqueue Missing Dimension
+     │
+     ▼
+Controlled Variation & Case Cluster Teaching
+     │
+     ▼
+Verification & Audit
 ```
+
+---
+
+## 2. Standard Boundary Dimension Registry
+
+Every technical domain defines its governing behavioral dimensions. A concept contract must map against these dimensions:
+
+### 2.1 Universal Core Dimensions
+1. `core_invariant`: The fundamental mathematical/runtime condition deciding truth.
+2. `normal_behavior`: Nominal baseline execution without edge interference.
+3. `value_variation`: Holding type and structure constant; changing search/input values.
+4. `type_variation`: Holding value stringification constant; changing primitive data types.
+5. `structural_variation`: Padded context, nesting, prefix/suffix additions.
+6. `boundary_extremes`: Empty collections, boundary indices (0, -1, length), sparse slots.
+7. `counterexamples`: Superficially identical structures that fail the invariant immediately.
+8. `misconceptions`: Enticing mental traps refuted with falsifiable counter-code.
+9. `neighboring_concepts`: Side-by-side trade-off debate against adjacent ecosystem APIs.
+10. `real_world_failure`: Realistic production silent bugs caused by boundary misunderstanding.
+11. `transfer`: Applying the invariant in a foreign, unprompted domain.
+
+### 2.2 JavaScript Runtime Domain Extensions
+- `primitive_vs_reference`: ECMAScript Object identity (SameValue / SameValueZero) vs primitive values.
+- `type_coercion`: Abstract equality conversion rules (ToPrimitive, ToNumber, ToString).
+- `special_primitives`: IEEE-754 primitives (`NaN`, `+0`, `-0`, `undefined`, `null`, `Symbol`).
+- `sparse_slots`: Array holes (`new Array(3)`) vs explicitly assigned `undefined`.
+- `prototype_chain`: Inherited properties vs own properties (`hasOwnProperty`).
+
+---
+
+## 3. The Boundary Coverage Matrix Schema
+
+A Concept Boundary Contract must declare its explicit coverage matrix:
+
+```yaml
+concept_id: js-array-includes
+coverage_audit:
+  target_dimensions:
+    - dimension: "primitive_baseline"
+      status: "covered"
+      test_case: "[1, 2, 3].includes(2)"
+
+    - dimension: "type_mismatch_boundary"
+      status: "covered"
+      test_case: "[1, 2, 3].includes('2')"
+
+    - dimension: "object_identity_reference"
+      status: "covered"
+      test_case: "[[1]].includes([1])"
+      s0_fact: "ECMAScript SameValueZero algorithm: distinct object literals produce distinct object references; comparison evaluates to false."
+      scaffolding_metaphor: "Distinct memory pointers (for beginner mental visualization only)."
+
+    - dimension: "special_primitive_nan"
+      status: "covered"
+      test_case: "[NaN].includes(NaN)"
+
+    - dimension: "special_primitive_signed_zero"
+      status: "covered"
+      test_case: "[+0].includes(-0)"
+      s0_fact: "SameValueZero treats +0 and -0 as equal (unlike Object.is which differentiates them)."
+
+    - dimension: "sparse_array_holes"
+      status: "covered"
+      test_case: "new Array(1).includes(undefined)"
+
+    - dimension: "index_offset_boundaries"
+      status: "covered"
+      test_case: "[1, 2, 3].includes(2, 1) vs [1, 2, 3].includes(2, 2)"
+```
+
+---
+
+## 4. Coverage Gap Detection Algorithm
+
+When the Teaching Engine prepares a lesson:
+1. **Matrix Inspection**: The engine loads the concept's `coverage_audit`.
+2. **Gap Identification**: Any dimension flagged as `gap` or `partial` is enqueued into the immediate teaching queue.
+3. **Instructional Generation**: The engine generates a single-variable controlled variation specifically targeting the missing dimension.
+4. **Completion Guarantee**: The coach is forbidden from declaring "concept delivered" until 100% of defined target dimensions are marked `covered`.
+
+---
+
+## 5. Strict Separation: S0 Standard Fact vs. Scaffolding Metaphor
+
+To maintain technical purity and avoid polluting standard engineering understanding:
+
+### Rule 1: Normative Specifications Must Cite Standards (S0)
+- **Object Reference Rule**: Never state as a formal rule that *"JavaScript compares memory pointers"*.
+- **Standard Statement (ECMAScript §7.2.14 SameValueZero)**:
+  > *If Type(x) is Object, return true if x and y are the same Object value (referencing the exact same object identity), otherwise return false. `[1] === [1]` evaluates to false because each array literal creates a newly allocated object identity.*
+
+### Rule 2: Metaphors Must Be Declared as Scaffolding
+- Metaphors (like "memory pointers" or "keycards") are strictly pedagogical tools for Beginners (Level 0-2). They must be formally tagged as `scaffolding_metaphor` and accompanied by the exact S0 fact.

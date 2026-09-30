@@ -6,7 +6,7 @@
 
 告别“看教程以为懂了，一动手脑子一片空白”。像请了一位懂你的高级私教，手把手带你从零基础练到独立实战。
 
-[![Protocol Version](https://img.shields.io/badge/Protocol-v3.0.0-007ACC?style=flat-square)](#)
+[![Protocol Version](https://img.shields.io/badge/Protocol-v3.1.0-007ACC?style=flat-square)](#)
 [![Zero Command](https://img.shields.io/badge/Interaction-说人话即可%20(Zero--Command)-4EBA6F?style=flat-square)](#)
 [![Complete Pedagogy](https://img.shields.io/badge/Pedagogy-单变量受控实验%20%7C%20反例教学-orange?style=flat-square)](#)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)](#)
@@ -44,7 +44,7 @@
 - `[1, 2, 3]` 里面找 `2` -> 找到（正常）
 - `[1, 2, 3]` 里面找 `4` -> 找不到（值变了）
 - `['1', '2', '3']` 里面找 `1` -> 找不到（类型变了，带引号的和数字不同）
-- `[[1]]` 里面找 `[1]` -> 找不到（内存指针不同，带你揭开底层引用秘密）
+- `[[1]]` 里面找 `[1]` -> 找不到（对象引用身份不同，揭开底层数据比较的秘密）
 通过亲眼看着结果一步一步变化，你不是在背枯燥的语法，而是在脑海中自然建立了对代码规律的物理直觉。
 
 ### 3. 反例冲击：打破自以为是的“假懂”
