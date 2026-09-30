@@ -1,30 +1,37 @@
-version: "3.2.0"
+version: "3.2.1"
 artifact_id: "artifact-example-01"
 concept_id: "js-array-includes"
 dimension_id: "object_identity"
 claim_id: "same-value-zero-object-identity"
 
+discriminates:
+  - "element_and_search_share_same_identity (evaluates to true)"
+  - "element_and_search_have_distinct_identities_with_same_shape (evaluates to false)"
+discriminative_power: "strong"
+
 case:
   baseline:
     input: "const item = { id: 1 }; [item].includes(item)"
     expected: true
+    relation: "array[0] === search_target (true)"
   mutation:
-    changed_only: "searchElement allocation reference only"
-    input: "[{ id: 1 }].includes({ id: 1 })"
+    controlled_dimension: "reference_identity_relation"
+    baseline_relation: "array[0] === search_target (true)"
+    mutated_relation: "array[0] !== search_target (false)"
+    input: "const item = { id: 1 }; [item].includes({ id: 1 })"
     expected: false
 
-causal_explanation: "Under ECMAScript SameValueZero algorithm (§7.2.14), object literals allocate distinct Object values. Comparison checks reference identity, which evaluates to false."
+causal_explanation: "Under ECMAScript §7.2.14 SameValueZero algorithm, object literals allocate distinct Object identities. Comparison checks reference identity equality, not field structural equality."
 scaffolding_metaphor: "Two separate keycards issued for two rooms with identical decor (for beginner visualization)."
 misconception_target: "Assuming includes() performs deep field equality on objects."
 
 quality_gate:
-  single_variable_verified: true
-  variables_changed:
-    - "searchElement reference allocation"
-  variables_held_constant:
-    - "object structure"
-    - "object property values"
-    - "array structure"
+  single_semantic_dimension_verified: true
+  controlled_dimension: "reference_identity_relation"
+  forbidden_deltas_checked:
+    - "object shape (held constant)"
+    - "property values (held constant)"
+    - "array length (held constant)"
   passed: true
 
 observed_result:

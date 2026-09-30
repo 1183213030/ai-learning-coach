@@ -1,6 +1,6 @@
-# Dimension Applicability Protocol & Completeness Formula
+# Dimension Applicability Protocol & Completeness Formula (Protocol V3.2.1)
 
-This protocol establishes the formal mathematical rules for auditing behavioral dimensions against concepts to prevent arbitrary omission and false completeness.
+This protocol establishes the formal mathematical rules for auditing behavioral dimensions against concepts to prevent arbitrary omission, false completeness, and unverified exclusions.
 
 ---
 
@@ -18,18 +18,18 @@ Every registered dimension from the domain registry (`knowledge/dimensions/*.yam
 
 ```text
                      Dimension from Registry
-                               │
+                                │
             ┌──────────────────┼──────────────────┐
             ▼                  ▼                  ▼
        [required]         [optional]       [not_applicable]
-    (Enters Denominator) (Enrichment Only) (Explicitly Excluded)
+    (Enters Denominator) (Enrichment Only) (Audited Evidence Chain)
 ```
 
 | Applicability State | Definition | Enters Completeness Denominator? | Enters Teaching Queue? |
 | :--- | :--- | :--- | :--- |
 | `required` | Essential behavioral invariant governing correct runtime execution. | **YES** | Mandatory |
 | `optional` | Useful edge context, historical legacy, or advanced performance trivia. | NO | Context-dependent |
-| `not_applicable` | Mechanically disconnected from the concept (with formal rationale). | NO | FORBIDDEN |
+| `not_applicable` | Mechanically disconnected from the concept (with formal evidence chain). | NO | FORBIDDEN |
 | `unknown` | Dimension has not yet been audited by the Knowledge Engine. | Triggers Audit Flag | Blocked |
 
 ---
@@ -47,24 +47,31 @@ $$\text{Knowledge Completeness} = \frac{\sum \text{covered}(\text{required})}{\s
 
 ---
 
-## 4. Formal Rationale Requirements
+## 4. Evidence Chain for `not_applicable` Classifications
 
-When marking a dimension as `required` or `not_applicable`, an explicit technical `reason` citing runtime mechanics is mandatory:
+Deciding that a dimension is NOT applicable is a formal claim that requires proof:
+> **"Not applicable" is not an arbitrary omission. It is an audited negative invariant.**
 
-### Example: Array.prototype.includes
+Every `not_applicable` dimension in a Boundary Matrix must contain an evidence chain:
+
 ```yaml
 boundary_matrix:
-  - dimension: primitive_baseline
-    applicability: required
-    reason: "Defines normal value search baseline under SameValueZero."
-
-  - dimension: object_identity
-    applicability: required
-    reason: "Objects are compared by reference identity; vital for preventing silent production bugs."
-
-  - dimension: prototype_chain
-    applicability: not_applicable
-    reason: "Array.prototype.includes scans indexed numeric elements directly; it does not perform property lookup across the prototype chain."
+  - dimension: "prototype_chain"
+    applicability: "not_applicable"
+    rationale:
+      claim_id: "includes-no-prototype-lookup"
+      source_id: "ecma-262"
+      section: "23.1.3.16 Array.prototype.includes"
+      explanation: "Array.prototype.includes performs Get(O, Pk) exclusively on integer indices from 0 to len-1; it does not perform property lookup across the prototype chain."
+      evidence_status: "verified"
 ```
 
-By requiring explicit negative justifications for `not_applicable`, the AI coach is prevented from silently ignoring difficult or obscure edge cases.
+---
+
+## 5. Algorithmic Applicability via Registry Signals
+
+To eliminate ad-hoc AI guessing, dimensions in the Domain Registry define matching signals:
+- `semantic_layer`: Restricts matching to concepts operating at that architectural level.
+- `applicability_signals`: Keywords/mechanisms whose presence triggers `required` candidacy (e.g. `membership`, `equality`).
+- `exclusion_signals`: Keywords/mechanisms that validate `not_applicable` exclusion (e.g. `pure_arithmetic`, `prototype_independent`).
+- `prerequisite_dimensions`: Mandatory prerequisite dimensions that must be audited prior to this dimension.

@@ -1,4 +1,4 @@
-version: "3.2.0"
+version: "3.2.1"
 domain: "javascript"
 description: "ECMAScript language and JavaScript runtime behavioral dimensions."
 
@@ -6,78 +6,156 @@ dimensions:
   - id: primitive_vs_reference
     name: "Primitive Values vs Object Identity"
     description: "Distinction between immutable primitive values and newly allocated object identities under SameValue / SameValueZero."
-    applicability_hint:
+    semantic_layer:
+      - ecmascript
+    applicability_signals:
       - equality
+      - membership
       - collections
       - parameters
-      - memory
+      - Map
+      - Set
+    exclusion_signals:
+      - pure_arithmetic
+    prerequisite_dimensions:
+      - value_variation
 
   - id: type_coercion
     name: "Abstract Type Coercion"
     description: "Implicit conversion rules under Abstract Equality (==), ToPrimitive, ToNumber, ToString."
-    applicability_hint:
-      - equality
-      - operators
-      - arithmetic
+    semantic_layer:
+      - ecmascript
+    applicability_signals:
+      - abstract_equality
+      - binary_plus
+      - template_literals
+      - relational_operators
+    exclusion_signals:
+      - strict_equality_only
+      - same_value_zero
+    prerequisite_dimensions:
+      - type_variation
 
   - id: special_primitives
     name: "IEEE-754 & Engine Special Values"
     description: "Behavior involving NaN, +0, -0, Infinity, undefined, null, and Symbol."
-    applicability_hint:
+    semantic_layer:
+      - ecmascript
+    applicability_signals:
       - arithmetic
       - equality
       - search_algorithms
+      - division
+    exclusion_signals:
+      - boolean_logic_only
+    prerequisite_dimensions:
+      - primitive_vs_reference
 
   - id: sparse_structure
     name: "Sparse Array Slots & Holes"
     description: "Difference between empty slots (holes from delete/new Array(N)) and explicitly assigned undefined."
-    applicability_hint:
+    semantic_layer:
+      - ecmascript
+    applicability_signals:
+      - arrays
       - array_methods
       - iterators
+    exclusion_signals:
+      - typed_arrays
+      - strings
+    prerequisite_dimensions:
+      - boundary_extremes
 
   - id: index_boundary
     name: "Index Boundaries & Negative Offsets"
     description: "Boundary index handling: 0, length, out-of-bounds, and negative wrapping offsets."
-    applicability_hint:
+    semantic_layer:
+      - ecmascript
+    applicability_signals:
       - arrays
       - strings
       - buffers
+      - slicing
+    exclusion_signals:
+      - sets
+      - maps
+    prerequisite_dimensions:
+      - boundary_extremes
 
   - id: execution_context_scope
     name: "Lexical Scope & Closure Retainment"
     description: "Lexical nesting, environment record variable lookup, scope chain closure over external variables."
-    applicability_hint:
+    semantic_layer:
+      - ecmascript
+    applicability_signals:
       - functions
       - closures
       - modules
+      - lexical_binding
+    exclusion_signals:
+      - global_pure_constants
+    prerequisite_dimensions:
+      - core_invariant
 
   - id: event_loop_timing
     name: "Event Loop & Task Scheduling"
     description: "Execution order among synchronous stack, microtasks (Promise/queueMicrotask), macrotasks (setTimeout), and rendering."
-    applicability_hint:
+    semantic_layer:
+      - html
+      - browser
+    applicability_signals:
       - async
       - timing
+      - promises
+      - timers
       - dom_events
+    exclusion_signals:
+      - synchronous_math
+    prerequisite_dimensions:
+      - execution_context_scope
 
   - id: prototype_chain
     name: "Prototype Inheritance & Property Lookup"
     description: "Delegation up the [[Prototype]] chain vs own properties (hasOwnProperty / Object.hasOwn)."
-    applicability_hint:
+    semantic_layer:
+      - ecmascript
+    applicability_signals:
       - objects
       - classes
       - inheritance
+      - property_access
+    exclusion_signals:
+      - primitive_values
+      - indexed_element_scans
+    prerequisite_dimensions:
+      - primitive_vs_reference
 
   - id: asynchronous_lifecycle
     name: "Asynchronous Lifecycle & Settling"
     description: "Promise states (pending, fulfilled, rejected), async/await suspension, unhandled rejections."
-    applicability_hint:
+    semantic_layer:
+      - ecmascript
+      - html
+    applicability_signals:
       - async
       - promises
+      - async_await
+    exclusion_signals:
+      - synchronous_algorithms
+    prerequisite_dimensions:
+      - event_loop_timing
 
   - id: memory_retention_gc
     name: "Memory Retention & GC Reachability"
     description: "Garbage collection reachability root graphs, unclosed handlers, and unintended retained closures."
-    applicability_hint:
+    semantic_layer:
+      - engine
+    applicability_signals:
       - memory
       - performance
       - closures
+      - listeners
+    exclusion_signals:
+      - short_lived_scripts
+    prerequisite_dimensions:
+      - execution_context_scope

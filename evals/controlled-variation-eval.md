@@ -1,40 +1,43 @@
-# Evaluation Suite: Controlled Variation & Case Quality Gate
+# Evaluation Suite: Controlled Variation & Case Quality Gate (Protocol V3.2.1)
 
-This benchmark verifies that every variation step mutates exactly ONE parameter, and any multi-variable mutation is rejected.
+This benchmark verifies that every variation step mutates exactly ONE causal semantic dimension, and any multi-dimension mutation is rejected by the Case Quality Gate.
 
 ---
 
-## Test Case 1: Dual-Variable Mutation Violation
+## Test Case 1: Multi-Semantic Dimension Mutation Violation
 
 ### Candidate Variation Pair
 - Baseline: `[1, 2, 3].includes(2)` -> `true`
 - Mutated: `["a", "b", "c"].includes(4)` -> `false`
 
 ### Flawed Behavior (Auto-Fail)
-- Accepts the mutation as a valid controlled test of `value_variation`.
-- Confounders introduced: Both the array elements (numbers -> strings) and the search target (2 -> 4) changed simultaneously. The learner cannot attribute causality.
+- Accepts the mutation because it only changes 2 tokens.
+- Fails to detect that both the array element type and the target search value changed simultaneously. The learner cannot attribute causality.
 
 ### Required Behavior (Pass)
 - The Case Quality Gate rejects the pair:
   ```text
   ERROR: INVALID_CONTROLLED_VARIATION
-  Variables mutated: [array_element_type, search_value] (Count: 2)
-  Constraint: Delta count must equal exactly 1.
+  Semantic dimensions mutated: [array_element_type, search_value] (Count: 2)
+  Constraint: Exactly ONE causal semantic dimension may mutate.
   ```
-- Requires a two-step sequence holding one constant at each step:
-  - Step 1: `[1, 2, 3].includes(4)` (Target value mutated only)
-  - Step 2: `["1", "2", "3"].includes("4")` (Element and target types mutated together if testing string arrays, or separate element-type step).
+- Requires a two-step sequence:
+  - Step 1: Mutate search value only (`[1, 2, 3].includes(4)`).
+  - Step 2: Mutate array element type (`['1', '2', '3'].includes('2')`).
 
 ---
 
-## Test Case 2: Invariant Causal Attribution
+## Test Case 2: Semantic Single Dimension vs. Syntax Diffs
 
 ### Candidate Variation Pair
-- Baseline: `const fns = []; for (var i = 0; i < 3; i++) { fns.push(() => i); }`
-- Mutated: `const fns = []; for (let i = 0; i < 3; i++) { fns.push(() => i); }`
+- Baseline: `Promise.resolve().then(() => log.push('task'))`
+- Mutated: `queueMicrotask(() => log.push('task'))`
+
+### Flawed Behavior (Auto-Fail)
+- The syntax checker fails because `Promise`, `resolve`, and `then` were replaced by `queueMicrotask` (textual diff > 1).
 
 ### Required Behavior (Pass)
-- Quality Gate inspects:
-  - Variables changed: Declaration keyword only (`var` -> `let`).
-  - Variables held constant: Loop limit (3), pushing mechanism, invocation structure.
-  - Passes Quality Gate and generates valid Coverage Artifact for `loop_variable_binding`.
+- The Case Quality Gate recognizes semantic equivalence:
+  - Controlled Dimension: `microtask_scheduling_mechanism`
+  - Callback body and execution context held strictly invariant.
+  - Passes the gate as a valid semantic controlled variation.

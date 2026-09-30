@@ -35,7 +35,7 @@ When learning to code, almost everyone encounters three painful frustrations:
 Most AI tutoring tools fail because they confuse reciting an explanation with actual learner understanding. This system tracks three strictly separated dimensions:
 - **Knowledge Completeness**: Exhaustively auditing every required behavioral boundary and pitfall against official runtime specifications (S0).
 - **Teaching Delivery**: Pacing lessons according to your energy and level (max 2 dimensions per turn for beginners) via single-variable experiments to prevent cognitive overload.
-- **Capability Mastery**: Demanding unassisted closed-book proofs (`L0`) and real-world transfer tests before marking any concept as truly mastered.
+- **Capability Mastery Tiers**: Differentiating "Concept Mastery" (closed-book unassisted L0 proof of all dimensions) from "Engineering Mastery" (successful transfer to unprompted real-world project code).
 
 ### 2. Maps the Entire Journey First
 Whether you say "I want to build websites" or "I want to master frontend development," it doesn't rush to dump random code. It quietly draws a clear **Skill Tree Roadmap**:
@@ -47,10 +47,10 @@ It never pushes you to advanced chapters until your foundational mechanics are t
 ### 3. Controlled Variation: Change One Variable and Watch the Result Shift
 Great teachers don't just state definitions; they run experiments with you.
 Instead of memorizing array methods, it holds everything constant and **changes only one variable at a time**:
-- `[1, 2, 3].includes(2)` -> `true` (Found, normal)
-- `[1, 2, 3].includes(4)` -> `false` (Value changed)
-- `['1', '2', '3'].includes(1)` -> `false` (Type changed: string vs number)
-- `[[1]].includes([1])` -> `false` (Reference changed: distinct object identity trap!)
+- `[1, 2, 3].includes(2)` -> `true` (Found, baseline)
+- `[1, 2, 3].includes(4)` -> `false` (Target value changed)
+- `[1, 2, 3].includes('2')` -> `false` (Target type changed: string vs number)
+- `const o = { id: 1 }; [o].includes(o)` (`true`) vs `[o].includes({ id: 1 })` -> `false` (Distinct object identity relation trap!)
 By observing output shifts step-by-step, you build an unshakeable physical intuition for how the runtime operates.
 
 ### 4. Counterexample Shocks: Shattering False Assumptions

@@ -1,4 +1,4 @@
-# Coverage & Capability State Machine Protocol
+# Coverage & Capability State Machine Protocol (Protocol V3.2.1)
 
 This protocol formally decouples **Knowledge Coverage (系统知识完整)**, **Teaching Coverage (实际教学实施)**, and **Learner Evidence (学习者独立能力)** into independent, verifiable state machines.
 
@@ -56,21 +56,30 @@ Measures unassisted empirical capability demonstrated by the learner:
 
 ---
 
-## 3. The True Mastery Threshold
+## 3. Two-Tier Mastery Definitions
 
-A concept is marked as **True Engineering Mastery** if and only if:
+To prevent conflating basic independent understanding with complex novel transfer:
 
-$$\text{Knowledge Coverage} = \text{covered} \quad \land \quad \text{Learner Evidence} \ge \text{independent}$$
+### Tier 1: Concept Mastery (概念独立掌握)
+The learner can solve and explain all required dimensions independently without hints:
+
+$$\text{Concept Mastery} \iff \text{Knowledge Coverage} = 100\% \quad \land \quad \forall d \in \text{required}, \text{Evidence}(d) \ge \text{independent}$$
+
+### Tier 2: Engineering Mastery (工程实战精通)
+The learner has achieved Concept Mastery AND successfully transferred the invariant to unprompted real-world engineering code:
+
+$$\text{Engineering Mastery} \iff \text{Concept Mastery} \quad \land \quad \forall d \in \text{transfer\_required}, \text{Evidence}(d) = \text{transfer\_verified}$$
 
 ```text
 Status Display Paradigm:
-┌─────────────────────────────────────────────────────────┐
-│ Concept: Array.prototype.includes                       │
-│ 知识边界 (Knowledge): 100% (8/8 Required Dimensions)    │
-│ 教学覆盖 (Teaching):  75%  (6/8 Delivered in Sessions)   │
-│ 独立能力 (Capability): 50%  (4/8 L0 Independent Proof)   │
-│ 下一步动作: 针对 object_identity 调度迁移实战测试        │
-└─────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│ Concept: Array.prototype.includes                            │
+│ 知识边界 (Knowledge):      100% (8/8 Required Dimensions)    │
+│ 教学实施 (Teaching):        100% (8/8 Delivered in Sessions)  │
+│ 概念掌握 (Concept Mastery): 100% (8/8 Independent Proof L0)  │
+│ 工程精通 (Engineering):     75%  (3/4 Transfer Verified)      │
+│ 下一步动作: 针对 object_identity 调度真实生产环境 JWT 角色排查 │
+└──────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -86,4 +95,4 @@ Learner Evidence states are strictly reversible:
   TRANSITION: independent -> supported
   ACTION: Enqueue targeted counterexample shock in next session
   ```
-- The Knowledge Coverage remains `covered`, but Capability drops until re-verified.
+- The Knowledge Coverage remains `covered`, but Concept Mastery drops until re-verified.

@@ -1,4 +1,4 @@
-version: "3.2.0"
+version: "3.2.1"
 domain: "universal"
 description: "Universal behavioral dimensions applicable across all programming languages, runtimes, and engineering systems."
 
@@ -6,83 +6,150 @@ dimensions:
   - id: core_invariant
     name: "Core Invariant"
     description: "The fundamental mathematical or runtime rule that dictates truth and invariant behavior."
-    applicability_hint:
+    semantic_layer:
+      - specification
+    applicability_signals:
       - all_concepts
+    exclusion_signals: []
+    prerequisite_dimensions: []
 
   - id: baseline_behavior
     name: "Baseline Nominal Behavior"
     description: "Nominal, happy-path execution under standard conditions without edge interference."
-    applicability_hint:
+    semantic_layer:
+      - specification
+    applicability_signals:
       - all_concepts
+    exclusion_signals: []
+    prerequisite_dimensions:
+      - core_invariant
 
   - id: value_variation
     name: "Value Variation"
     description: "Holding type, structure, and execution environment constant while varying the target or input data."
-    applicability_hint:
-      - data_structures
-      - search_algorithms
-      - operators
+    semantic_layer:
+      - data_layer
+    applicability_signals:
+      - search
+      - membership
+      - comparison
+      - lookup
+    exclusion_signals:
+      - zero_arity_functions
+    prerequisite_dimensions:
+      - baseline_behavior
 
   - id: type_variation
     name: "Type Variation"
     description: "Holding value semantics constant while testing mismatched or coerced primitive data types."
-    applicability_hint:
-      - operators
+    semantic_layer:
+      - type_system
+    applicability_signals:
+      - dynamic_typing
       - equality
-      - function_signatures
+      - operators
+    exclusion_signals:
+      - nominal_typed_invariants
+    prerequisite_dimensions:
+      - baseline_behavior
 
   - id: boundary_extremes
     name: "Boundary Extremes & Empty States"
     description: "Execution at extremal limits: empty collections, zero length, max bounds, null/undefined inputs."
-    applicability_hint:
+    semantic_layer:
+      - boundary
+    applicability_signals:
       - collections
       - range_queries
       - loops
+    exclusion_signals:
+      - constants
+    prerequisite_dimensions:
+      - baseline_behavior
 
   - id: structural_composition
     name: "Structural Composition & Nesting"
     description: "Behavior when entities are deeply nested, composed, chained, or wrapped."
-    applicability_hint:
-      - data_structures
-      - functions
-      - object_graphs
+    semantic_layer:
+      - architecture
+    applicability_signals:
+      - composition
+      - recursion
+      - data_graphs
+    exclusion_signals:
+      - primitive_scalars
+    prerequisite_dimensions:
+      - baseline_behavior
 
   - id: state_lifecycle
     name: "State & Lifecycle Dynamics"
     description: "Creation, initialization, transition, mutation, and destruction lifecycle phases."
-    applicability_hint:
+    semantic_layer:
+      - lifecycle
+    applicability_signals:
+      - stateful
       - components
       - connections
-      - memory_management
+    exclusion_signals:
+      - pure_functions
+    prerequisite_dimensions:
+      - baseline_behavior
 
   - id: counterexample_shocks
     name: "Counterexample Shocks (Near-Misses)"
     description: "Superficially valid cases that fail immediately, shattering false mental assumptions."
-    applicability_hint:
+    semantic_layer:
+      - pedagogy
+    applicability_signals:
       - all_concepts
+    exclusion_signals: []
+    prerequisite_dimensions:
+      - baseline_behavior
 
   - id: common_misconceptions
     name: "Common Mental Misconceptions"
     description: "Enticing cognitive traps and false analogies refuted with falsifiable counter-code."
-    applicability_hint:
+    semantic_layer:
+      - pedagogy
+    applicability_signals:
       - all_concepts
+    exclusion_signals: []
+    prerequisite_dimensions:
+      - baseline_behavior
 
   - id: neighboring_concepts
     name: "Neighboring Concept Contrast"
     description: "Side-by-side trade-off debate against adjacent APIs or architectural options in the ecosystem."
-    applicability_hint:
+    semantic_layer:
+      - ecosystem
+    applicability_signals:
       - api_selection
-      - patterns
+      - alternatives
+    exclusion_signals:
+      - unique_language_primitives
+    prerequisite_dimensions:
+      - baseline_behavior
 
   - id: production_real_world
     name: "Production Anchors & Silent Failures"
     description: "Realistic production bugs or vulnerability patterns caused by boundary misunderstanding."
-    applicability_hint:
+    semantic_layer:
+      - engineering
+    applicability_signals:
       - production_code
-      - system_design
+      - authorization
+      - concurrency
+    exclusion_signals: []
+    prerequisite_dimensions:
+      - baseline_behavior
 
   - id: transfer_application
     name: "Transfer Application (Novel Domain)"
     description: "Applying the core invariant in an unfamiliar scenario without prompting keywords."
-    applicability_hint:
+    semantic_layer:
+      - engineering
+    applicability_signals:
       - mastery_verification
+    exclusion_signals: []
+    prerequisite_dimensions:
+      - baseline_behavior

@@ -1,17 +1,32 @@
-# Evaluation Suite: Claim-Source Traceability & S0 Standard Isolation
+# Evaluation Suite: Claim-Source Traceability & S0/S1 Layer Isolation (Protocol V3.2.1)
 
-This benchmark verifies that every normative rule is anchored to an S0 standard source, and conceptual metaphors are segregated as scaffolding.
+This benchmark verifies that every normative rule is anchored to an appropriate standard source (S0) or implementation source (S1), semantic layers are strictly isolated, and conceptual metaphors are segregated as scaffolding.
 
 ---
 
-## Test Case 1: The "Memory Pointer" Metaphor Pollution
+## Test Case 1: The "ECMAScript GC" Level Violation
+
+### Candidate Explanation
+> "Under the ECMAScript language specification, the Garbage Collector cannot free outer variables if an inner closure exists."
+
+### Flawed Behavior (Auto-Fail)
+- Conflates ECMAScript language semantics (Environment Record retention S0) with Virtual Machine GC implementation algorithms (V8/SpiderMonkey S1).
+- ECMAScript specifies observable runtime evaluation semantics, not specific garbage collection algorithms.
+
+### Required Behavior (Pass)
+- Strictly separates the layers:
+  - **S0 (ECMAScript §9.1.2)**: "A function retains a reference to its outer lexical Environment Record."
+  - **S1 (V8 Engine Implementation)**: "As long as a closure function remains reachable on the heap, V8 GC tracing preserves the referenced Environment Record."
+
+---
+
+## Test Case 2: The "Memory Pointer" Metaphor Pollution
 
 ### Candidate Explanation
 > "In JavaScript, `[[1]].includes([1])` returns false because JavaScript arrays compare memory pointers in the heap."
 
 ### Flawed Behavior (Auto-Fail)
-- Quotes an implementation detail or informal metaphor ("memory pointer") as an official ECMAScript rule.
-- Fails to link the observation to the normative standard specification.
+- Quotes an informal mental model ("memory pointer") as an official ECMAScript rule.
 
 ### Required Behavior (Pass)
 - Cites ECMAScript §7.2.14 `SameValueZero`:
@@ -21,13 +36,17 @@ This benchmark verifies that every normative rule is anchored to an S0 standard 
 
 ---
 
-## Test Case 2: Claim Traceability Linkage
+## Test Case 3: Unverified `not_applicable` Exclusion
 
-### Requirement Under Evaluation
-Auditing whether an educational claim can be traced back to its standard section.
+### Candidate Contract
+An agent marks `prototype_chain` as `not_applicable` for `Array.prototype.includes` with `artifact_id: null` and no evidence.
+
+### Flawed Behavior (Auto-Fail)
+- Treats "not applicable" as an unverified negative assumption without evidence.
 
 ### Required Behavior (Pass)
-- Every claim in the concept contract includes:
-  - `source_id`: Standard repository (e.g. `ecma-262` or `html-spec`).
-  - `section`: Precise section number (e.g. `23.1.3.16` or `8.1.6.3`).
-  - `claim_text`: Formal invariant statement.
+- Requires a formal negative rationale citing standards:
+  - `claim_id`: "includes-no-prototype-lookup"
+  - `source_id`: "ecma-262"
+  - `section`: "23.1.3.16"
+  - `evidence_status`: "verified"

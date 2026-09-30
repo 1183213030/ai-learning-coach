@@ -1,4 +1,4 @@
-version: "3.2.0"
+version: "3.2.1"
 
 concept:
   id: "js-closure"
@@ -6,6 +6,7 @@ concept:
   domain: "frontend-javascript"
   source_ids:
     - "ecma-262"
+    - "v8-engine-gc"
     - "src-mdn-web"
 
   normative_sources:
@@ -13,24 +14,36 @@ concept:
       name: "ECMAScript Language Specification"
       level: "S0"
       section: "9.1.2 Environment Records & 10.2.1 Function Environment Records"
+    - source_id: "v8-engine-gc"
+      name: "V8 JavaScript Engine Architecture"
+      level: "S1"
+      section: "Orinoco Garbage Collection & Heap Object Reachability"
 
   claims:
     - id: "lexical-environment-binding"
+      semantic_layer: "ecmascript"
       source_id: "ecma-262"
+      level: "S0"
       section: "9.1.2"
       claim_text: "A function retains an implicit reference to its outer Environment Record established at evaluation time, forming a closure."
     - id: "independent-environment-instances"
+      semantic_layer: "ecmascript"
       source_id: "ecma-262"
+      level: "S0"
       section: "10.2.1"
       claim_text: "Every invocation of an outer function allocates a distinct, separate Environment Record."
     - id: "block-iteration-binding"
+      semantic_layer: "ecmascript"
       source_id: "ecma-262"
+      level: "S0"
       section: "14.7.4.3 ForDeclarationBindingInitialization"
       claim_text: "A for-loop with 'let' creates a fresh lexical Environment Record per iteration, preserving loop counter state per closure."
-    - id: "gc-reachability"
-      source_id: "ecma-262"
-      section: "Memory Management & Garbage Collection"
-      claim_text: "Variables in an outer Environment Record cannot be reclaimed by garbage collection as long as any reachable child function references the environment."
+    - id: "closure-gc-reachability"
+      semantic_layer: "engine"
+      source_id: "v8-engine-gc"
+      level: "S1"
+      section: "Orinoco Heap Tracing"
+      claim_text: "Memory occupied by an Environment Record and objects referenced therein cannot be reclaimed by garbage collection as long as any reachable child function retains an active lexical reference."
 
   boundary_matrix:
     - dimension: "baseline_behavior"
@@ -70,15 +83,21 @@ concept:
 
     - dimension: "prototype_chain"
       applicability: "not_applicable"
-      reason: "Closures resolve identifiers along lexical Environment Record scope chains, not prototype inheritance chains."
-      coverage:
-        status: "not_applicable"
-        artifact_id: null
+      rationale:
+        claim_id: "closure-lexical-resolution"
+        source_id: "ecma-262"
+        section: "9.1.2 Environment Records"
+        explanation: "Identifier lookup within closures proceeds along outer Environment Record scope chains; it does not delegate along object prototype chains."
+        evidence_status: "verified"
 
   coverage_artifacts:
     - artifact_id: "artifact-closure-baseline"
       dimension: "baseline_behavior"
       claim_id: "lexical-environment-binding"
+      discriminates:
+        - "function_accesses_parent_lexical_variable_after_parent_returns (true)"
+        - "parent_scope_destroyed_immediately_on_return (false)"
+      discriminative_power: "strong"
       case:
         baseline:
           input: "function outer() { let a = 1; return function() { return a; }; } outer()()"
@@ -89,15 +108,27 @@ concept:
     - artifact_id: "artifact-closure-instances"
       dimension: "multiple_instances"
       claim_id: "independent-environment-instances"
+      discriminates:
+        - "separate_invocations_share_single_static_scope (false mental model)"
+        - "separate_invocations_allocate_isolated_environment_records (true runtime fact)"
+      discriminative_power: "strong"
       case:
         baseline:
+          input: "function create() { let count = 0; return () => ++count; } const c1 = create(); [c1(), c1()]"
+          expected: [1, 2]
+        mutation:
+          controlled_dimension: "invocation_instance_isolation"
           input: "function create() { let count = 0; return () => ++count; } const c1 = create(); const c2 = create(); c1(); [c1(), c2()]"
           expected: [2, 1]
-      causal_explanation: "Each call to create() instantiates a fresh Environment Record. c1 and c2 mutate distinct memory records."
+      causal_explanation: "Each call to create() instantiates a fresh Environment Record. c1 and c2 mutate distinct memory records, and c1 !== c2."
 
     - artifact_id: "artifact-closure-shared-state"
       dimension: "shared_mutable_state"
       claim_id: "lexical-environment-binding"
+      discriminates:
+        - "sibling_closures_receive_independent_copies (false)"
+        - "sibling_closures_share_identical_environment_record (true)"
+      discriminative_power: "strong"
       case:
         baseline:
           input: "function pair() { let x = 0; return [() => ++x, () => x]; } const [inc, get] = pair(); inc(); get()"
@@ -107,24 +138,32 @@ concept:
     - artifact_id: "artifact-closure-loop-binding"
       dimension: "loop_variable_binding"
       claim_id: "block-iteration-binding"
+      discriminates:
+        - "var_hoisting_shares_single_binding_across_iterations"
+        - "let_block_scope_allocates_fresh_binding_per_iteration"
+      discriminative_power: "strong"
       case:
         baseline:
           input: "const fns = []; for (var i = 0; i < 3; i++) { fns.push(() => i); } fns.map(f => f())"
           expected: [3, 3, 3]
         mutation:
-          changed_only: "declaration keyword (var -> let)"
+          controlled_dimension: "loop_variable_declaration_keyword"
           input: "const fns = []; for (let i = 0; i < 3; i++) { fns.push(() => i); } fns.map(f => f())"
           expected: [0, 1, 2]
       causal_explanation: "Under ECMAScript §14.7.4.3, 'let' in for-loop creates a new Environment Record per iteration. 'var' binds a single shared record in the enclosing execution context."
 
     - artifact_id: "artifact-closure-gc-leak"
       dimension: "memory_retention_gc"
-      claim_id: "gc-reachability"
+      claim_id: "closure-gc-reachability"
+      discriminates:
+        - "unreferenced_outer_variables_always_collected_instantly"
+        - "reachable_closure_roots_keep_entire_lexical_environment_alive"
+      discriminative_power: "strong"
       case:
         baseline:
           input: "let holder; function leak() { const heavy = new Array(1e6); holder = () => heavy.length; } leak(); typeof holder"
           expected: "function"
-      causal_explanation: "Global reference 'holder' keeps the inner function reachable, which retains the entire lexical environment containing 'heavy'."
+      causal_explanation: "Under V8 GC heap tracing (S1), global reference 'holder' keeps the inner function reachable, retaining the Environment Record containing 'heavy'."
 
   teaching:
     teaching_budget:
@@ -161,6 +200,7 @@ concept:
       status: "not_attempted"
 
   completeness:
-    knowledge: 100.0  # 5 covered / 5 required
-    teaching: 40.0   # 2 delivered / 5 required
-    capability: 20.0 # 1 independent / 5 required
+    knowledge: 100.0          # 5 covered / 5 required
+    teaching: 40.0           # 2 delivered / 5 required
+    concept_mastery: 20.0    # 1 independent / 5 required
+    engineering_mastery: 0.0 # 0 transfer verified
