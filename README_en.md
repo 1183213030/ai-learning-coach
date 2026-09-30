@@ -1,244 +1,176 @@
 <div align="center">
 
-# AI Personal Learning OS
-### Protocol Specification v1.1.0
+# AI Learning Coach
 
-An evidence-based, state-machine-driven personal learning protocol designed for AI Agents and Large Language Models.
+### A Knowledge-Driven, Evidence-Based Personal Learning Operating System
 
-[![Protocol Version](https://img.shields.io/badge/Protocol-v1.1.0-007ACC?style=flat-square)](#)
-[![Architecture](https://img.shields.io/badge/Architecture-FSM%20%7C%20Decoupled-4EBA6F?style=flat-square)](#)
-[![Verification](https://img.shields.io/badge/Verification-E1~E5%20Evidence%20Chain-orange?style=flat-square)](#)
-[![Review Engine](https://img.shields.io/badge/Review-Ebbinghaus%20Spaced-blueviolet?style=flat-square)](#)
+Let the user focus purely on learning; let the AI Learning Coach handle the rest.
+
+[![Protocol Version](https://img.shields.io/badge/Protocol-v2.2.0-007ACC?style=flat-square)](#)
+[![Interaction](https://img.shields.io/badge/Interaction-Zero--Command%20Natural%20Language-4EBA6F?style=flat-square)](#)
+[![Verification](https://img.shields.io/badge/Verification-Type--Specific%20Evidence-orange?style=flat-square)](#)
+[![Architecture](https://img.shields.io/badge/Architecture-Six--Tier%20Knowledge%20Plane-blueviolet?style=flat-square)](#)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)](#)
 
 [简体中文](README.md) • [English](README_en.md)
 
-[Overview](#overview) • [Core Philosophy](#core-philosophy) • [FSM State Machine](#state-machine-topology) • [Evidence Policy](#evidence-chain-matrix) • [Execution Modules](#execution-modules) • [Dual-Mode Runtime](#dual-mode-runtime-guide) • [Quick Start](#quick-start)
+</div>
 
 ---
 
-</div>
-
 ## Overview
 
-**AI Personal Learning OS (`ai-learning-coach`)** is a rigorous engineering learning protocol that transforms AI from a passive "code generator / spoon-feeding tutor" into an **active resistance trainer, examiner, and persistent state keeper**.
+In the era of modern AI coding assistants, obtaining working code and instant answers has become trivial. However, **building durable personal engineering capabilities has become harder than ever**.
 
-Traditional AI learning suffers from two fatal flaws:
-1. **The Illusion of Competence**: Reading AI explanations makes learners feel they understand, but they fail during blank-page coding or edge-case reasoning.
-2. **Context Amnesia & Bloat**: Ephemeral chat logs lose learning progress, mistaken intuitions, and mastered evidence.
+### Two Pervasive Pitfalls in AI Learning
+1. **The Illusion of Competence**: Reading an AI explanation or copying working code gives the sensation of mastery. But when confronted with a blank file, intricate runtime concurrency, or an unexpected production outage, the developer gets stuck.
+2. **Fragmentation & Ad-hoc Knowledge**: Asking AI sporadic questions about configs or errors leaves isolated fragments. No structured mental lattice ever forms.
 
-`ai-learning-coach` solves this by introducing a **Finite State Machine (FSM)**, a verifiable **E1~E5 Elastic Evidence Policy**, and a **Three-Tier Decoupled Architecture** that works both in local file-system IDEs (Cursor, Claude Code, Antigravity) and web-based LLMs (ChatGPT, Claude, Gemini).
+**AI Learning Coach** flips the script on passive answer-dumping and static online courses. It transforms AI into a **long-term cognitive coach, strict examiner, and dynamic curriculum engine** that adapts to the learner's real-world constraints.
 
 ---
 
 ## Core Philosophy
 
-```
-+-----------------------------------------------------------------------------------+
-|                              THREE-TIER ARCHITECTURE                              |
-+-----------------------------------------------------------------------------------+
-|  [PROTOCOL]   SKILL.md             Rule Hierarchy & FSM Engine Orchestration      |
-|  [MODULES]    modules/*.md         Practice, Examiner, Feynman, Assessment, Suspend|
-|  [STATE]      state/**/*.md        Persistent Profiles, Subject States & Logs      |
-+-----------------------------------------------------------------------------------+
-```
+> **Learner state decides what to learn right now; objective evidence proves whether it is mastered.**
 
-- **Output-Driven (输出驱动)**: The learner writes code, predicts output, and simplifies mental models; the AI injects cognitive resistance, diagnoses blind spots, and arbitrates state progression.
-- **Evidence-Based Mastery (证据链验收)**: True mastery is strictly defined by demonstrable evidence tokens (`E1` to `E5`), completely eliminating subjective "I feel I get it" assessments.
-- **Three-Tier Decoupled Architecture (三权分立)**:
-  - **Protocol (`SKILL.md`)**: Defines state transitions, priority hierarchy, and interrupt contracts.
-  - **Modules (`modules/`)**: Stateless execution engines (Examiner, Practice Modes, Feynman, Recovery).
-  - **State (`state/`)**: File-based git-trackable memory of subject levels, evidence logs, and mistake histories.
-- **Zero-Noise State IO (静默与精准反馈)**: Suppresses conversational boilerplate; state updates occur strictly at stage transitions, explicit queries (`/status`), and session terminations.
+- **Global Perspective, Zero Fragmentation**: Before diving into isolated details, the coach constructs an authoritative **prerequisite capability tree (Roadmap)**, establishing an unshakeable foundation step-by-step.
+- **Socratic Guidance, Zero Spoon-Feeding**: When encountering difficult mechanics, the coach withholds walls of text. It uses physical metaphors, observable contradictions, and micro-predictions to help you deduce the mechanism yourself.
+- **Closed-Book Verification, Zero Fake Mastery**: Saying "I understand" yields zero evidence points. The coach strictly decouples **Teaching** from **Testing**. During verification, hints and solutions are withheld; only unassisted explanations, predictions, or implementations unlock true mastery.
+- **Learner Reality over Curriculum Progress**: Real humans experience fatigue, tight time limits, and sudden work interruptions. The coach yields static syllabi to your immediate reality.
+- **Zero-Command Natural Language**: No complex CLI flags or config syntax to memorize. Speak naturally as you would with a human mentor.
 
 ---
 
-## State Machine Topology
+## Natural Language Interface
 
-The learning engine follows a deterministic, unidirectional graph with strict gating and repair loops:
+You communicate purely through natural conversation:
 
-```mermaid
-graph TD
-    INIT[INIT: Load Profile & State] --> REVIEW_GATE{REVIEW_GATE: Spaced Review Due?}
-    REVIEW_GATE -->|Due Items Found| SPOT_EXAM[REVIEW: 1~2 Spot Exams]
-    SPOT_EXAM -->|Pass & Upgraded| MAP[MAP: 5-Level Competence Ladder]
-    SPOT_EXAM -->|Decayed / Failed| WEAK[WEAK: Precision Repair Loop]
-    REVIEW_GATE -->|No Due Items| MAP
-    MAP --> CORE_20[CORE_20: Top 20% Leveraged Atom]
-    CORE_20 --> TUTOR[TUTOR: Minimum Concept Explanation MCE]
-    TUTOR --> PRACTICE[PRACTICE: Dynamic Match Mode]
-    PRACTICE --> EXAM[EXAM: Single-Step Examiner]
-    EXAM --> FEYNMAN[FEYNMAN: 3D Metaphor & De-Jargon Review]
-    FEYNMAN --> SUMMARY[SUMMARY: Cheat Sheet Archival]
-    SUMMARY --> ASSESS[ASSESS: Evidence Policy Audit]
-    
-    ASSESS -->|All Required Evidence Fulfilled| MASTERED[MASTERED: Level Up / Next Atom]
-    ASSESS -->|Evidence Deficit / Gaps| WEAK
-    WEAK --> PRACTICE
-    MASTERED --> CORE_20
+```text
+┌────────────────────────────────────────────────────────┐
+│                                                        │
+│  "I want to systematically master frontend engineering" │
+│  "Teach me JS async concurrency; I only know await"    │
+│  -> Initiates a new domain with light diagnostic       │
+│                                                        │
+│  "Continue learning"                                   │
+│  -> Seamlessly resumes the unclosed frontier           │
+│                                                        │
+│  "Exhausted today, only have 15 minutes"               │
+│  -> Halts new chapters; downgrades to targeted drill   │
+│                                                        │
+│  "I don't understand closures, teach me from zero"     │
+│  "That was too abstract, explain with an analogy"      │
+│  "Quiz me on what we just covered, zero hints"         │
+│  "Pause the book, I hit a CORS bug in my real project" │
+│  -> Targeted clarity, pedagogical pivot, or real work  │
+│                                                        │
+└────────────────────────────────────────────────────────┘
 ```
 
-### State Responsibilities
-
-| State | Purpose | Associated Module / Template |
-| :--- | :--- | :--- |
-| `INIT` | Read `state/profile.md` and subject state; initialize on cold start | `state/profile.md` |
-| `REVIEW_GATE` | Scan for spaced repetition due dates; trigger 1~2 high-yield spot exams | `modules/review.md` |
-| `MAP` | Generate a 5-level competence ladder and assign `evidence_policy` per atom | `modules/assessment.md` |
-| `CORE_20` | Lock into the 20% highest-leverage atom for the current level | `templates/subject-state.md` |
-| `TUTOR` | Deliver Minimum Concept Explanation (MCE, strictly <=15 lines code) | `SKILL.md` |
-| `PRACTICE` | Execute dynamic practice modes tailored to the atom | `modules/practice.md` |
-| `EXAM` | Conduct single-question, lock-step interactive examination | `modules/examiner.md` |
-| `FEYNMAN` | Penetrate jargon and test mental model stability under stress | `modules/feynman.md` |
-| `SUMMARY` | Generate and persist a condensed one-page reference card | `templates/cheat-sheet.md` |
-| `ASSESS` | Tally evidence fulfillment and decide pass/repair | `modules/assessment.md` |
-
 ---
 
-## Evidence Chain Matrix
+## Six-Tier Architecture
 
-Knowledge acquisition is certified only when designated evidence tokens are fulfilled:
+Beneath the minimalist conversation interface lies an uncompromising six-tier system:
 
-```
-  [ E1: Explain ]   Understand root mechanisms & core problem solved
-  [ E2: Predict ]   推演 / Trace execution & state transitions mentally without running code
-  [ E3: Build   ]   Implement production paradigm from scratch without hints
-  [ E4: Debug   ]   Isolate hidden edge-case defects and explain root causes
-  [ E5: Boundary]   Identify anti-patterns, runtime side effects, and constraints
+```text
+┌─────────────────────────────────────────────────────────────────┐
+│ Layer 1: Learner Profile (Baselines, blind spots, preferences)  │
+├─────────────────────────────────────────────────────────────────┤
+│ Layer 2: Knowledge Ingress (Multi-source ingestion S0 to S5)    │
+│   [Local Library Priority library/]  [Official Specs]  [Git Diff]│
+├─────────────────────────────────────────────────────────────────┤
+│ Layer 3: Knowledge Map & Topology (Capability trees & graphs)   │
+├─────────────────────────────────────────────────────────────────┤
+│ Layer 4: Adaptive Curriculum Engine (Single-lesson dynamic growth)│
+├─────────────────────────────────────────────────────────────────┤
+│ Layer 5: Teaching Engine (MCE explanations, 4-way pivots)       │
+├─────────────────────────────────────────────────────────────────┤
+│ Layer 6: Evidence & Review (Type-specific proof, spaced retention)│
+└─────────────────────────────────────────────────────────────────┘
 ```
 
-### Elastic Evidence Policies
+### 1. Source Ranking (S0 to S5)
+- **S0 (Official Specs)**: ECMAScript, W3C, MDN, Vue/React/Node.js Official Handbooks.
+- **S1 (Canonical Literature)**: Ingested local textbooks (`library/`), classic engineering literature.
+- **S2 to S4**: Vetted courses, high-reputation engineering blogs, community articles.
+- **S5 (AI Memory)**: Parametric model memory (must be cross-referenced with S0/S1; never substitute AI metaphors for standard facts).
 
-Different knowledge types require distinct verification strategies:
+### 2. Local-First Library Ingestion
+Store your own Markdown notes, e-books, or documentation under `library/<domain>/` (e.g. `library/frontend/`). The coach parses your local materials as the primary curriculum spine before searching external resources.
 
-- **Standard (标准型)**: `required: [E1, E3, E5]` | `optional: [E2, E4]` (e.g., Design patterns, framework APIs)
-- **Mechanism (深度原理型)**: `required: [E1, E2, E5]` | `optional: [E3, E4]` (e.g., Event loop, GC, type systems)
-- **Tooling (工具语法型)**: `required: [E3, E4]` | `optional: [E1]` (e.g., Git commands, regex, build tools)
-
-### `/skip` Bypass Challenge
-When `/skip` is invoked, the AI synthesizes a **single comprehensive challenge** combining code construction and edge-case validation. Passing lights up all required evidence tokens immediately; failure redirects to targeted repair.
-
----
-
-## Execution Modules
-
-### 1. Spaced Review Engine (`modules/review.md`)
-- **Ebbinghaus 6-Tier Intervals**: Standardized intervals (`+1d`, `+2d`, `+4d`, `+7d`, `+15d`, `+30d/PERMANENT`).
-- **Spot Exam Precision**: Extracts single high-yield questions from `required` evidence tokens without cognitive clutter.
-- **Dynamic Demotion/Promotion**: Flawless recall elevates tier; cognitive decay demotes and redirects to targeted repair.
-
-### 2. Practice Engine (`modules/practice.md`)
-Dynamically switches between 6 specialized training modes:
-- `BUILD`: Write standard implementations from scratch given rigorous specifications.
-- `DEBUG`: Locate and resolve subtle runtime/type defects in pre-constructed snippets.
-- `MODIFY`: Refactor functional but suboptimal/leaky code into robust structures.
-- `PREDICT`: Mentally trace non-intuitive execution orders and execution contexts.
-- `EXPLAIN`: Deconstruct systemic timings and protocols into structured text diagrams.
-- `DESIGN`: Model types, interfaces, and architecture under domain constraints.
-
-### 3. Single-Step Examiner (`modules/examiner.md`)
-- **Lock-Step**: Strictly one question per prompt round.
-- **Inspirational Feedback**: Never leaks solutions; points out logical gaps.
-- **Structured Rating Matrix**:
-  ```text
-  Rating:     [ PASS: Mastered | SOUND: Basically Sound | FLAW: Logic Flaw | FAIL: Not Mastered ]
-  Confidence: [ High | Medium | Low ]
-  Diagnosis:  [ Specific cognitive breakdown or missing edge cases ]
-  Follow-up:  [ Stepped inquiry to verify root understanding ]
-  ```
-
-### 4. Feynman Reviewer (`modules/feynman.md`)
-- **Jargon Penetration**: Whenever professional jargon (e.g. *closure, coroutine, covariance*) is used as an explanatory crutch, the coach demands a plain-language mechanistic description.
-- **3D Metaphor Stress Test**: Audits metaphors for mapping completeness, reverse misdirection, and breakdown under extreme concurrency/error states.
-
-### 5. Recovery & Interrupt Protocol (`modules/recovery.md`)
-Any interruption (`/ask`, `/debug`, `/review`) creates a suspension snapshot and seamlessly returns to the exact breakpoint once answered.
+### 3. Objective Evidence Over Scores
+The coach rejects arbitrary percentage metrics (e.g. "Score: 85%"). Capabilities are proven through decoupled dimensions:
+- **AI Intervention Level**: Zero assistance (`L0`) vs. guided scaffolding (`L1 to L3`). AI-authored code awards 0% independent mastery credit.
+- **Evidence Dimensions**: Mechanism explanation (`E1`), runtime simulation (`E2`), debugging (`E3`), independent implementation (`E4`), cross-domain transfer (`E5`).
+- **Domain-Specific Verification**: Conceptual models require counter-case defense; runtime requires execution tracing; testing requires boundary matrix derivation; architecture requires 7-step trade-off analysis.
+- **Reversible State Machine**: `UNKNOWN -> EXPOSED -> GUIDED -> INDEPENDENT -> TRANSFERABLE -> DURABLE`. Failures in subsequent complex tasks trigger real regression.
 
 ---
 
-## Dual-Mode Runtime Guide
+## Installation & Setup
 
-### Mode A: Local Agent Environment (File-System Native)
-*Supported: Cursor, Antigravity, Claude Code, Codex*
+### Google Antigravity
+Natively configured for this workspace. Speak naturally in chat to begin.
 
-- **Mechanism**: The Agent reads and writes directly to local markdown files in `state/`.
-- **Invocation**:
-  ```text
-  @SKILL.md 读取 state/subjects/typescript.md，继续推进当前阶段。
-  ```
-- **Lifecycle**: State files are automatically mutated during transitions; session logs are written to `state/sessions/YYYY-MM-DD-{subject}.md` on exit.
+### Claude Code
+```bash
+# Global installation
+npx skills add https://github.com/1183213030/ai-learning-coach.git --skill ai-learning-coach --global --agent claude-code
 
-### Mode B: Web LLM Environment (Zero-FS Clipboard Bridge)
-*Supported: ChatGPT, Claude.ai, Gemini Web*
+# Project installation
+npx skills add https://github.com/1183213030/ai-learning-coach.git --skill ai-learning-coach --agent claude-code
+```
 
-- **Mechanism**: Use the clipboard as the state I/O bridge.
-- **Invocation**:
-  1. Upload `SKILL.md` and `modules/` to Custom GPT / Project Knowledge (or paste in prompt).
-  2. Paste `state/subjects/{subject}.md` to begin:
-     ```text
-     [Paste state/subjects/{subject}.md]
-     以此学科状态启动 AI Learning OS 协议。
-     ```
-  3. At the end of the session, the AI emits updated Markdown code blocks for `Subject State` and `Session Log`. Copy and commit them to your local git repository.
+### OpenAI Codex
+```bash
+npx skills add https://github.com/1183213030/ai-learning-coach.git --skill ai-learning-coach --global --agent codex
+```
 
 ---
 
-## Project Structure
+## Directory Structure
 
 ```text
 ai-learning-coach/
-├── README.md                         # Main documentation (Chinese)
-├── README_en.md                      # English documentation
-├── SKILL.md                          # Protocol core: FSM engine, arbitration & IO contract
-├── modules/
-│   ├── review.md                     # Ebbinghaus 6-tier spaced review & spot exam engine
-│   ├── practice.md                   # 6 practice modes & dynamic scheduler
-│   ├── examiner.md                   # Lock-step examiner & grading rules
-│   ├── feynman.md                    # Jargon penetration & metaphor stress tests
-│   ├── assessment.md                 # E1-E5 evidence policy & /skip challenge
-│   └── recovery.md                   # Interrupt snapshots & recovery protocol
-├── templates/
-│   ├── cheat-sheet.md                # 1-page condensed cheat sheet template
-│   ├── assessment-report.md          # Level completion assessment report template
-│   ├── subject-state.md              # Single-subject persistent state template
-│   └── session-log.md                # Single-session audit log template
-└── state/
-    ├── profile.md                    # Global learner profile & systemic gaps
-    ├── subjects/
-    │   └── typescript.md             # Production example: TypeScript Level 2 State
-    └── sessions/
-        └── 2026-09-20-typescript.md  # Production example: Archived session log
-```
-
----
-
-## Interrupt Command Reference
-
-| Command | Action | Behavior |
-| :--- | :--- | :--- |
-| `/ask [query]` | Targeted Q&A | Resolves ad-hoc questions and automatically resumes suspended stage |
-| `/debug [code/err]` | Guided Debugging | Assists root-cause discovery; learner performs the fix |
-| `/review` | Spaced Review | Triggers Ebbinghaus review inspection and launches spot exams |
-| `/skip` | Bypass Challenge | Triggers instant comprehensive test for fast-track credit |
-| `/status` | Status Inspection | Prints current stage, atom target, and evidence fulfillment |
-| `/exit` | Graceful Teardown | Generates session archive and updates subject state file |
-
----
-
-## Quick Start
-
-### 1. Initialize a New Subject
-Copy `templates/subject-state.md` to `state/subjects/{your_subject}.md` and configure target level.
-
-### 2. Launch with Your Favorite Agent
-In your IDE agent chat window, run:
-```text
-加载 @SKILL.md，读取 state/subjects/typescript.md。
-根据当前 current_stage: EXAM 和未完成证据 E3，直接出第 1 道实战考题，启动考官模式。
+├── SKILL.md                          # Core protocol & arbitration laws
+├── README.md                         # Chinese Documentation
+├── README_en.md                      # English Documentation
+│
+├── knowledge/                        # Evolving Knowledge Registry
+│   ├── frontend/                     # JavaScript, browser, and runtime concepts
+│   └── software-testing/             # Software testing methodology and standards
+│
+├── library/                          # Local Textbook Library (Local-First Priority)
+│   ├── frontend/                     # Ingested frontend literature
+│   └── software-testing/             # Ingested testing handbooks
+│
+├── references/                       # Operational specifications (Progressive Disclosure)
+│   ├── intent-router.md              # Zero-command natural language routing & Teach vs Check
+│   ├── teaching-protocol.md          # Teacher persona, 4-way pivots, and micro-probes
+│   ├── curriculum-engine.md          # Learner-state-over-curriculum arbitration
+│   ├── local-library.md              # Local textbook reverse parsing protocol
+│   ├── knowledge-discovery.md        # S0-S5 source strategy & provenance
+│   ├── evidence-model.md             # E1-E5 evidence matrix & decoupled assessment
+│   ├── learning-loop.md              # 10-step Coding Learning Loop
+│   ├── coding-learning.md            # Git diff concept extraction
+│   ├── socratic-hints.md             # L1-L5 scaffolding ladder
+│   ├── review-system.md              # Spaced retention & dynamic regression
+│   └── quality-rubric.md             # Strict qualitative evaluation standards
+│
+└── templates/                        # State contracts and persistence ledgers
+    ├── source-manifest.yaml          # Provenance & source coverage manifest
+    ├── roadmap.yaml                  # Domain capability topology
+    ├── curriculum-lesson.md          # Dynamic runtime lesson generator template
+    ├── learner-profile.md            # Long-term learner baseline & blind spots
+    ├── learning-state.yaml           # Active frontier & review queues
+    ├── session.md                    # Single-session execution log
+    └── evidence.yaml                 # Immutable evidence ledger
 ```
 
 ---
 
 ## License
 
-This project is licensed under the MIT License. Feel free to adapt the protocol for team onboarding, technical interview prep, and personal mastery.
+This project is open-source under the [MIT License](LICENSE).

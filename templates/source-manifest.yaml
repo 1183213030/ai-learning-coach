@@ -1,0 +1,41 @@
+version: "2.1.0"
+last_updated: "2026-09-30T09:20:00Z"
+
+sources:
+  - id: "src-mdn-web"
+    title: "MDN Web Docs"
+    type: "official_documentation"
+    tier: "S0"
+    url: "https://developer.mozilla.org"
+    role: "Standard reference for JavaScript runtime, DOM, and Web APIs"
+
+  - id: "src-local-testing-book"
+    title: "Software Testing Foundations (Local Textbook)"
+    type: "local_textbook"
+    tier: "S1"
+    path: "library/software-testing/testing-fundamentals.md"
+    role: "Primary curriculum backbone for software testing methodology and case design"
+
+  - id: "src-istqb-foundation"
+    title: "ISTQB Certified Tester Foundation Level Syllabus"
+    type: "official_standard"
+    tier: "S0"
+    url: "https://www.istqb.org"
+    role: "International standard terminology and boundary test definitions"
+
+  - id: "src-vitest-official"
+    title: "Vitest Official Guide"
+    type: "official_documentation"
+    tier: "S0"
+    url: "https://vitest.dev"
+    role: "Modern JavaScript and TypeScript isolated unit testing"
+
+coverage_mapping:
+  "knowledge/frontend/javascript/scope.yaml":
+    source_ids: ["src-mdn-web"]
+  "knowledge/frontend/javascript/closure.yaml":
+    source_ids: ["src-mdn-web"]
+  "knowledge/software-testing/test-case.yaml":
+    source_ids: ["src-local-testing-book", "src-istqb-foundation"]
+  "knowledge/software-testing/unit-test.yaml":
+    source_ids: ["src-local-testing-book", "src-vitest-official"]

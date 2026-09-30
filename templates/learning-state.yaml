@@ -1,0 +1,43 @@
+version: "1.0.0"
+updated_at: "2026-09-30T08:50:00Z"
+
+current_focus:
+  concept_id: "js-closure"
+  capability: "explain_mechanism_and_implement_private_state"
+  status: "INDEPENDENT"
+  target_next_state: "TRANSFERABLE"
+  active_project_context: "Auth token interceptor and request queue"
+
+active_misconceptions:
+  - id: "misc-closure-copying"
+    concept_id: "js-closure"
+    description: "Believed that outer variables are copied by value into inner closure functions"
+    status: "repaired"
+    last_verified: "2026-09-30"
+
+due_reviews:
+  - concept_id: "js-async-iteration"
+    capability: "for_await_of_concurrency"
+    due_date: "2026-10-01"
+    priority: "high"
+    modality: "predict_output"
+  - concept_id: "vue-computed-caching"
+    capability: "distinguish_getter_side_effects"
+    due_date: "2026-10-03"
+    priority: "medium"
+    modality: "refactor_constraint"
+
+recent_evidence_summary:
+  total_evaluated: 12
+  independent_passed: 8
+  guided_passed: 3
+  regressed_count: 1
+
+ai_dependency_metrics:
+  recent_l0_ratio: 0.67
+  recent_l4_l5_ratio: 0.15
+  autonomy_trend: "increasing"
+
+next_session_action:
+  command: "/learn transfer js-closure"
+  description: "Test closure state management in a Node.js event emitter context without keywords"

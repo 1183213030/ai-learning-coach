@@ -1,0 +1,62 @@
+version: "1.0.0"
+description: "Immutable ledger of evaluated learning attempts and capability proofs."
+
+entries:
+  - id: "ev-20260930-001"
+    timestamp: "2026-09-30T08:30:00Z"
+    concept_id: "js-closure"
+    capability: "implement_private_state_counter"
+    context: "scratch_buffer"
+    task: "Write a function createCounter() returning increment and get functions with truly private count"
+    ai_assistance_level: "L0"
+    ai_contribution_pct: 0
+    learner_response_summary: "Wrote function returning object with methods referencing let count = 0 inside outer body"
+    result: "correct"
+    confidence_stated: "high"
+    evidence_tokens_awarded:
+      - "E1_explain"
+      - "E4_implement"
+    misconception_flagged: null
+    mastery_transition:
+      from: "EXPOSED"
+      to: "INDEPENDENT"
+    notes: "Learner authored code completely without boilerplate assistance."
+
+  - id: "ev-20260930-002"
+    timestamp: "2026-09-30T08:45:00Z"
+    concept_id: "js-closure"
+    capability: "transfer_to_module_pattern"
+    context: "auth_service_refactor"
+    task: "Explain why auth token in factory function is protected against console tampering in browser DevTools"
+    ai_assistance_level: "L1"
+    ai_contribution_pct: 10
+    learner_response_summary: "Explained that variable lives in closed lexical scope inaccessible from window global"
+    result: "correct"
+    confidence_stated: "medium"
+    evidence_tokens_awarded:
+      - "E1_explain"
+      - "E5_transfer"
+    misconception_flagged: null
+    mastery_transition:
+      from: "INDEPENDENT"
+      to: "TRANSFERABLE"
+    notes: "Prompted once with L1 open question regarding global window scope."
+
+  - id: "ev-20261007-003"
+    timestamp: "2026-10-07T09:15:00Z"
+    concept_id: "js-closure"
+    capability: "delayed_retrieval_predict"
+    context: "review_queue"
+    task: "Predict memory footprint when 10,000 closure instances are created but only 1 method is invoked"
+    ai_assistance_level: "L0"
+    ai_contribution_pct: 0
+    learner_response_summary: "Correctly stated each instance retains its own lexical environment on heap"
+    result: "correct"
+    confidence_stated: "high"
+    evidence_tokens_awarded:
+      - "E2_predict"
+    misconception_flagged: null
+    mastery_transition:
+      from: "TRANSFERABLE"
+      to: "DURABLE"
+    notes: "Spaced retrieval passed after 7-day interval."

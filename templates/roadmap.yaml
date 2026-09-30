@@ -1,0 +1,54 @@
+version: "2.1.0"
+active_domains:
+  - "frontend-engineering"
+  - "software-testing"
+
+domains:
+  frontend-engineering:
+    title: "Modern Frontend Engineering"
+    target_outcome: "Independent production-grade frontend architecture and state management"
+    nodes:
+      - id: "js-scope"
+        knowledge_ref: "knowledge/frontend/javascript/scope.yaml"
+        name: "Lexical Scope Chain & Execution Context Stack"
+        status: "DURABLE"
+        prerequisites: []
+        source_id: "src-mdn-web"
+
+      - id: "js-closure"
+        knowledge_ref: "knowledge/frontend/javascript/closure.yaml"
+        name: "JavaScript Closures & Heap Environment Retention"
+        status: "INDEPENDENT"
+        prerequisites: ["js-scope"]
+        source_id: "src-mdn-web"
+
+      - id: "js-event-loop"
+        knowledge_ref: "knowledge/frontend/javascript/event-loop.yaml"
+        name: "Event Loop: Microtasks, Macrotasks, and Render Ticks"
+        status: "CURRENT_FOCUS"
+        prerequisites: ["js-closure"]
+        source_id: "src-mdn-web"
+
+  software-testing:
+    title: "Software Testing Engineering"
+    target_outcome: "Systematic test case derivation, automated unit testing, and E2E pipelines"
+    nodes:
+      - id: "test-philosophy"
+        name: "Core Testing Principles & Defect Cost Curves"
+        status: "DURABLE"
+        prerequisites: []
+        source_id: "src-local-testing-book"
+
+      - id: "test-case-design"
+        knowledge_ref: "knowledge/software-testing/test-case.yaml"
+        name: "Equivalence Partitioning & Boundary Value Analysis"
+        status: "CURRENT_FOCUS"
+        prerequisites: ["test-philosophy"]
+        source_id: "src-local-testing-book"
+
+      - id: "test-unit-testing"
+        knowledge_ref: "knowledge/software-testing/unit-test.yaml"
+        name: "Unit Testing & Isolated Mocking (Vitest)"
+        status: "LOCKED"
+        prerequisites: ["test-case-design"]
+        source_id: "src-local-testing-book"

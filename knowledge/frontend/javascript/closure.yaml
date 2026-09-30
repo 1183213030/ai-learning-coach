@@ -1,0 +1,40 @@
+id: "js-closure"
+name: "JavaScript Closures & Heap Environment Retention"
+domain: "frontend-javascript"
+source_ids:
+  - "src-mdn-web"
+
+capabilities:
+  - id: "cap-explain-closure-heap"
+    token: "E1_explain"
+    description: "Explain why outer local variables are preserved on the heap instead of disappearing when execution context pops off stack."
+  - id: "cap-predict-closure-instances"
+    token: "E2_predict"
+    description: "Predict output when multiple closure instances are created and independently mutate shared vs isolated state."
+  - id: "cap-implement-encapsulation"
+    token: "E4_implement"
+    description: "Implement private state encapsulation (e.g. factory counter, rate limiter, or memoizer) with zero AI assistance (L0)."
+  - id: "cap-transfer-closure"
+    token: "E5_transfer"
+    description: "Identify and utilize closure retention in an unfamiliar domain (e.g. Node.js stream pipeline or event emitter) without prompting."
+
+prerequisites:
+  - "js-scope"
+  - "js-call-stack"
+
+unlocks:
+  - "js-module-pattern"
+  - "js-currying"
+  - "vue-reactivity"
+  - "react-hooks-internals"
+
+common_misconceptions:
+  - id: "misc-closure-copy-by-value"
+    trap: "Believing that closed-over variables are copied or cloned at the moment the inner function is defined."
+    counter_case: "Mutating an outer variable after returning the closure demonstrates live shared reference."
+  - id: "misc-unavoidable-leak"
+    trap: "Believing that every closure inevitably produces a permanent memory leak in the V8 engine."
+    counter_case: "Nullifying the reference to the inner function triggers V8 garbage collection to reclaim the heap environment record."
+
+source_fact: "ECMAScript §10.2: Function objects evaluate in a LexicalEnvironment saved in their internal [[Environment]] slot at creation time."
+scaffolding_metaphor: "A persistent tether to a floating backpack: even after the tent is folded and packed away, the tether keeps the backpack accessible."

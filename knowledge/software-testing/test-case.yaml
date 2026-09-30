@@ -1,0 +1,32 @@
+id: "test-case-design"
+name: "Test Case Design: Equivalence Partitioning & Boundary Value Analysis"
+domain: "software-testing"
+source_ids:
+  - "src-local-testing-book"
+  - "src-istqb-foundation"
+
+capabilities:
+  - id: "cap-derive-partitions"
+    token: "E1_explain"
+    description: "Explain the mathematical difference between valid and invalid equivalence classes for a given input domain."
+  - id: "cap-identify-boundaries"
+    token: "E2_predict"
+    description: "Identify exact boundary, on-point, off-point, and interior-point values for complex edge constraints."
+  - id: "cap-design-test-suite"
+    token: "E4_implement"
+    description: "Design a minimal, non-redundant test matrix covering all critical boundary partitions without AI assistance."
+
+prerequisites:
+  - "testing-philosophy-and-types"
+
+unlocks:
+  - "test-unit-testing"
+  - "test-integration"
+
+common_misconceptions:
+  - id: "misc-exhaustive-testing-myth"
+    trap: "Believing that software can be proven bug-free by writing an infinite number of random test inputs."
+    counter_case: "Demonstrating that equivalence partitioning achieves identical defect detection with a mathematically bounded set of inputs."
+
+source_fact: "ISTQB Certified Tester Foundation Level: Exhaustive testing is impossible; risk assessment and test techniques are used to focus test efforts."
+scaffolding_metaphor: "Surveying a frozen lake: instead of testing every square inch, you drill sample holes in the center and test the exact transition edges near the shore."

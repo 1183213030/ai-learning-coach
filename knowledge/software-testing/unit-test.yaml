@@ -1,0 +1,33 @@
+id: "test-unit-testing"
+name: "Unit Testing & Isolated Mocking (Vitest / Jest)"
+domain: "software-testing"
+source_ids:
+  - "src-local-testing-book"
+  - "src-vitest-official"
+
+capabilities:
+  - id: "cap-explain-mock-spy"
+    token: "E1_explain"
+    description: "Explain the architectural difference between a Dummy, Stub, Spy, and Mock."
+  - id: "cap-predict-mock-leakage"
+    token: "E2_predict"
+    description: "Predict test suite pollution caused by shared global mock state across asynchronous test files."
+  - id: "cap-author-isolated-unit-test"
+    token: "E4_implement"
+    description: "Write an isolated unit test asserting behavior and side-effect calls using Vitest with L0 assistance."
+
+prerequisites:
+  - "test-case-design"
+  - "js-async-await"
+
+unlocks:
+  - "test-component-testing"
+  - "test-e2e-automation"
+
+common_misconceptions:
+  - id: "misc-mock-everything-trap"
+    trap: "Mocking every internal implementation detail until tests test the mocks rather than the system behavior."
+    counter_case: "Refactoring private functions breaks over-mocked tests despite public behavior remaining identical."
+
+source_fact: "Martin Fowler, Mocks Aren't Stubs: Mocks use behavior verification; stubs use state verification."
+scaffolding_metaphor: "A flight simulator: you disconnect real hydraulics and feed simulated sensor signals to test the cockpit controls in safe isolation."

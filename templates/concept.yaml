@@ -1,0 +1,37 @@
+id: "js-closure"
+name: "JavaScript Closures & Lexical Environments"
+domain: "javascript-runtime"
+
+capability:
+  summary: "Explain lexical scope retention, predict asynchronous execution order, and independently implement encapsulation without AI assistance."
+  observable_actions:
+    - action: "explain"
+      criteria: "Articulates why outer lexical variables remain on heap when execution context is popped off stack."
+    - action: "predict"
+      criteria: "Accurately predicts output of asynchronous or multi-step invocations sharing closed-over state."
+    - action: "implement"
+      criteria: "Implements factory functions, private counters, or memoized wrappers with L0 assistance."
+    - action: "transfer"
+      criteria: "Identifies and leverages closure patterns in unfamiliar frameworks or Node.js streaming contexts."
+
+prerequisites:
+  - "js-call-stack"
+  - "js-lexical-scope"
+  - "js-reference-vs-primitive"
+
+unlocks:
+  - "js-module-pattern"
+  - "js-currying-partial-application"
+  - "react-hooks-internals"
+
+common_misconceptions:
+  - id: "cm-01"
+    trap: "Assuming closed-over variables are cloned/copied at function creation time."
+    counter_case: "Mutating the outer variable after returning the closure demonstrates live reference binding."
+  - id: "cm-02"
+    trap: "Assuming closures cause unavoidable memory leaks in all scenarios."
+    counter_case: "Demonstrating garbage collection reclaiming unreachable lexical scopes once references are severed."
+
+rubric:
+  explain_threshold: "Must cite call stack pop vs. heap retention without using the word 'magic'."
+  implement_threshold: "Must create genuine encapsulation where inner state is inaccessible directly."

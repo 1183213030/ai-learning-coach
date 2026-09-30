@@ -1,0 +1,28 @@
+id: "js-scope"
+name: "Lexical Scope Chain & Execution Context Stack"
+domain: "frontend-javascript"
+source_ids:
+  - "src-mdn-web"
+
+capabilities:
+  - id: "cap-explain-scope-chain"
+    token: "E1_explain"
+    description: "Explain how V8 resolves identifier references upward through nested lexical environments until global scope."
+  - id: "cap-predict-shadowing"
+    token: "E2_predict"
+    description: "Accurately predict output in scenarios involving variable shadowing across block and function boundaries."
+
+prerequisites:
+  - "js-call-stack"
+
+unlocks:
+  - "js-closure"
+  - "js-this-binding"
+
+common_misconceptions:
+  - id: "misc-dynamic-scope-confusion"
+    trap: "Believing that JavaScript scope depends on where a function is called rather than where it was defined."
+    counter_case: "Invoking a nested function from a different caller function proves lexical binding remains invariant."
+
+source_fact: "ECMAScript §9.4 Lexical Environments: A Lexical Environment consists of an Environment Record and a possibly null reference to an outer Lexical Environment."
+scaffolding_metaphor: "A one-way glass elevator: code inside can see variables on the floors above, but floors above cannot look down into rooms below."
