@@ -1,15 +1,15 @@
 <div align="center">
 
-# AI Learning Coach
+# AI Learning Coach (V3.0)
 
-### A Knowledge-Driven, Evidence-Based Personal Learning Operating System
+### A Knowledge-Driven, Concept-Boundary-Expanded, and Evidence-Based Personal Learning OS
 
 Let the user focus purely on learning; let the AI Learning Coach handle the rest.
 
-[![Protocol Version](https://img.shields.io/badge/Protocol-v2.2.0-007ACC?style=flat-square)](#)
-[![Interaction](https://img.shields.io/badge/Interaction-Zero--Command%20Natural%20Language-4EBA6F?style=flat-square)](#)
-[![Verification](https://img.shields.io/badge/Verification-Type--Specific%20Evidence-orange?style=flat-square)](#)
-[![Architecture](https://img.shields.io/badge/Architecture-Six--Tier%20Knowledge%20Plane-blueviolet?style=flat-square)](#)
+[![Protocol Version](https://img.shields.io/badge/Protocol-v3.0.0-007ACC?style=flat-square)](#)
+[![Pedagogy](https://img.shields.io/badge/Pedagogy-Minimal%20Complete%20Coverage-4EBA6F?style=flat-square)](#)
+[![Interaction](https://img.shields.io/badge/Interaction-Zero--Command%20Natural%20Language-orange?style=flat-square)](#)
+[![Verification](https://img.shields.io/badge/Verification-Type--Specific%20Evidence-blueviolet?style=flat-square)](#)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)](#)
 
 [简体中文](README.md) • [English](README_en.md)
@@ -18,94 +18,89 @@ Let the user focus purely on learning; let the AI Learning Coach handle the rest
 
 ---
 
-## Overview
+## Core Breakthrough: What is Truly "Complete Teaching"?
 
-In the era of modern AI coding assistants, obtaining working code and instant answers has become trivial. However, **building durable personal engineering capabilities has become harder than ever**.
+Traditional AI instruction suffers from a fatal flaw: **providing an abstract definition accompanied by a single happy-path example**.
+The learner nods along, but collapses when faced with nuanced mutations and boundary edge traps in real code.
 
-### Two Pervasive Pitfalls in AI Learning
-1. **The Illusion of Competence**: Reading an AI explanation or copying working code gives the sensation of mastery. But when confronted with a blank file, intricate runtime concurrency, or an unexpected production outage, the developer gets stuck.
-2. **Fragmentation & Ad-hoc Knowledge**: Asking AI sporadic questions about configs or errors leaves isolated fragments. No structured mental lattice ever forms.
+**AI Learning Coach V3.0** introduces a fundamental pedagogical law:
+> **Do not merely explain what a concept means. Systematically unpack its entire observable behavioral boundary space (Minimal Complete Coverage).**
 
-**AI Learning Coach** flips the script on passive answer-dumping and static online courses. It transforms AI into a **long-term cognitive coach, strict examiner, and dynamic curriculum engine** that adapts to the learner's real-world constraints.
-
----
-
-## Core Philosophy
-
-> **Learner state decides what to learn right now; objective evidence proves whether it is mastered.**
-
-- **Global Perspective, Zero Fragmentation**: Before diving into isolated details, the coach constructs an authoritative **prerequisite capability tree (Roadmap)**, establishing an unshakeable foundation step-by-step.
-- **Socratic Guidance, Zero Spoon-Feeding**: When encountering difficult mechanics, the coach withholds walls of text. It uses physical metaphors, observable contradictions, and micro-predictions to help you deduce the mechanism yourself.
-- **Closed-Book Verification, Zero Fake Mastery**: Saying "I understand" yields zero evidence points. The coach strictly decouples **Teaching** from **Testing**. During verification, hints and solutions are withheld; only unassisted explanations, predictions, or implementations unlock true mastery.
-- **Learner Reality over Curriculum Progress**: Real humans experience fatigue, tight time limits, and sudden work interruptions. The coach yields static syllabi to your immediate reality.
-- **Zero-Command Natural Language**: No complex CLI flags or config syntax to memorize. Speak naturally as you would with a human mentor.
+Learning a concept (such as `assertIn`, `Array.prototype.includes`, or JavaScript's `==`) is far more than reciting definitions. The system guides you through its **7-Dimensional Behavioral Space**:
+1. **The Core Invariant**: The single underlying physical rule deciding truth.
+2. **Positive Baseline Cases**: Cleanest, zero-distraction nominal conditions where it holds.
+3. **Structural Variations**: Padding and mutations where it *still* surprisingly holds.
+4. **Counterexample Shocks (The Critical Cognitive Step)**: Superficially identical cases that *instantly fail* (e.g. `admmmmmin` does not contain `admin`, or `['1'].includes(1)` is false), compelling the mind to isolate the invariant.
+5. **Boundary & Extreme Limits**: Empty values, type coercion, `NaN`, and object references.
+6. **Confusing Neighbor Contrast**: Side-by-side debate against similar ecosystem tools (e.g. `indexOf` vs `includes` vs `some`, or `==` vs `===` vs `Object.is`).
+7. **Real Engineering Anchors**: Production failure points where misunderstandings cause silent, disastrous bugs.
 
 ---
 
-## Natural Language Interface
+## Three Dimensions of Completeness
 
-You communicate purely through natural conversation:
+The system operates across three tightly integrated pillars:
+
+| Dimension | Core Mission | Implementation Mechanism |
+| :--- | :--- | :--- |
+| **1. Knowledge Completeness** | Map the entire operational envelope of a concept | **Concept Boundary Engine**: Invariant, Variations, Shocks, Extremes, and Neighbor Contrasts. |
+| **2. Teaching Completeness** | Take a beginner from zero to deep intuition | **Shock & Deduce Cycle**: Everyday intuition -> observation -> counter-case deduction -> standard formalisms. |
+| **3. Capability Completeness** | Prove unassisted independent mastery | **Type-Specific Evidence Engine**: Zero-hint (`L0`) assessment via execution simulation, boundary matrices, or clean-slate code. |
+
+---
+
+## Zero-Command Natural Language Interface
+
+Communicate naturally without memorizing complex syntax:
 
 ```text
 ┌────────────────────────────────────────────────────────┐
 │                                                        │
 │  "I want to systematically master frontend engineering" │
 │  "Teach me JS async concurrency; I only know await"    │
-│  -> Initiates a new domain with light diagnostic       │
-│                                                        │
-│  "Continue learning"                                   │
-│  -> Seamlessly resumes the unclosed frontier           │
-│                                                        │
-│  "Exhausted today, only have 15 minutes"               │
-│  -> Halts new chapters; downgrades to targeted drill   │
+│  -> Initiates domain roadmap with light diagnostic     │
 │                                                        │
 │  "I don't understand closures, teach me from zero"     │
-│  "That was too abstract, explain with an analogy"      │
+│  "That was too abstract, explain with a real analogy"  │
+│  -> Beginner Mode: Intuition -> Minimal Code -> Shock  │
+│                                                        │
+│  "Continue learning"                                   │
+│  "Exhausted today, only have 10 minutes"               │
+│  -> Learner reality overrides rigid curriculum syllabi │
+│                                                        │
 │  "Quiz me on what we just covered, zero hints"         │
-│  "Pause the book, I hit a CORS bug in my real project" │
-│  -> Targeted clarity, pedagogical pivot, or real work  │
+│  "Pause the book, I hit a CORS bug in production"      │
+│  -> Strict L0 verification or real-world bug diagnosis │
 │                                                        │
 └────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## Six-Tier Architecture
-
-Beneath the minimalist conversation interface lies an uncompromising six-tier system:
+## The Tri-Engine Architecture
 
 ```text
-┌─────────────────────────────────────────────────────────────────┐
-│ Layer 1: Learner Profile (Baselines, blind spots, preferences)  │
-├─────────────────────────────────────────────────────────────────┤
-│ Layer 2: Knowledge Ingress (Multi-source ingestion S0 to S5)    │
-│   [Local Library Priority library/]  [Official Specs]  [Git Diff]│
-├─────────────────────────────────────────────────────────────────┤
-│ Layer 3: Knowledge Map & Topology (Capability trees & graphs)   │
-├─────────────────────────────────────────────────────────────────┤
-│ Layer 4: Adaptive Curriculum Engine (Single-lesson dynamic growth)│
-├─────────────────────────────────────────────────────────────────┤
-│ Layer 5: Teaching Engine (MCE explanations, 4-way pivots)       │
-├─────────────────────────────────────────────────────────────────┤
-│ Layer 6: Evidence & Review (Type-specific proof, spaced retention)│
-└─────────────────────────────────────────────────────────────────┘
+                           AI Learning OS
+                                  │
+         ┌────────────────────────┼────────────────────────┐
+         ▼                        ▼                        ▼
+  Knowledge Engine         Teaching Engine          Evidence Engine
+(Concept Boundary & Map)  (Adaptive Pedagogy)      (Verification & Audit)
+         │                        │                        │
+         ▼                        ▼                        ▼
+Minimal Complete Coverage    Shock & Deduce Cycle     Type-Specific Proof
+(7-Dimension Boundary)     (Intuition-Observation-  (Immutable L0 Evidence
+                            Counterexample-Reality)  Ledger)
+         │                        │                        │
+         └────────────────────────┼────────────────────────┘
+                                  ▼
+                         Learner State & Graph
+                         (Learner Reality > Syllabus)
+                                  │
+                                  ▼
+                       Review & Spaced Retention
+                         (Reversible state machine)
 ```
-
-### 1. Source Ranking (S0 to S5)
-- **S0 (Official Specs)**: ECMAScript, W3C, MDN, Vue/React/Node.js Official Handbooks.
-- **S1 (Canonical Literature)**: Ingested local textbooks (`library/`), classic engineering literature.
-- **S2 to S4**: Vetted courses, high-reputation engineering blogs, community articles.
-- **S5 (AI Memory)**: Parametric model memory (must be cross-referenced with S0/S1; never substitute AI metaphors for standard facts).
-
-### 2. Local-First Library Ingestion
-Store your own Markdown notes, e-books, or documentation under `library/<domain>/` (e.g. `library/frontend/`). The coach parses your local materials as the primary curriculum spine before searching external resources.
-
-### 3. Objective Evidence Over Scores
-The coach rejects arbitrary percentage metrics (e.g. "Score: 85%"). Capabilities are proven through decoupled dimensions:
-- **AI Intervention Level**: Zero assistance (`L0`) vs. guided scaffolding (`L1 to L3`). AI-authored code awards 0% independent mastery credit.
-- **Evidence Dimensions**: Mechanism explanation (`E1`), runtime simulation (`E2`), debugging (`E3`), independent implementation (`E4`), cross-domain transfer (`E5`).
-- **Domain-Specific Verification**: Conceptual models require counter-case defense; runtime requires execution tracing; testing requires boundary matrix derivation; architecture requires 7-step trade-off analysis.
-- **Reversible State Machine**: `UNKNOWN -> EXPOSED -> GUIDED -> INDEPENDENT -> TRANSFERABLE -> DURABLE`. Failures in subsequent complex tasks trigger real regression.
 
 ---
 
@@ -134,22 +129,23 @@ npx skills add https://github.com/1183213030/ai-learning-coach.git --skill ai-le
 
 ```text
 ai-learning-coach/
-├── SKILL.md                          # Core protocol & arbitration laws
+├── SKILL.md                          # V3.0 Tri-Engine Core Protocol Specification
 ├── README.md                         # Chinese Documentation
 ├── README_en.md                      # English Documentation
 │
-├── knowledge/                        # Evolving Knowledge Registry
-│   ├── frontend/                     # JavaScript, browser, and runtime concepts
-│   └── software-testing/             # Software testing methodology and standards
+├── knowledge/                        # Evolving Knowledge Registry with 7-D Boundary Models
+│   ├── frontend/javascript/          # closure.yaml, scope.yaml, includes.yaml, equality.yaml
+│   └── software-testing/             # test-case.yaml, unit-test.yaml
 │
 ├── library/                          # Local Textbook Library (Local-First Priority)
 │   ├── frontend/                     # Ingested frontend literature
 │   └── software-testing/             # Ingested testing handbooks
 │
 ├── references/                       # Operational specifications (Progressive Disclosure)
-│   ├── intent-router.md              # Zero-command natural language routing & Teach vs Check
+│   ├── concept-boundary-engine.md    # [V3.0 Core] Minimal Complete Coverage Boundary Specification
 │   ├── teaching-protocol.md          # Teacher persona, 4-way pivots, and micro-probes
 │   ├── curriculum-engine.md          # Learner-state-over-curriculum arbitration
+│   ├── intent-router.md              # Zero-command natural language routing & Teach vs Check
 │   ├── local-library.md              # Local textbook reverse parsing protocol
 │   ├── knowledge-discovery.md        # S0-S5 source strategy & provenance
 │   ├── evidence-model.md             # E1-E5 evidence matrix & decoupled assessment
@@ -160,6 +156,7 @@ ai-learning-coach/
 │   └── quality-rubric.md             # Strict qualitative evaluation standards
 │
 └── templates/                        # State contracts and persistence ledgers
+    ├── concept-expansion.yaml        # [V3.0 Core] Standardized 7-dimension expansion blueprint
     ├── source-manifest.yaml          # Provenance & source coverage manifest
     ├── roadmap.yaml                  # Domain capability topology
     ├── curriculum-lesson.md          # Dynamic runtime lesson generator template

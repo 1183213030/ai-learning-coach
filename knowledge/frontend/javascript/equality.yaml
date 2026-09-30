@@ -1,0 +1,78 @@
+id: "js-loose-equality"
+name: "JavaScript Loose Equality (==) & Abstract Equality Algorithm"
+domain: "frontend-javascript"
+source_ids:
+  - "src-mdn-web"
+
+purpose:
+  - "Evaluate whether two operands are equal after performing implicit type conversions according to the ECMAScript Abstract Equality Comparison Algorithm."
+
+syntax:
+  - "x == y"
+
+core_invariant:
+  - "If operands have different types, coercive conversion occurs: Booleans convert to numbers, Strings convert to numbers when compared with numbers, and Objects convert to primitives via Symbol.toPrimitive / valueOf / toString."
+
+positive_cases:
+  - input: "1 == '1'"
+    expected: true
+    rationale: "String '1' coerces to Number 1."
+  - input: "0 == false"
+    expected: true
+    rationale: "Boolean false coerces to Number 0; 0 === 0."
+  - input: "null == undefined"
+    expected: true
+    rationale: "ECMAScript rule explicitly treats null and undefined as equal only to each other."
+
+variation_cases:
+  - input: "'' == false"
+    expected: true
+    rationale: "Both coerce to Number 0."
+  - input: "[] == false"
+    expected: true
+    rationale: "Empty array converts to empty string '', which then coerces to Number 0."
+  - input: "[] == ''"
+    expected: true
+    rationale: "[].toString() yields empty string ''; '' === ''."
+
+counterexample_shocks:
+  - input: "'0' == false"
+    expected: true
+    shock_reason: "String '0' coerces to 0; false coerces to 0. 0 === 0 holds."
+  - input: "'false' == false"
+    expected: false
+    shock_reason: "'false' coerces to Number NaN; false coerces to 0. NaN === 0 is false!"
+  - input: "null == 0"
+    expected: false
+    shock_reason: "null does not coerce to number during loose equality; it only loosely equals undefined."
+  - input: "NaN == NaN"
+    expected: false
+    shock_reason: "IEEE-754 standard strictly defines NaN as unequal to any value, including itself."
+
+boundary_cases:
+  - input: "[1] == 1"
+    expected: true
+    boundary_type: "Single-element array coercion"
+  - input: "[1, 2] == '1,2'"
+    expected: true
+    boundary_type: "Array join string coercion"
+  - input: "{} == false"
+    expected: false
+    boundary_type: "Object coercion ([object Object] to NaN)"
+
+common_misconceptions:
+  - trap: "Assuming == just means 'they look roughly the same'."
+    counter_proof: "'false' == false evaluates to false, despite containing the exact characters."
+  - trap: "Assuming null converts to 0 during loose comparison."
+    counter_proof: "null == 0 is false, even though Number(null) is 0."
+
+confusing_neighbor_contrast:
+  - tool: "==="
+    difference: "Strict equality. Evaluates to false immediately if types differ, with zero implicit type casting."
+  - tool: "Object.is"
+    difference: "SameValue algorithm. Considers NaN and NaN equal, and distinguishes +0 from -0."
+
+real_world_engineering_anchor:
+  scenario: "Checking falsy status of form fields or API query parameters."
+  trap_in_prod: "if (status == false) will inadvertently match status = '' and status = 0."
+  correct_pattern: "Always use strict equality === and explicit boolean conversions."

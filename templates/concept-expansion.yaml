@@ -1,0 +1,74 @@
+version: "3.0.0"
+concept_id: "js-array-includes"
+name: "Array.prototype.includes & SameValueZero Algorithm"
+domain: "frontend-javascript"
+
+purpose:
+  - "Determine whether an array contains a specific element, returning a boolean true or false."
+
+syntax:
+  - "arr.includes(searchElement[, fromIndex])"
+
+core_invariant:
+  - "Compares searchElement with array elements using the SameValueZero algorithm. Unlike indexOf, it treats NaN as equal to NaN."
+
+positive_cases:
+  - input: "[1, 2, 3].includes(2)"
+    expected: true
+    rationale: "Direct primitive number match."
+  - input: "['admin', 'editor'].includes('admin')"
+    expected: true
+    rationale: "Direct primitive string match."
+
+variation_cases:
+  - input: "[1, 2, 3].includes(2, 1)"
+    expected: true
+    rationale: "Searching fromIndex 1 includes index 1 itself."
+  - input: "[1, 2, 3].includes(1, 1)"
+    expected: false
+    rationale: "Searching fromIndex 1 starts past the target position."
+  - input: "[1, 2, 3].includes(3, -1)"
+    expected: true
+    rationale: "Negative offset counts back from array length (3 + (-1) = 2)."
+
+counterexample_shocks:
+  - input: "['1'].includes(1)"
+    expected: false
+    shock_reason: "Looks identical in string coercion, but strictly checks types without casting."
+  - input: "[[1]].includes([1])"
+    expected: false
+    shock_reason: "Inner arrays are distinct heap object references, even though contents look identical."
+  - input: "[{ id: 1 }].includes({ id: 1 })"
+    expected: false
+    shock_reason: "Object literal creates a new heap memory pointer; reference equality fails."
+
+boundary_cases:
+  - input: "[NaN].includes(NaN)"
+    expected: true
+    boundary_type: "IEEE-754 Special Primitive"
+    note: "Unlike indexOf which uses === (where NaN === NaN is false), includes correctly finds NaN."
+  - input: "[].includes(undefined)"
+    expected: false
+    boundary_type: "Empty collection"
+  - input: "[undefined].includes(undefined)"
+    expected: true
+    boundary_type: "Sparse array / undefined slot"
+
+common_misconceptions:
+  - trap: "Believing includes() performs deep object equality checking."
+    counter_proof: "Passing two distinct object references with identical fields returns false."
+  - trap: "Assuming includes() works like indexOf with NaN."
+    counter_proof: "indexOf(NaN) returns -1, while includes(NaN) returns true."
+
+confusing_neighbor_contrast:
+  - tool: "Array.prototype.indexOf"
+    difference: "Returns integer index; uses Strict Equality (===) which causes it to miss NaN."
+  - tool: "Array.prototype.some"
+    difference: "Accepts a callback predicate function; essential for finding objects by internal property."
+  - tool: "Set.prototype.has"
+    difference: "O(1) average lookup complexity; far superior for high-frequency or large collections."
+
+real_world_engineering_anchor:
+  scenario: "Checking user permissions from JWT payload array."
+  trap_in_prod: "If roles are returned as [{ name: 'admin' }], roles.includes({ name: 'admin' }) returns false silently."
+  correct_pattern: "roles.some(r => r.name === 'admin')"

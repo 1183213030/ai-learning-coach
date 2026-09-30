@@ -1,15 +1,15 @@
 <div align="center">
 
-# AI Learning Coach
+# AI Learning Coach (V3.0)
 
-### 个人专属的知识驱动与证据验收型技术学习操作系统 (Personal Learning OS)
+### 个人专属的知识驱动、概念边界展开与证据验收型技术学习操作系统 (Personal Learning OS)
 
 让用户只需要会学习，剩下的交给 AI Learning Coach。
 
-[![Protocol Version](https://img.shields.io/badge/Protocol-v2.2.0-007ACC?style=flat-square)](#)
-[![Interaction](https://img.shields.io/badge/Interaction-Zero--Command%20Natural%20Language-4EBA6F?style=flat-square)](#)
-[![Verification](https://img.shields.io/badge/Verification-Type--Specific%20Evidence-orange?style=flat-square)](#)
-[![Architecture](https://img.shields.io/badge/Architecture-Six--Tier%20Knowledge%20Plane-blueviolet?style=flat-square)](#)
+[![Protocol Version](https://img.shields.io/badge/Protocol-v3.0.0-007ACC?style=flat-square)](#)
+[![Pedagogy](https://img.shields.io/badge/Pedagogy-Minimal%20Complete%20Coverage-4EBA6F?style=flat-square)](#)
+[![Interaction](https://img.shields.io/badge/Interaction-Zero--Command%20Natural%20Language-orange?style=flat-square)](#)
+[![Verification](https://img.shields.io/badge/Verification-Type--Specific%20Evidence-blueviolet?style=flat-square)](#)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)](#)
 
 [简体中文](README.md) • [English](README_en.md)
@@ -18,103 +18,97 @@
 
 ---
 
-## 项目概述
+## 核心突破：什么是真正的“教完整”？
 
-在大模型普及的今天，获取现成代码和答案变得前所未有的廉价，但**真正建立属于自己的技术工程能力却变得越来越难**。
+传统 AI 教学最大的弊端在于：**只给一个抽象定义 + 一个简单的正确示例**。
+学习者当时看懂了，但一旦遇到真实代码中形形色色的变体和陷阱，立刻陷入盲区。
 
-### 传统 AI 学习的两大通病
-1. **虚假胜任感 (The Illusion of Competence)**：阅读 AI 详尽的解释或复制 AI 生成的代码，让人误以为自己掌握了；但一旦脱离 AI 白纸盲打、分析复杂系统时序或排查线上事故时，瞬间束手无策。
-2. **碎片化与无体系 (Fragmented & Ad-hoc)**：今天问一个配置，明天问一段报错，学到的全是零碎拼图，脑海里始终无法形成清晰完整的技术知识骨架。
+**AI Learning Coach V3.0** 确立了一个全新的教学核心法典：
+> **不是单纯“解释知识点”，而是穷举知识点的“可观察行为边界空间 (Minimal Complete Coverage)”。**
 
-**AI Learning Coach** 彻底颠覆了“你问我答”的传统问答模式与“机械播放章节”的死板网课模式。它将 AI 从被动的代码生成器，转变为**带有长期记忆、掌握客观证据、动态规划知识树并自适应学习者现实状态的随身技术教练**。
-
----
-
-## 核心设计哲学
-
-> **现实状态决定现在学什么，客观证据决定到底会不会。**
-
-- **全局视野，告别碎片化**：无论你想掌握现代前端、JavaScript 内核还是其他技术领域，系统会首先构建清晰的**前置依赖技能树 (Roadmap)**，让你清楚看到起点、当前关卡与终点，一环扣一环扎实推进。
-- **启发引导，拒绝填鸭灌输**：遇到不懂的原理，系统绝不倾倒长篇大论，而是通过生活隐喻、观察矛盾、小步预测，引导你自己推导出答案。
-- **闭卷检验，彻底击碎假懂**：嘴上说“理解了”在系统里积分为零。系统严格将**教学 (Teach)** 与 **检验 (Check)** 分离。考核时关闭提示与答案泄露，唯有你独立完成白话阐述、时序预测或独立手写，才算真正过关。
-- **用户现实状态高于课程进度**：真实人类不是机器。当你只有 10 分钟、身心疲惫、或被突发的工作线上 Bug 打断时，系统绝不强推大纲，而是动态自适应为微型复习或就地取材教学。
-- **零命令交互 (Zero-Command)**：你不需要学习复杂的命令行或配置文件，全程纯自然语言交流，像和真人导师对话一样自然。
+学习一个概念（如 `assertIn`、`Array.prototype.includes` 或 JavaScript 的 `==`），绝不仅仅是背下“它用于判断是否包含/是否相等”。系统会带你完整推演它的 **7 维行为空间**：
+1. **核心不变量**：决定真伪的唯一底层物理规则；
+2. **正向基准用例**：最干净、无干扰的标准成立场景；
+3. **结构形变用例**：前后加上前缀、后缀、嵌套，验证为什么它*依然成立*；
+4. **反例震撼冲击 (关键教学步)**：看起来极其相似，却*瞬间失败*的典型陷阱（例如 `admmmmmin` 不包含 `admin`，或 `['1'].includes(1)` 为假），逼迫大脑自己推导并锁定不变量；
+5. **极值边界测试**：空值、特殊类型转换、`NaN`、引用对象等极端边缘情况；
+6. **易混概念横向对比**：与生态中相似方法（如 `indexOf` vs `includes` vs `some`，或 `==` vs `===` vs `Object.is`）的同台辩论；
+7. **真实工程锚点**：它在生产环境（如鉴权令牌解析、性能渲染拦截）中如何引发致命的隐蔽 Bug。
 
 ---
 
-## 交互范式：你只需要表达意图
+## 三大完整性原则 (Three Dimensions of Completeness)
 
-系统摒弃了繁重的命令行参数，用户在日常使用中只需表达真实想法：
+系统围绕三个不可分割的完整性闭环运行：
+
+| 维度 | 核心诉求 | 系统实现方式 |
+| :--- | :--- | :--- |
+| **1. 知识完整** | 搞透这个技术到底管哪些情况 | **概念边界展开引擎 (Concept Boundary Engine)**：正例、变式、反例、边界极值、相邻辨析。 |
+| **2. 教学完整** | 怎么把一个小白真正带入门 | **震荡推演循环 (Shock & Deduce)**：先生活直觉、再代码观察、反例冲击后总结规律、最后才引入正式规范术语。 |
+| **3. 能力完整** | 怎么证明学习者真的独立掌握了 | **分领域闭卷证据链 (Evidence Engine)**：关掉提示 (`L0`)，按知识类型分别考核时序推演、边界矩阵或手写重构，杜绝口头假懂。 |
+
+---
+
+## 极简交互体验：说人话即可
+
+你不需要记忆任何命令，随时像在微信里与一位顶级技术导师对话：
 
 ```text
 ┌────────────────────────────────────────────────────────┐
 │                                                        │
-│  “我想系统学习前端开发”                                 │
-│  “我想系统搞懂 JavaScript 异步与并发，我只会 async”     │
-│  -> 开启新领域的系统学习 (自动诊断并定位最佳切入点)     │
-│                                                        │
-│  “继续学习”                                            │
-│  -> 接续上次断点，自动调取未闭环任务，无废话继续推进    │
-│                                                        │
-│  “今天加班很累，只有15分钟，简单学一下”                │
-│  -> 自动阻断新课，降级为精准复习与轻量演练              │
+│  “我想系统学前端开发”                                 │
+│  “我想系统搞懂 JavaScript 异步并发控制，我只会 async”  │
+│  -> 开启新领域 (自动摸底诊断，按前置依赖循序渐进)       │
 │                                                        │
 │  “我完全不懂闭包，从零教我”                            │
-│  “你刚才讲的太抽象了，换一种方式讲讲”                  │
+│  “你刚才讲的太抽象了，换个生活比喻讲讲”                │
+│  -> 启动小白模式 (生活直觉 -> 最小代码 -> 反例冲击)    │
+│                                                        │
+│  “继续昨天的学习”                                      │
+│  “今天加班很累，只有10分钟，简单学一下”                │
+│  -> 状态与时间自适应 (用户现实状态高于死板课程大纲)    │
+│                                                        │
 │  “考考我刚才学的，但不要给我任何提示”                  │
 │  “先不学教材了，我工作里遇到了一个跨域报错”            │
-│  -> 针对性解惑、教学模型突变、闭卷验证或生产实战介入    │
+│  -> 闭卷真实能力核验 (L0)，或就地取材解决生产 Bug      │
 │                                                        │
 └────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 六层架构体系 (Six-Tier Architecture)
-
-在极简对话界面的背后，运转着一套高严密度的六层工程中枢：
+## 三大中枢引擎架构
 
 ```text
-┌─────────────────────────────────────────────────────────────────┐
-│ Layer 1: Learner Profile (用户全局画像 / 能力基线 / 盲区归档)    │
-├─────────────────────────────────────────────────────────────────┤
-│ Layer 2: Knowledge Ingress (三源汇聚与 S0~S5 权威溯源)          │
-│   [本地教材库优先 library/]  [Web 官方权威规范]  [真实工程上下文] │
-├─────────────────────────────────────────────────────────────────┤
-│ Layer 3: Knowledge Map & Topology (领域技能树 / 前置拓扑依赖)   │
-├─────────────────────────────────────────────────────────────────┤
-│ Layer 4: Adaptive Curriculum Engine (单课动态生长 / 弱项回退)    │
-├─────────────────────────────────────────────────────────────────┤
-│ Layer 5: Teaching Engine (MCE 极简解释 / 4级策略突变 / 微探针)  │
-├─────────────────────────────────────────────────────────────────┤
-│ Layer 6: Evidence & Review (分领域闭卷证据链 / 艾宾浩斯抗衰减)   │
-└─────────────────────────────────────────────────────────────────┘
+                           AI Learning OS
+                                  │
+         ┌────────────────────────┼────────────────────────┐
+         ▼                        ▼                        ▼
+  Knowledge Engine         Teaching Engine          Evidence Engine
+(概念边界展开与技能图谱)      (震荡教学与自适应引导)    (分领域闭卷能力审计)
+         │                        │                        │
+         ▼                        ▼                        ▼
+Minimal Complete Coverage    Shock & Deduce Cycle     Type-Specific Proof
+(7维行为边界空间)          (直觉-观察-反例-机制-工程) (不可伪造的 L0 证据底账)
+         │                        │                        │
+         └────────────────────────┼────────────────────────┘
+                                  ▼
+                         Learner State & Graph
+                         (用户现实状态 > 课程大纲)
+                                  │
+                                  ▼
+                       Review & Spaced Retention
+                         (可逆退化动态复习防衰减)
 ```
-
-### 1. 知识来源分级 (S0 to S5)
-- **S0 (官方规范)**：ECMAScript Spec, W3C, MDN, Vue/React 官方手册。
-- **S1 (经典著作与本地教材)**：本地存入的系统教材 (`library/`)、行业标准权威书籍。
-- **S2~S4**：行业进阶课程、一线大厂工程博客、社区排错文章。
-- **S5**：AI 参数记忆（必须与 S0/S1 交叉比对，严禁把 AI 自编比喻冒充客观规范事实）。
-
-### 2. 本地教材库优先机制 (Local-First Library)
-支持将你自有的电子书、Markdown 笔记、官方教程放入本地 `library/` 目录下（如 `library/frontend/`）。向 AI 提出学习诉求时，系统优先逆向解析本地教材的目录层级作为主干大纲，避免网络散装资料造成的知识混乱。
-
-### 3. 多维度能力核验机制 (Evidence over Scores)
-彻底摒弃无意义的“掌握度 85%”等伪精确评分。系统将能力判定解耦为五大客观维度：
-- **AI 介入度**：区分无提示独立完成 (`L0`) 与引导下完成 (`L1~L3`)。AI 参与编写的代码一律计为 0% 独立掌握证据。
-- **证据维度**：机制阐述 (`E1`)、逻辑心算 (`E2`)、排错诊断 (`E3`)、手写构建 (`E4`)、跨域迁移 (`E5`)。
-- **领域专属题型**：概念考辨析与反例、运行时考执行序推演、测试考边界矩阵划分、架构考 7 步权衡链，拒绝所有知识均机械化套用写代码。
-- **可逆状态机**：`UNKNOWN -> EXPOSED -> GUIDED -> INDEPENDENT -> TRANSFERABLE -> DURABLE`。一旦后续复杂场景连续失误或延迟抽测失败，状态如实回退至 `REGRESSION DETECTED`。
 
 ---
 
-## 快速安装与配置
+## 快速上手与多 Agent 生态适配
 
-### 在 Google Antigravity 中运行
-本仓库结构原生适配 Antigravity。在当前工作区对话框中直接输入任意自然语言即可开启学习。
+### Google Antigravity
+本仓库结构原生适配 Antigravity。在工作区对话框中直接输入任意自然语言即可开启学习。
 
-### 在 Claude Code 中使用
+### Claude Code
 ```bash
 # 全局安装 (所有工程通用)
 npx skills add https://github.com/1183213030/ai-learning-coach.git --skill ai-learning-coach --global --agent claude-code
@@ -123,7 +117,7 @@ npx skills add https://github.com/1183213030/ai-learning-coach.git --skill ai-le
 npx skills add https://github.com/1183213030/ai-learning-coach.git --skill ai-learning-coach --agent claude-code
 ```
 
-### 在 OpenAI Codex 中使用
+### OpenAI Codex
 ```bash
 npx skills add https://github.com/1183213030/ai-learning-coach.git --skill ai-learning-coach --global --agent codex
 ```
@@ -134,22 +128,23 @@ npx skills add https://github.com/1183213030/ai-learning-coach.git --skill ai-le
 
 ```text
 ai-learning-coach/
-├── SKILL.md                          # 系统核心协议规范 (六层调度法典、仲裁原则)
+├── SKILL.md                          # V3.0 三大中枢核心协议规范
 ├── README.md                         # 简体中文主文档
 ├── README_en.md                      # English Documentation
 │
-├── knowledge/                        # 动态演化知识注册中心 (概念定义、能力标准、认知陷阱)
-│   ├── frontend/                     # 前端与 JavaScript/CSS/浏览器核心
-│   └── software-testing/             # 软件测试理论与工程规范
+├── knowledge/                        # 动态演化知识注册中心 (含 7 维行为边界展开)
+│   ├── frontend/javascript/          # closure.yaml, scope.yaml, includes.yaml, equality.yaml
+│   └── software-testing/             # test-case.yaml, unit-test.yaml
 │
 ├── library/                          # 本地教材库 (Local-First 优先检索物理载体)
 │   ├── frontend/                     # 前端工程体系教材
 │   └── software-testing/             # 软件测试教材与案例
 │
-├── references/                       # 核心执行规范与内部调度策略 (Progressive Disclosure)
-│   ├── intent-router.md              # 零命令自然语言意图分流与 Teach-vs-Check 隔离规范
+├── references/                       # 核心执行规范与调度策略 (Progressive Disclosure)
+│   ├── concept-boundary-engine.md    # [V3.0 核心] 概念边界展开与最小完备覆盖规范
 │   ├── teaching-protocol.md          # 老师人格、四级策略突变矩阵与微型行为探针
 │   ├── curriculum-engine.md          # 现实状态优先调度、拓扑依赖寻路与单课生长
+│   ├── intent-router.md              # 零命令自然语言意图分流与 Teach-vs-Check 隔离规范
 │   ├── local-library.md              # 本地教材逆向解析与教材锚定教学协议
 │   ├── knowledge-discovery.md        # 三源汇聚与 S0~S5 权威分级标准
 │   ├── evidence-model.md             # E1~E5 证据矩阵与解耦评估模型
@@ -160,6 +155,7 @@ ai-learning-coach/
 │   └── quality-rubric.md             # 严苛定性评分标准
 │
 └── templates/                        # 状态底账与记忆持久化模板
+    ├── concept-expansion.yaml        # [V3.0 核心] 标准化 7 维概念展开模板
     ├── source-manifest.yaml          # 课程与知识点权威溯源清单
     ├── roadmap.yaml                  # 领域知识依赖拓扑图谱
     ├── curriculum-lesson.md          # 动态单课运行时生成模板

@@ -1,0 +1,26 @@
+id: "js-array-includes"
+name: "Array.prototype.includes & SameValueZero Algorithm"
+domain: "frontend-javascript"
+source_ids:
+  - "src-mdn-web"
+
+expansion_ref: "templates/concept-expansion.yaml"
+
+capabilities:
+  - id: "cap-explain-samevaluezero"
+    token: "E1_explain"
+    description: "Explain why includes handles NaN correctly while indexOf fails."
+  - id: "cap-predict-reference-includes"
+    token: "E2_predict"
+    description: "Predict output when checking presence of object literals or nested arrays."
+  - id: "cap-debug-permission-check"
+    token: "E3_debug"
+    description: "Diagnose silent authorization failure caused by passing new object reference into includes()."
+
+prerequisites:
+  - "js-reference-vs-primitive"
+  - "js-equality-operators"
+
+unlocks:
+  - "js-set-collection"
+  - "fe-role-based-access"
