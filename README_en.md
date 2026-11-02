@@ -6,7 +6,7 @@
 
 Say goodbye to "reading a tutorial and thinking you got it, then staring blankly at an empty screen." Like having an expert private tutor by your side, guiding you from absolute zero to independent real-world mastery.
 
-[![Protocol Version](https://img.shields.io/badge/Protocol-v3.2.0-007ACC?style=flat-square)](#)
+[![Protocol Version](https://img.shields.io/badge/Protocol-v3.3.0-007ACC?style=flat-square)](#)
 [![Zero Command](https://img.shields.io/badge/Interaction-Zero--Command%20Natural%20Language-4EBA6F?style=flat-square)](#)
 [![Tri Completeness](https://img.shields.io/badge/Completeness-Knowledge%20%7C%20Teaching%20%7C%20Capability-orange?style=flat-square)](#)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)](#)

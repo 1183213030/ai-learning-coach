@@ -1,39 +1,44 @@
-# Learner Profile
+# Learner Profile — Three-View (Ds / Dw / Dr)
 
-*Last updated: 2026-09-30*
+*Last updated: YYYY-MM-DD*
 
----
-
-## 1. Core Profile & Context
-
-- **Primary Goal**: Deep engineering mastery of modern frontend, TypeScript, async patterns, and AI-assisted workflows.
-- **Experience Baseline**: Intermediate developer building real-world applications with AI coding agents.
-- **Preferred Explanation Style**: `concrete_first` (start from real code and runtime behavior; extract abstractions after mechanics are understood).
-- **Feedback Preference**: Direct, rigorous, zero-fluff, highly technical.
+> **v3.3.0**: Profile structure absorbed from DeepTutor (HKUDS, arXiv:2604.26962 §2.1.2 Profile Construction). The profile is assembled from **observable trace evidence**, not from learner self-reports. Every weakness entry MUST carry an evidence chain (trace id / probe record); unanchored claims are `INVALID_UNGROUNDED_CLAIM`.
 
 ---
 
-## 2. Capability Matrix
+## Ds — Session & Context View (会话与背景)
 
-| Domain | Baseline Level | Active Focus | Verified Independent Capabilities |
-| :--- | :--- | :--- | :--- |
-| **JavaScript / Runtime** | Intermediate | Event loop, closures, memory retention | Scope chain, basic async/await |
-| **TypeScript** | Intermediate | Advanced generics, conditional types | Standard interfaces, union narrowing |
-| **Frontend Architecture** | Advanced | Reactive state, cache synchronization | Component lifecycle, routing |
-| **Backend & Node.js** | Intermediate | Streams, backpressure, process lifecycle | Basic Express/Koa routing, middleware |
-| **AI-Assisted Workflow** | Advanced | Change auditing, anti-illusion validation | Prompting, code generation |
-
----
-
-## 3. Recurring Blind Spots & Known Traps
-
-- **Trap 1**: Tendency to confuse `watch` with `computed` when handling derived data.
-- **Trap 2**: Assuming `async/await` executes in parallel when placed inside an unawaited loop.
-- **Trap 3**: Over-reliance on AI code completion for complex regex and TypeScript mapped types.
+- **Primary Goal / Target Role**: (e.g. 求职前端岗位 / 深度掌握现代前端工程)
+- **Baseline / 摸底结论**: (verdict from the initial assessment, with date)
+- **Preferred Explanation Style**: (`concrete_first` | `abstract_first`, plus one-line justification)
+- **Time Budget / Constraints**: (daily learning time, target date — only if known)
+- **Active Learning Tracks**: (pointer to `state/subjects/*` state files + current progress)
+- **Recent Session Summary**: (one or two lines per recent session; link to session logs)
 
 ---
 
-## 4. Active Projects
+## Dw — Weakness & Blind-Spot Inventory (弱点清单，证据支撑)
 
-- `ai-learning-coach` (Current learning protocol system)
-- Web application projects involving Vue 3 / React and TypeScript
+| Weakness | Evidence Chain (trace/probe id) | Status | Last Verified | Planned Target Dimension |
+| :--- | :--- | :--- | :--- | :--- |
+| (e.g. 混淆 var/let 循环闭包共享语义) | `tr-20261013-s2` probe ADCB failed → repair drill | active | 2026-10-13 | `d4_reference_identity` |
+
+Rules:
+
+- **No evidence, no entry.** Adding a weakness requires at least one L2/L3 trace or failed probe.
+- **Status transitions** only via Evidence Engine results: `active → repaired` requires a passing L0 probe on the same dimension.
+- **This view drives practice generation** (difficulty calibration and gap targeting in `references/practice-generation.md`).
+
+---
+
+## Dr — Pedagogical Reflection View (教学反思)
+
+- **What worked recently**: (e.g. counterexample contrast on `var` loop beat a 10-minute lecture)
+- **What failed recently**: (e.g. abstract rule announced before shock → learner parroted terminology)
+- **Calibration notes**: (confidence vs actual performance mismatches, from Evidence Model §4)
+- **Next teaching adjustments**: (concrete deltas for the next session, not vague intent)
+
+Rules:
+
+- Dr is **for the coach's next interaction**, not a report card; keep it short and actionable.
+- Dr updates AFTER sessions, never mid-session.

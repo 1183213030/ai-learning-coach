@@ -6,7 +6,7 @@
 
 告别“看教程以为懂了，一动手脑子一片空白”。像请了一位懂你的高级私教，手把手带你从零基础练到独立实战。
 
-[![Protocol Version](https://img.shields.io/badge/Protocol-v3.2.0-007ACC?style=flat-square)](#)
+[![Protocol Version](https://img.shields.io/badge/Protocol-v3.3.0-007ACC?style=flat-square)](#)
 [![Zero Command](https://img.shields.io/badge/Interaction-说人话即可%20(Zero--Command)-4EBA6F?style=flat-square)](#)
 [![Tri Completeness](https://img.shields.io/badge/Completeness-知识边界%20%7C%20教学实施%20%7C%20独立能力-orange?style=flat-square)](#)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey?style=flat-square)](#)
