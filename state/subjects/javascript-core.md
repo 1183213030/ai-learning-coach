@@ -14,10 +14,10 @@ interrupt_snapshot: null
 │   ├── [✓] JS-M1-A1: 执行上下文 (EC)、变量对象 (VO/AO) 与词法作用域链
 │   ├── [✓] JS-M1-A2: 闭包底层本质、堆内存逃逸分析与 GC 垃圾回收机制
 │   └── [ ] JS-M1-A3: this 绑定四种规则、优先级与隐式丢失防御
-├── Module 2: 异步并发与事件循环体系 (Async & Concurrency)
+├── Module 2: 异步并发与事件循环体系 (Async & Concurrency) [✓ 100% 全部通关]
 │   ├── [✓] JS-M2-A1: 调用栈与 Event Loop 调度模型（宏任务/微任务/渲染帧时序）
 │   ├── [✓] JS-M2-A2: Promise 内部状态机模型与 microtask 绑定机制
-│   └── [CURRENT] JS-M2-A3: async/await 协程脱糖机制与调用栈切入边界
+│   └── [✓] JS-M2-A3: async/await 协程脱糖机制与调用栈切入边界 [Stage 1]
 ├── Module 3: 原型系统与对象元编程 (Prototypes & Metaprogramming)
 │   ├── [ ] JS-M3-A1: 原型链 `__proto__` 与 `prototype` 拓扑结构与 new 操作符底层白板推演
 │   ├── [ ] JS-M3-A2: 属性描述符 (Property Descriptors) 与对象冻结/密封
@@ -35,9 +35,9 @@ evidence_policy:
 evidence_status:
   E1_explain: true
   E2_predict: true
-  E3_build: false
-  E4_debug: false
-  E5_boundary: false
+  E3_build: true
+  E4_debug: true
+  E5_boundary: true
 
 ## 4. 掌握与艾宾浩斯复习调度 (Mastered Atoms & Spaced Review)
 mastered_atoms:
@@ -59,7 +59,17 @@ mastered_atoms:
     last_reviewed: "2026-09-22"
     next_review_due: "2026-09-23"
     status: "DUE"
+  - id: "JS-M2-A3"
+    name: "async/await 协程脱糖与调用栈时序"
+    stage: 1
+    last_reviewed: "2026-10-08"
+    next_review_due: "2026-10-09"
+    status: "HEALTHY"
 
 weak_atoms: []
 
 ## 5. 错题与混淆库 (Mistake Log)
+- date: 2026-10-08
+  issue: "误认为 await 后的函数在调用前即被挂起"
+  root_cause: "通过'先去吧台点单 (执行被 await 函数的同步体) 拿到 Promise 盒子后才坐下等待'物理模型完全修复并推导通过 ABCD 验证"
+  resolved: true

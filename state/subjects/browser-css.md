@@ -2,8 +2,8 @@
 
 ## 1. Metadata
 level: 1
-current_stage: INIT
-current_atom: null
+current_stage: TUTOR
+current_atom: "CSS-M1-A2: 块级格式化上下文 (BFC) 触发条件、高度塌陷与外边距折叠消除"
 interrupt_snapshot: null
 
 ## 2. 知识体系树状图谱 (Curriculum & Skill Tree)

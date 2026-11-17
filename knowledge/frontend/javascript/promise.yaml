@@ -1,0 +1,206 @@
+version: "3.2.1"
+
+concept:
+  id: "FE-L3-A1"
+  name: "Promise A+ Specification & Microtask Execution Semantics"
+  domain: "frontend-javascript"
+  source_ids:
+    - "promises-aplus"
+    - "ecma-262-promise"
+    - "src-javascript-info"
+    - "src-mdn-web"
+
+  normative_sources:
+    - source_id: "promises-aplus"
+      name: "Promises/A+ Specification"
+      level: "S0"
+      section: "2.1 Promise States & 2.2 The then Method"
+    - source_id: "ecma-262-promise"
+      name: "ECMAScript Language Specification"
+      level: "S0"
+      section: "27.2 Promise Objects"
+    - source_id: "src-javascript-info"
+      name: "The Modern JavaScript Tutorial: Promises & Microtasks"
+      level: "S1"
+      section: "Promise basics, Chaining, and Microtask queue"
+    - source_id: "src-mdn-web"
+      name: "MDN Web Docs: Promise"
+      level: "S0"
+      section: "JavaScript Reference: Global Objects: Promise"
+
+  claims:
+    - id: "promise-three-states-enum"
+      semantic_layer: "ecmascript"
+      source_id: "promises-aplus"
+      level: "S0"
+      section: "2.1"
+      claim_text: "A promise must be in one of three mutually exclusive states: pending, fulfilled, or rejected."
+
+    - id: "state-transition-irreversibility"
+      semantic_layer: "ecmascript"
+      source_id: "promises-aplus"
+      level: "S0"
+      section: "2.1.2 & 2.1.3"
+      claim_text: "When fulfilled or rejected, a promise must transition only from pending to that terminal state, and must not transition to any other state thereafter. Its settled value or reason is permanently immutable."
+
+    - id: "microtask-asynchronous-dispatch"
+      semantic_layer: "html"
+      source_id: "promises-aplus"
+      level: "S0"
+      section: "2.2.4"
+      claim_text: "onFulfilled or onRejected callbacks must not be called until the current JavaScript execution context stack contains only platform code; in browser environments, execution is scheduled in the Microtask queue."
+
+    - id: "then-returns-new-promise"
+      semantic_layer: "ecmascript"
+      source_id: "promises-aplus"
+      level: "S0"
+      section: "2.2.7"
+      claim_text: "The then method must return a brand new promise instance: promise2 = promise1.then(onFulfilled, onRejected)."
+
+    - id: "value-error-penetration"
+      semantic_layer: "ecmascript"
+      source_id: "promises-aplus"
+      level: "S0"
+      section: "2.2.7.3 & 2.2.7.4"
+      claim_text: "If onFulfilled is not a function and promise1 is fulfilled, promise2 must be fulfilled with the same value. If onRejected is not a function and promise1 is rejected, promise2 must be rejected with the same reason."
+
+    - id: "cycle-self-resolution-rejection"
+      semantic_layer: "ecmascript"
+      source_id: "promises-aplus"
+      level: "S0"
+      section: "2.3.1"
+      claim_text: "If a promise is resolved with itself as the returned value (promise === x), the promise resolution procedure must reject promise with a TypeError as the reason."
+
+    - id: "synchronous-error-absorption"
+      semantic_layer: "ecmascript"
+      source_id: "promises-aplus"
+      level: "S0"
+      section: "2.2.7.2"
+      claim_text: "If either onFulfilled or onRejected throws an exception e, promise2 must be rejected with e as the reason."
+
+  boundary_matrix:
+    - dimension: "three_states_enumeration"
+      applicability: "required"
+      reason: "Ensures the state machine contains exactly pending, fulfilled, and rejected, with no intermediate or undefined state."
+      coverage:
+        status: "covered"
+        artifact_id: "artifact-promise-states"
+
+    - dimension: "state_transition_immutability"
+      applicability: "required"
+      reason: "Validates that once a promise is settled (fulfilled or rejected), subsequent invocations of resolve or reject are ignored."
+      coverage:
+        status: "covered"
+        artifact_id: "artifact-promise-immutability"
+
+    - dimension: "microtask_asynchrony"
+      applicability: "required"
+      reason: "Ensures then callbacks are scheduled asynchronously in the microtask queue, never executing synchronously in the current turn."
+      coverage:
+        status: "covered"
+        artifact_id: "artifact-promise-microtask"
+
+    - dimension: "then_chaining_new_instance"
+      applicability: "required"
+      reason: "Ensures promise1.then returns promise2, preserving immutability of the upstream promise instance."
+      coverage:
+        status: "covered"
+        artifact_id: "artifact-promise-chaining"
+
+    - dimension: "value_error_penetration"
+      applicability: "required"
+      reason: "Validates transparent pass-through of values and errors when then handlers are omitted or non-functions."
+      coverage:
+        status: "covered"
+        artifact_id: "artifact-promise-penetration"
+
+    - dimension: "self_resolution_cycle_guard"
+      applicability: "required"
+      reason: "Prevents infinite microtask loops by rejecting with TypeError when a handler returns its own promise."
+      coverage:
+        status: "covered"
+        artifact_id: "artifact-promise-cycle-guard"
+
+    - dimension: "synchronous_error_absorption"
+      applicability: "required"
+      reason: "Guarantees exceptions thrown inside executors or then handlers are absorbed into promise rejection rather than uncaught script crashes."
+      coverage:
+        status: "covered"
+        artifact_id: "artifact-promise-error-absorption"
+
+    - dimension: "prototype_chain_lookup"
+      applicability: "not_applicable"
+      rationale:
+        claim_id: "promise-state-private-slot"
+        source_id: "ecma-262-promise"
+        section: "27.2.5.4"
+        explanation: "Promise state ([[PromiseState]]) and fulfillment/rejection values ([[PromiseResult]]) are internal slots of the instance, never resolved via prototype chain lookup."
+        evidence_status: "verified"
+
+  coverage_artifacts:
+    - artifact_id: "artifact-promise-immutability"
+      dimension: "state_transition_immutability"
+      claim_id: "state-transition-irreversibility"
+      discriminates:
+        - "terminal_state_frozen_permanently (true fact)"
+        - "multiple_transitions_allowed (false expectation)"
+      discriminative_power: "strong"
+      case:
+        baseline:
+          input: |
+            const p = new Promise((resolve, reject) => {
+              resolve("OK");
+              reject(new Error("FAILED"));
+            });
+            p.then(val => val).catch(err => "CAUGHT");
+          expected: "Promise resolves with 'OK', reject call is completely ignored"
+        mutation:
+          controlled_dimension: "resolution_order"
+          input: |
+            const p = new Promise((resolve, reject) => {
+              reject(new Error("FAILED"));
+              resolve("OK");
+            });
+            p.then(val => val).catch(err => "CAUGHT");
+          expected: "Promise rejects with Error('FAILED'), resolve call is completely ignored"
+      causal_explanation: "Under Promises/A+ §2.1.2 and §2.1.3, state transition is strictly one-way and irreversible. The first settle action freezes [[PromiseState]] and [[PromiseResult]]; all subsequent settle calls are no-ops."
+      scaffolding_metaphor: "A physical wax seal: once stamped with an imprint, subsequent stamps have no effect on the sealed document."
+
+    - artifact_id: "artifact-promise-microtask"
+      dimension: "microtask_asynchrony"
+      claim_id: "microtask-asynchronous-dispatch"
+      discriminates:
+        - "asynchronous_microtask_dispatch (true fact)"
+        - "synchronous_handler_invocation (false expectation)"
+      discriminative_power: "strong"
+      case:
+        baseline:
+          input: |
+            console.log(1);
+            Promise.resolve().then(() => console.log(2));
+            console.log(3);
+          expected: "Output sequence is 1, 3, 2"
+      causal_explanation: "Under Promises/A+ §2.2.4 and HTML Living Standard §8.1.6, then callbacks are enqueued to the host environment Microtask Queue and run only after the current synchronous execution stack is empty."
+
+    - artifact_id: "artifact-promise-penetration"
+      dimension: "value_error_penetration"
+      claim_id: "value-error-penetration"
+      discriminates:
+        - "value_falls_through_non_function_handler (true fact)"
+        - "value_swallowed_by_non_function_handler (false expectation)"
+      discriminative_power: "strong"
+      case:
+        baseline:
+          input: |
+            Promise.resolve("DATA")
+              .then(null)
+              .then(val => val);
+          expected: "Second then receives 'DATA'"
+        mutation:
+          controlled_dimension: "handler_type_argument"
+          input: |
+            Promise.resolve("DATA")
+              .then("NOT_A_FUNCTION")
+              .then(val => val);
+          expected: "Second then still receives 'DATA'"
+      causal_explanation: "Under Promises/A+ §2.2.7.3, when onFulfilled is not a function, the implementation defaults to identity (x => x), allowing the resolved value to penetrate through."

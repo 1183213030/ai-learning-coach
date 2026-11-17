@@ -240,20 +240,13 @@ concept:
       - "primitive_baseline"
       - "value_variation"
       - "type_mismatch"
-    active_dimension: "object_identity"
-    queue:
-      - dimension: "object_identity"
-        priority: "critical"
-        phase: 2
-      - dimension: "special_nan"
-        priority: "high"
-        phase: 2
-      - dimension: "special_signed_zero"
-        priority: "medium"
-        phase: 2
-      - dimension: "sparse_structure"
-        priority: "low"
-        phase: 3
+      - "object_identity"
+      - "special_nan"
+      - "special_signed_zero"
+      - "sparse_structure"
+      - "index_offset_boundaries"
+    active_dimension: null
+    queue: []
 
   learner_evidence:
     primitive_baseline:
@@ -263,18 +256,18 @@ concept:
     type_mismatch:
       status: "independent"
     object_identity:
-      status: "supported"
+      status: "independent"
     special_nan:
-      status: "not_attempted"
+      status: "independent"
     special_signed_zero:
-      status: "not_attempted"
+      status: "independent"
     sparse_structure:
-      status: "not_attempted"
+      status: "independent"
     index_offset_boundaries:
-      status: "not_attempted"
+      status: "independent"
 
   completeness:
     knowledge: 100.0          # 8 covered / 8 required
-    teaching: 50.0           # 4 delivered / 8 required
-    concept_mastery: 37.5    # 3 independent / 8 required
+    teaching: 100.0          # 8 delivered / 8 required
+    concept_mastery: 100.0   # 8 independent / 8 required
     engineering_mastery: 0.0 # 0 transfer verified

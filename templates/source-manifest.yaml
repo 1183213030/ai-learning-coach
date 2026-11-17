@@ -1,5 +1,5 @@
 version: "2.1.0"
-last_updated: "2026-09-30T09:20:00Z"
+last_updated: "2026-11-17T11:32:00Z"
 
 sources:
   - id: "src-mdn-web"
@@ -30,11 +30,50 @@ sources:
     url: "https://vitest.dev"
     role: "Modern JavaScript and TypeScript isolated unit testing"
 
+  - id: "src-mdn-curriculum"
+    title: "MDN Web Development Curriculum & Standards"
+    type: "official_curriculum"
+    tier: "S0"
+    url: "https://developer.mozilla.org/en-US/docs/Learn_web_development"
+    role: "主线大纲：标准 Web 平台能力全景、HTML/CSS/JS 进阶路径与规范对齐"
+
+  - id: "src-javascript-info"
+    title: "The Modern JavaScript Tutorial (JavaScript.info)"
+    type: "authoritative_book"
+    tier: "S1"
+    url: "https://javascript.info"
+    role: "深度专项：底层执行上下文、闭包、原型链、事件循环与 Promise A+ 原理"
+
+  - id: "src-odin-project"
+    title: "The Odin Project (Foundations & Full Stack)"
+    type: "vetted_course"
+    tier: "S2"
+    url: "https://www.theodinproject.com/paths/foundations/courses/foundations"
+    role: "实战题库：闭卷动手编码任务库与阶段性项目验收标准"
+
+  - id: "src-vue-official"
+    title: "Vue.js Official Documentation & RFCs"
+    type: "official_documentation"
+    tier: "S0"
+    url: "https://vuejs.org"
+    role: "现代前端框架标准：响应式底层原理与组件生命周期规范"
+
+  - id: "src-typescript-official"
+    title: "TypeScript Official Handbook"
+    type: "official_documentation"
+    tier: "S0"
+    url: "https://www.typescriptlang.org/docs"
+    role: "类型系统权威依据：类型推导、条件类型与工程类型契约"
+
 coverage_mapping:
   "knowledge/frontend/javascript/scope.yaml":
-    source_ids: ["src-mdn-web"]
+    source_ids: ["src-mdn-web", "src-javascript-info"]
   "knowledge/frontend/javascript/closure.yaml":
+    source_ids: ["src-mdn-web", "src-javascript-info"]
+  "knowledge/frontend/javascript/includes.yaml":
     source_ids: ["src-mdn-web"]
+  "knowledge/frontend/javascript/promise.yaml":
+    source_ids: ["src-javascript-info", "src-mdn-web", "src-mdn-curriculum"]
   "knowledge/software-testing/test-case.yaml":
     source_ids: ["src-local-testing-book", "src-istqb-foundation"]
   "knowledge/software-testing/unit-test.yaml":
