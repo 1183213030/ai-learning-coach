@@ -43,7 +43,7 @@
 
 > 每轮教学后更新，供下一轮个性化上下文使用。示例字段：教学策略效果 / 自信校准偏差 / 下一轮调整。
 
-- **What worked recently**: *(待记录)*
-- **What failed recently**: *(待记录)*
-- **Calibration notes**: *(待记录)*
-- **Next teaching adjustments**: *(待记录)*
+- **What worked recently**: 2026-11-03 复习门禁通过——闭包实例隔离与微任务排空两项到期复习均 L0 盲推正确，时隔约 6 周未见遗忘。
+- **What failed recently**: *(无)*
+- **Calibration notes**: 学习者对「累计调用」的推理表述为"执行过一次"，理解正确但术语表述松散；后续追问时留意引导精确术语。
+- **Next teaching adjustments**: 推进 JS-M2-A3 的 E3 独立手写（async/await 脱糖），随后 E5 边界防御。

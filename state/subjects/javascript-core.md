@@ -43,22 +43,22 @@ evidence_status:
 mastered_atoms:
   - id: "JS-M1-A1"
     name: "执行上下文与作用域链"
-    stage: 2
-    last_reviewed: "2026-09-21"
-    next_review_due: "2026-09-23"
-    status: "DUE"
+    stage: 3
+    last_reviewed: "2026-11-03"
+    next_review_due: "2026-11-09"
+    status: "OK"
   - id: "JS-M1-A2"
     name: "闭包机制与内存GC"
-    stage: 2
-    last_reviewed: "2026-09-21"
-    next_review_due: "2026-09-23"
-    status: "DUE"
+    stage: 3
+    last_reviewed: "2026-11-03"
+    next_review_due: "2026-11-09"
+    status: "OK"
   - id: "JS-M2-A1"
     name: "事件循环三层调度"
-    stage: 1
-    last_reviewed: "2026-09-22"
-    next_review_due: "2026-09-23"
-    status: "DUE"
+    stage: 2
+    last_reviewed: "2026-11-03"
+    next_review_due: "2026-11-05"
+    status: "OK"
   - id: "JS-M2-A3"
     name: "async/await 协程脱糖与调用栈时序"
     stage: 1

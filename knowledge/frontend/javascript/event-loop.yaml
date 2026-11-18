@@ -155,7 +155,7 @@ concept:
     baseline_behavior:
       status: "independent"
     microtask_drain_exhaustion:
-      status: "supported"
+      status: "independent"
     macrotask_interleaving:
       status: "not_attempted"
     render_timing_phase:
@@ -164,5 +164,5 @@ concept:
   completeness:
     knowledge: 100.0          # 4 covered / 4 required
     teaching: 50.0           # 2 delivered / 4 required
-    concept_mastery: 25.0    # 1 independent / 4 required
+    concept_mastery: 50.0    # 2 independent / 4 required
     engineering_mastery: 0.0 # 0 transfer verified

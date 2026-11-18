@@ -191,7 +191,7 @@ concept:
     baseline_behavior:
       status: "independent"
     multiple_instances:
-      status: "supported"
+      status: "independent"
     shared_mutable_state:
       status: "not_attempted"
     loop_variable_binding:
@@ -202,5 +202,5 @@ concept:
   completeness:
     knowledge: 100.0          # 5 covered / 5 required
     teaching: 40.0           # 2 delivered / 5 required
-    concept_mastery: 20.0    # 1 independent / 5 required
+    concept_mastery: 40.0    # 2 independent / 5 required
     engineering_mastery: 0.0 # 0 transfer verified
